@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProHospitalar - Sistema ERP Completo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        .active-tab { background: linear-gradient(135deg, #059669, #047857); color: white; }
+        .card-hover:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; }
+        .progress-bar { transition: width 0.8s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.6s ease-out; }
+        .gradient-bg { background: linear-gradient(135deg, #059669 0%, #047857 100%); }
+        .shadow-premium { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .btn-export { background: linear-gradient(135deg, #10b981, #059669); transition: all 0.3s ease; }
+        .btn-export:hover { background: linear-gradient(135deg, #059669, #047857); transform: translateY(-2px); }
+        .notification-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .status-online { width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header ProHospitalar -->
+    <header class="gradient-bg text-white shadow-2xl">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center text-2xl">🏥</div>
+                    <div>
+                        <h1 class="text-2xl font-bold">ProHospitalar</h1>
+                        <p class="text-green-100 text-sm">Sistema ERP - Gestão Empresarial</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <div class="relative">
+                        <button onclick="mostrarNotificacoes()" class="p-2 bg-white bg-opacity-20 rounded-lg hover:bg-opacity-30 transition-all">
+                            🔔<div class="notification-badge" id="notification-count">3</div>
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="status-online"></div>
+                        <span class="text-sm text-green-100">Online</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="text-right">
+                            <p class="text-sm font-medium">Admin ProHospitalar</p>
+                            <p class="text-xs text-green-100">Conectado agora</p>
+                        </div>
+                        <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">👨‍💼</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-80 bg-white shadow-2xl min-h-screen">
+            <nav class="mt-6">
+                <div class="px-4 space-y-1">
+                    <button onclick="showTab('dashboard')" id="tab-dashboard" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all active-tab">
+                        <span class="text-xl">📊</span>
+                        <div class="flex-1 text-left">
+                            <span class="font-medium">Dashboard</span>
+                            <p class="text-xs opacity-80">Painel Executivo</p>
+                        </div>
+                    </button>
+                    <button onclick="showTab('vendas')" id="tab-vendas" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
+                        <span class="text-xl">💰</span>
+                        <div class="flex-1 text-left">
+                            <span class="font-medium">Vendas</span>
+                            <p class="text-xs text-gray-500">Pedidos e faturamento</p>
+                        </div>
+                        <div class="notification-badge">8</div>
+                    </button>
+                    <button onclick="showTab('clientes')" id="tab-clientes" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
+                        <span class="text-xl">🏥</span>
+                        <div class="flex-1 text-left">
+                            <span class="font-medium">Clientes</span>
+                            <p class="text-xs text-gray-500">Hospitais e Clínicas</p>
+                        </div>
+                    </button>
+                    <button onclick="showTab('estoque')" id="tab-estoque" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
+                        <span class="text-xl">🩺</span>
+                        <div class="flex-1 text-left">
+                            <span class="font-medium">Produtos</span>
+                            <p class="text-xs text-gray-500">Equipamentos médicos</p>
+                        </div>
+                        <div class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded font-medium">12 baixos</div>
+                    </button>
+                    <button onclick="showTab('vendedores')" id="tab-vendedores" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
+                        <span class="text-xl">👨‍💼</span>
+                        <div class="flex-1 text-left">
+                            <span class="font-medium">Representantes</span>
+                            <p class="text-xs text-gray-500">Equipe comercial</p>
+                        </div>
+                    </button>
+                    <button onclick="showTab('fornecedores')" id="tab-fornecedores" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
+                        <span class="text-xl">🏭</span>
+                        <div class="flex-1 text-left">
+                            <span class="font-medium">Fornecedores</span>
+                            <p class="text-xs text-gray-500">Indústria médica</p>
+                        </div>
+                    </button>
+                    <button onclick="showTab('financeiro')" id="tab-financeiro" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
+                        <span class="text-xl">💳</span>
+                        <div class="flex-1 text-left">
+                            <span class="font-medium">Financeiro</span>
+                            <p class="text-xs text-gray-500">Fluxo de caixa</p>
+                        </div>
+                    </button>
+                    <button onclick="showTab('fiscal')" id="tab-fiscal" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
+                        <span class="text-xl">🧾</span>
+                        <div class="flex-1 text-left">
+                            <span class="font-medium">Fiscal</span>
+                            <p class="text-xs text-gray-500">DAV, NFe</p>
+                        </div>
+                        <div class="notification-badge">3</div>
+                    </button>
+                    <button onclick="showTab('relatorios')" id="tab-relatorios" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
+                        <span class="text-xl">📈</span>
+                        <div class="flex-1 text-left">
+                            <span class="font-medium">Relatórios</span>
+                            <p class="text-xs text-gray-500">Analytics</p>
+                        </div>
+                    </button>
+                </div>
+                <div class="mt-8 px-4">
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">Ações Rápidas</h3>
+                    <div class="space-y-2">
+                        <button onclick="openModal('venda')" class="w-full bg-green-50 text-green-700 px-3 py-2 rounded-lg text-sm hover:bg-green-100 transition-colors font-medium">➕ Nova Venda</button>
+                        <button onclick="openModal('produto')" class="w-full bg-blue-50 text-blue-700 px-3 py-2 rounded-lg text-sm hover:bg-blue-100 transition-colors font-medium">🩺 Novo Produto</button>
+                        <button onclick="openModal('cliente')" class="w-full bg-purple-50 text-purple-700 px-3 py-2 rounded-lg text-sm hover:bg-purple-100 transition-colors font-medium">🏥 Novo Cliente</button>
+                        <button onclick="gerarDAV()" class="w-full bg-orange-50 text-orange-700 px-3 py-2 rounded-lg text-sm hover:bg-orange-100 transition-colors font-medium">📄 Gerar DAV</button>
+                    </div>
+                </div>
+                <div class="mt-8 mx-4 p-4 bg-green-50 rounded-xl border border-green-200">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <span class="text-2xl">🏥</span>
+                        </div>
+                        <h4 class="font-bold text-green-800">ProHospitalar</h4>
+                        <p class="text-xs text-green-600 mt-1">Soluções em Equipamentos Médicos</p>
+                        <p class="text-xs text-green-500 mt-2 font-medium">Sistema ERP v2.0</p>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="flex-1 p-8 overflow-y-auto" style="max-height: calc(100vh - 80px);">
+            <!-- Dashboard -->
+            <div id="dashboard" class="fade-in">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-900">Dashboard ProHospitalar</h2>
+                        <p class="text-gray-600 mt-1">Gestão completa de equipamentos médico-hospitalares</p>
+                    </div>
+                    <button onclick="exportarDashboard()" class="btn-export text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-lg">
+                        <span>📊</span><span>Exportar Dashboard</span>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+                    <div class="bg-gradient-to-br from-green-500 to-emerald-600 p-6 rounded-2xl text-white card-hover shadow-premium">
+                        <h3 class="text-green-100 text-sm mb-1">Vendas do Mês</h3>
+                        <p class="text-3xl font-bold">R$ 685.490</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl text-white card-hover shadow-premium">
+                        <h3 class="text-blue-100 text-sm mb-1">Lucro Bruto</h3>
+                        <p class="text-3xl font-bold">R$ 261.857</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl text-white card-hover shadow-premium">
+                        <h3 class="text-purple-100 text-sm mb-1">Clientes Ativos</h3>
+                        <p class="text-3xl font-bold">347</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-orange-500 to-red-500 p-6 rounded-2xl text-white card-hover shadow-premium">
+                        <h3 class="text-orange-100 text-sm mb-1">Produtos Ativos</h3>
+                        <p class="text-3xl font-bold">2.847</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-6 rounded-2xl text-white card-hover shadow-premium">
+                        <h3 class="text-indigo-100 text-sm mb-1">Meta do Mês</h3>
+                        <p class="text-3xl font-bold">91%</p>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-premium mb-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6">📊 Vendas por Categoria Hospitalar</h3>
+                    <canvas id="chartVendasCategorias" width="800" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- Vendas -->
+            <div id="vendas" class="hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900">💰 Gestão de Vendas</h2>
+                    <button onclick="exportarVendas()" class="btn-export text-white px-6 py-3 rounded-lg shadow-lg">📄 Exportar</button>
+                </div>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-vendas"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Clientes -->
+            <div id="clientes" class="hidden">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">🏥 Gestão de Clientes</h2>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">CNPJ</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cidade</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-clientes"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Produtos -->
+            <div id="estoque" class="hidden">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">🩺 Gestão de Produtos</h2>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Código</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantidade</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Preço</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-produtos"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Representantes -->
+            <div id="vendedores" class="hidden">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">👨‍💼 Representantes</h2>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Região</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vendas</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Performance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-representantes"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Fornecedores -->
+            <div id="fornecedores" class="hidden">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">🏭 Fornecedores</h2>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">CNPJ</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Especialidade</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-fornecedores"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Financeiro -->
+            <div id="financeiro" class="hidden">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">💳 Financeiro</h2>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Descrição</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-transacoes"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Fiscal -->
+            <div id="fiscal" class="hidden">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">🧾 Documentos Fiscais</h2>
+                <div class="bg-white rounded-xl shadow-premium p-6">
+                    <p class="text-gray-600">Módulo de documentos fiscais (DAV, NFe) em desenvolvimento.</p>
+                </div>
+            </div>
+
+            <!-- Relatórios -->
+            <div id="relatorios" class="hidden">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">📈 Relatórios</h2>
+                <div class="bg-white rounded-xl shadow-premium p-6">
+                    <p class="text-gray-600">Centro de relatórios e analytics em desenvolvimento.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+// ========================================
+// SISTEMA PROHOSPITALAR - JavaScript Completo
+// Versão: 2.0 Final
+// ========================================
+
+// DADOS DO SISTEMA
+let vendas = [
+    { id: 1, data: '2024-10-17', cliente: 'Hospital São Lucas', produto: 'Monitor Cardíaco MC-500', representante: 'Ana Silva', valor: 45890, lucro: 15200, status: 'Concluída' },
+    { id: 2, data: '2024-10-17', cliente: 'Clínica Santa Maria', produto: 'Ultrassom US-300', representante: 'Carlos Mendes', valor: 78500, lucro: 28900, status: 'Concluída' },
+    { id: 3, data: '2024-10-16', cliente: 'Hospital Regional', produto: 'Equipamento Raio-X RX-700', representante: 'Ana Silva', valor: 125000, lucro: 42000, status: 'Pendente' },
+    { id: 4, data: '2024-10-16', cliente: 'Posto de Saúde Central', produto: 'Kit Equipamentos Básicos', representante: 'João Santos', valor: 32800, lucro: 11500, status: 'Concluída' },
+    { id: 5, data: '2024-10-15', cliente: 'Hospital Universitário', produto: 'Eletrocardiógrafo ECG-200', representante: 'Carlos Mendes', valor: 19800, lucro: 7300, status: 'Concluída' }
+];
+
+let produtos = [
+    { codigo: 'MC-500', nome: 'Monitor Cardíaco Digital', categoria: 'Monitoramento', quantidade: 12, custo: 30690, precoVenda: 45890, margem: '49.5%', status: 'Disponível' },
+    { codigo: 'US-300', nome: 'Ultrassom Portátil', categoria: 'Diagnóstico', quantidade: 5, custo: 49600, precoVenda: 78500, margem: '58.3%', status: 'Estoque Baixo' },
+    { codigo: 'RX-700', nome: 'Equipamento Raio-X Digital', categoria: 'Radiologia', quantidade: 3, custo: 83000, precoVenda: 125000, margem: '50.6%', status: 'Estoque Baixo' },
+    { codigo: 'ECG-200', nome: 'Eletrocardiógrafo 12 Canais', categoria: 'Cardiologia', quantidade: 18, custo: 12500, precoVenda: 19800, margem: '58.4%', status: 'Disponível' },
+    { codigo: 'OXI-100', nome: 'Oxímetro de Pulso Digital', categoria: 'Monitoramento', quantidade: 45, custo: 280, precoVenda: 520, margem: '85.7%', status: 'Disponível' },
+    { codigo: 'DFB-400', nome: 'Desfibrilador Automático', categoria: 'Emergência', quantidade: 8, custo: 15800, precoVenda: 24500, margem: '55.1%', status: 'Disponível' }
+];
+
+let clientes = [
+    { id: 1, nome: 'Hospital São Lucas', cnpj: '12.345.678/0001-90', cidade: 'São Paulo', responsavel: 'Dr. Roberto Silva', telefone: '(11) 98765-4321', status: 'Ativo', totalCompras: 285600 },
+    { id: 2, nome: 'Clínica Santa Maria', cnpj: '23.456.789/0001-01', cidade: 'Rio de Janeiro', responsavel: 'Dra. Marina Costa', telefone: '(21) 97654-3210', status: 'Ativo', totalCompras: 156800 },
+    { id: 3, nome: 'Hospital Regional', cnpj: '34.567.890/0001-12', cidade: 'Belo Horizonte', responsavel: 'Dr. Paulo Santos', telefone: '(31) 96543-2109', status: 'Ativo', totalCompras: 423000 },
+    { id: 4, nome: 'Posto de Saúde Central', cnpj: '45.678.901/0001-23', cidade: 'Salvador', responsavel: 'Dra. Juliana Lima', telefone: '(71) 95432-1098', status: 'Ativo', totalCompras: 98500 }
+];
+
+let representantes = [
+    { id: 1, nome: 'Ana Silva', regiao: 'Sudeste', vendasMes: 249390, meta: 220000, comissao: 12469, performance: '113%' },
+    { id: 2, nome: 'Carlos Mendes', regiao: 'Sul', vendasMes: 187600, meta: 200000, comissao: 9380, performance: '94%' },
+    { id: 3, nome: 'João Santos', regiao: 'Nordeste', vendasMes: 156800, meta: 180000, comissao: 7840, performance: '87%' },
+    { id: 4, nome: 'Marina Costa', regiao: 'Centro-Oeste', vendasMes: 198450, meta: 190000, comissao: 9922, performance: '104%' }
+];
+
+let fornecedores = [
+    { id: 1, nome: 'MedTech Equipamentos', cnpj: '56.789.012/0001-34', especialidade: 'Equipamentos de Diagnóstico', contato: 'Ricardo Alves', telefone: '(11) 3456-7890', status: 'Ativo' },
+    { id: 2, nome: 'CardioMed Importadora', cnpj: '67.890.123/0001-45', especialidade: 'Cardiologia', contato: 'Fernanda Costa', telefone: '(21) 3567-8901', status: 'Ativo' },
+    { id: 3, nome: 'Hospital Supply Co.', cnpj: '78.901.234/0001-56', especialidade: 'Equipamentos Gerais', contato: 'Marcos Silva', telefone: '(11) 3678-9012', status: 'Ativo' }
+];
+
+let transacoes = [
+    { id: 1, data: '2024-10-17', descricao: 'Venda - Hospital São Lucas', categoria: 'Receita', tipo: 'Entrada', valor: 45890, status: 'Confirmado' },
+    { id: 2, data: '2024-10-17', descricao: 'Venda - Clínica Santa Maria', categoria: 'Receita', tipo: 'Entrada', valor: 78500, status: 'Confirmado' },
+    { id: 3, data: '2024-10-16', descricao: 'Compra - MedTech Equipamentos', categoria: 'Operacional', tipo: 'Saída', valor: -83000, status: 'Pago' },
+    { id: 4, data: '2024-10-16', descricao: 'Comissão Representantes', categoria: 'Pessoal', tipo: 'Saída', valor: -12469, status: 'Pago' }
+];
+
+let chartVendas = null;
+
+// NAVEGAÇÃO DE ABAS
+function showTab(tabName) {
+    const tabs = ['dashboard', 'vendas', 'clientes', 'estoque', 'vendedores', 'fornecedores', 'financeiro', 'fiscal', 'relatorios'];
+    
+    tabs.forEach(tab => {
+        const element = document.getElementById(tab);
+        if (element) element.classList.add('hidden');
+        
+        const tabButton = document.getElementById(`tab-${tab}`);
+        if (tabButton) {
+            tabButton.classList.remove('active-tab');
+            tabButton.classList.add('text-gray-700', 'hover:bg-gray-100');
+        }
+    });
+
+    const selectedTab = document.getElementById(tabName);
+    if (selectedTab) {
+        selectedTab.classList.remove('hidden');
+        selectedTab.classList.add('fade-in');
+    }
+    
+    const selectedButton = document.getElementById(`tab-${tabName}`);
+    if (selectedButton) {
+        selectedButton.classList.add('active-tab');
+        selectedButton.classList.remove('text-gray-700', 'hover:bg-gray-100');
+    }
+
+    if (tabName === 'dashboard') initDashboard();
+    else if (tabName === 'vendas') renderVendas();
+    else if (tabName === 'clientes') renderClientes();
+    else if (tabName === 'estoque') renderProdutos();
+    else if (tabName === 'vendedores') renderRepresentantes();
+    else if (tabName === 'fornecedores') renderFornecedores();
+    else if (tabName === 'financeiro') renderFinanceiro();
+}
+
+// DASHBOARD
+function initDashboard() {
+    const ctx = document.getElementById('chartVendasCategorias');
+    if (ctx && !chartVendas) {
+        chartVendas = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'],
+                datasets: [{
+                    label: 'Vendas (R$)',
+                    data: [245000, 289000, 312000, 278000, 356000, 398000, 367000, 425000, 489000, 685490],
+                    borderColor: '#059669',
+                    backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: { legend: { display: true, position: 'top' } },
+                scales: {
+                    y: { 
+                        beginAtZero: true,
+                        ticks: { callback: function(value) { return 'R$ ' + value.toLocaleString('pt-BR'); } }
+                    }
+                }
+            }
+        });
+    }
+}
+
+// RENDERIZAR VENDAS
+function renderVendas() {
+    const tbody = document.getElementById('lista-vendas');
+    if (!tbody) return;
+    
+    tbody.innerHTML = vendas.map(venda => {
+        const statusColor = venda.status === 'Concluída' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+        return `
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap font-medium">#${venda.id}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${venda.cliente}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">${venda.produto}</td>
+                <td class="px-6 py-4 whitespace-nowrap font-semibold text-green-600">R$ ${venda.valor.toLocaleString('pt-BR')}</td>
+                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 text-xs rounded-full ${statusColor}">${venda.status}</span></td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// RENDERIZAR CLIENTES
+function renderClientes() {
+    const tbody = document.getElementById('lista-clientes');
+    if (!tbody) return;
+    
+    tbody.innerHTML = clientes.map(cliente => {
+        const statusColor = cliente.status === 'Ativo' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
+        return `
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap font-medium">${cliente.nome}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">${cliente.cnpj}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">${cliente.cidade}</td>
+                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 text-xs rounded-full ${statusColor}">${cliente.status}</span></td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// RENDERIZAR PRODUTOS
+function renderProdutos() {
+    const tbody = document.getElementById('lista-produtos');
+    if (!tbody) return;
+    
+    tbody.innerHTML = produtos.map(produto => {
+        const statusColor = produto.status === 'Disponível' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+        return `
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap font-medium">${produto.codigo}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${produto.nome}</td>
+                <td class="px-6 py-4 whitespace-nowrap font-semibold text-center">${produto.quantidade}</td>
+                <td class="px-6 py-4 whitespace-nowrap font-semibold">R$ ${produto.precoVenda.toLocaleString('pt-BR')}</td>
+                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 text-xs rounded-full ${statusColor}">${produto.status}</span></td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// RENDERIZAR REPRESENTANTES
+function renderRepresentantes() {
+    const tbody = document.getElementById('lista-representantes');
+    if (!tbody) return;
+    
+    tbody.innerHTML = representantes.map(rep => {
+        const performanceNum = parseFloat(rep.performance);
+        const performanceColor = performanceNum >= 100 ? 'text-green-600' : 'text-red-600';
+        return `
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap font-medium">${rep.nome}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">${rep.regiao}</td>
+                <td class="px-6 py-4 whitespace-nowrap font-semibold text-green-600">R$ ${rep.vendasMes.toLocaleString('pt-BR')}</td>
+                <td class="px-6 py-4 whitespace-nowrap font-semibold ${performanceColor}">${rep.performance}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// RENDERIZAR FORNECEDORES
+function renderFornecedores() {
+    const tbody = document.getElementById('lista-fornecedores');
+    if (!tbody) return;
+    
+    tbody.innerHTML = fornecedores.map(forn => {
+        const statusColor = forn.status === 'Ativo' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
+        return `
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap font-medium">${forn.nome}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">${forn.cnpj}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">${forn.especialidade}</td>
+                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 text-xs rounded-full ${statusColor}">${forn.status}</span></td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// RENDERIZAR FINANCEIRO
+function renderFinanceiro() {
+    const tbody = document.getElementById('lista-transacoes');
+    if (!tbody) return;
+    
+    tbody.innerHTML = transacoes.map(trans => {
+        const tipoColor = trans.tipo === 'Entrada' ? 'text-green-600' : 'text-red-600';
+        const valorFormatado = trans.tipo === 'Entrada' ? `R$ ${trans.valor.toLocaleString('pt-BR')}` : `R$ ${Math.abs(trans.valor).toLocaleString('pt-BR')}`;
+        const statusColor = trans.status === 'Confirmado' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800';
+        
+        return `
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap text-sm">${new Date(trans.data).toLocaleDateString('pt-BR')}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${trans.descricao}</td>
+                <td class="px-6 py-4 whitespace-nowrap font-semibold ${tipoColor}">${valorFormatado}</td>
+                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 text-xs rounded-full ${statusColor}">${trans.status}</span></td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// MODAIS E AÇÕES
+function openModal(tipo) {
+    const modalTitle = {
+        'venda': '💰 Nova Venda',
+        'produto': '🩺 Novo Produto Hospitalar',
+        'cliente': '🏥 Novo Cliente',
+        'representante': '👨‍💼 Novo Representante'
+    };
+    alert(`${modalTitle[tipo]}\n\nModal de cadastro será implementado!\n\nEsta é uma demonstração do sistema ProHospitalar.`);
+}
+
+function gerarDAV() {
+    alert('📄 GERAR DAV\n\nDocumento Auxiliar de Venda\n\n• Selecione cliente e produtos\n• Sistema gera DAV automaticamente\n• Envio por email ou WhatsApp\n• Conversão para NFe após aprovação\n\nFuncionalidade completa em breve!');
+}
+
+function mostrarNotificacoes() {
+    alert('🔔 NOTIFICAÇÕES ProHospitalar\n\nVocê tem 3 notificações não lidas:\n\n• 2 produtos com estoque baixo\n• 1 pagamento vencendo hoje\n• 1 novo pedido\n\nClique em "Central de Alertas" para ver todas.');
+}
+
+// EXPORTAÇÕES
+function exportarDashboard() {
+    alert('📊 EXPORTAR DASHBOARD\n\nGerando relatório executivo em PDF...\n\n✅ Incluindo:\n• KPIs principais\n• Gráficos de performance\n• Top produtos\n• Vendas recentes\n\nDownload iniciado!');
+}
+
+function exportarVendas() {
+    const totalVendas = vendas.reduce((sum, v) => sum + v.valor, 0);
+    alert(`💰 EXPORTAR VENDAS\n\nGerando relatório de vendas...\n\n✅ Dados incluídos:\n• ${vendas.length} vendas\n• Total: R$ ${totalVendas.toLocaleString('pt-BR')}\n• Período: Out/2024\n\nFormatos: PDF, Excel, CSV\n\nDownload iniciado!`);
+}
+
+function exportarEstoque() {
+    alert(`📦 EXPORTAR ESTOQUE\n\nGerando relatório de produtos...\n\n✅ Inclui:\n• ${produtos.length} produtos\n• Alertas de estoque baixo\n• Análise de margem\n\nDownload iniciado!`);
+}
+
+function exportarRepresentantes() {
+    alert(`👥 EXPORTAR REPRESENTANTES\n\nGerando relatório de performance...\n\n✅ Inclui:\n• ${representantes.length} representantes\n• Vendas por região\n• Comissões calculadas\n\nDownload iniciado!`);
+}
+
+// INICIALIZAÇÃO DO SISTEMA
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🏥 Sistema ProHospitalar inicializado!');
+    console.log('✅ Versão 2.0 - Sistema Completo');
+    
+    setTimeout(() => {
+        showTab('dashboard');
+    }, 100);
+    
+    console.log('📊 Dados carregados:');
+    console.log(`   • ${vendas.length} vendas`);
+    console.log(`   • ${produtos.length} produtos`);
+    console.log(`   • ${clientes.length} clientes`);
+    console.log(`   • ${representantes.length} representantes`);
+    console.log(`   • ${fornecedores.length} fornecedores`);
+    
+    console.log('✅ Sistema pronto para uso!');
+});
+
+console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+console.log('🏥 ProHospitalar - Sistema ERP v2.0');
+console.log('📅 Carregado em:', new Date().toLocaleString('pt-BR'));
+console.log('✅ JavaScript carregado com sucesso!');
+console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+</script>
+</body>
+</html>
