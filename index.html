@@ -37,6 +37,18 @@
         .btn-edit:hover { background: #2563eb; }
         .btn-delete { background: #ef4444; color: white; padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; }
         .btn-delete:hover { background: #dc2626; }
+        .btn-action { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s; }
+        .btn-print { background: #3b82f6; color: white; }
+        .btn-print:hover { background: #2563eb; transform: translateY(-2px); }
+        .btn-pdf { background: #ef4444; color: white; }
+        .btn-pdf:hover { background: #dc2626; transform: translateY(-2px); }
+        .btn-email { background: #8b5cf6; color: white; }
+        .btn-email:hover { background: #7c3aed; transform: translateY(-2px); }
+        .btn-whatsapp { background: #25d366; color: white; }
+        .btn-whatsapp:hover { background: #20ba5a; transform: translateY(-2px); }
+        .btn-pagar { background: #10b981; color: white; padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; margin-right: 5px; }
+        .btn-pagar:hover { background: #059669; }
+        .alerta-estoque { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 10px; border-radius: 6px; margin: 10px 0; }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -52,7 +64,10 @@
                 </div>
                 <div class="flex items-center space-x-6">
                     <button onclick="mostrarNotificacoes()" class="p-2 bg-white bg-opacity-20 rounded-lg hover:bg-opacity-30 transition-all relative">
-                        🔔<div class="notification-badge">3</div>
+                        🔔<div class="notification-badge" id="alert-count">3</div>
+                    </button>
+                    <button onclick="fazerBackupManual()" class="p-2 bg-white bg-opacity-20 rounded-lg hover:bg-opacity-30 transition-all" title="Backup Manual">
+                        💾
                     </button>
                     <div class="flex items-center space-x-2">
                         <div class="status-online"></div>
@@ -82,6 +97,11 @@
                         <span class="text-xl">💰</span>
                         <div class="flex-1 text-left"><span class="font-medium">Vendas</span><p class="text-xs text-gray-500">Pedidos e faturamento</p></div>
                     </button>
+                    <button onclick="showTab('contas-receber')" id="tab-contas-receber" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
+                        <span class="text-xl">💵</span>
+                        <div class="flex-1 text-left"><span class="font-medium">Contas a Receber</span><p class="text-xs text-gray-500">Recebimentos</p></div>
+                        <div class="notification-badge" id="receber-count">0</div>
+                    </button>
                     <button onclick="showTab('clientes')" id="tab-clientes" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
                         <span class="text-xl">🏥</span>
                         <div class="flex-1 text-left"><span class="font-medium">Clientes</span><p class="text-xs text-gray-500">Hospitais e Clínicas</p></div>
@@ -89,6 +109,7 @@
                     <button onclick="showTab('estoque')" id="tab-estoque" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
                         <span class="text-xl">🩺</span>
                         <div class="flex-1 text-left"><span class="font-medium">Produtos</span><p class="text-xs text-gray-500">Equipamentos médicos</p></div>
+                        <div class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded font-medium" id="estoque-baixo">0</div>
                     </button>
                     <button onclick="showTab('vendedores')" id="tab-vendedores" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
                         <span class="text-xl">👨‍💼</span>
@@ -102,6 +123,10 @@
                         <span class="text-xl">💳</span>
                         <div class="flex-1 text-left"><span class="font-medium">Financeiro</span><p class="text-xs text-gray-500">Fluxo de caixa</p></div>
                     </button>
+                    <button onclick="showTab('historico-davs')" id="tab-historico-davs" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
+                        <span class="text-xl">📄</span>
+                        <div class="flex-1 text-left"><span class="font-medium">Histórico DAVs</span><p class="text-xs text-gray-500">Documentos gerados</p></div>
+                    </button>
                 </div>
                 <div class="mt-8 px-4">
                     <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">Ações Rápidas</h3>
@@ -110,6 +135,16 @@
                         <button onclick="openModal('produto')" class="w-full bg-blue-50 text-blue-700 px-3 py-2 rounded-lg text-sm hover:bg-blue-100 transition-colors font-medium">🩺 Novo Produto</button>
                         <button onclick="openModal('cliente')" class="w-full bg-purple-50 text-purple-700 px-3 py-2 rounded-lg text-sm hover:bg-purple-100 transition-colors font-medium">🏥 Novo Cliente</button>
                         <button onclick="openModal('dav')" class="w-full bg-orange-50 text-orange-700 px-3 py-2 rounded-lg text-sm hover:bg-orange-100 transition-colors font-medium">📄 Gerar DAV</button>
+                    </div>
+                </div>
+                <div class="mt-8 mx-4 p-4 bg-green-50 rounded-xl border border-green-200">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <span class="text-2xl">💾</span>
+                        </div>
+                        <h4 class="font-bold text-green-800">Backup Automático</h4>
+                        <p class="text-xs text-green-600 mt-1">Dados salvos automaticamente</p>
+                        <p class="text-xs text-green-500 mt-2 font-medium" id="ultimo-backup">Nunca</p>
                     </div>
                 </div>
             </nav>
@@ -126,26 +161,29 @@
                         <span>📊</span><span>Exportar Dashboard</span>
                     </button>
                 </div>
+                
+                <div id="alertas-dashboard"></div>
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
                     <div class="bg-gradient-to-br from-green-500 to-emerald-600 p-6 rounded-2xl text-white card-hover shadow-premium">
                         <h3 class="text-green-100 text-sm mb-1">Vendas do Mês</h3>
-                        <p class="text-3xl font-bold">R$ 685.490</p>
+                        <p class="text-3xl font-bold" id="dash-vendas">R$ 0</p>
                     </div>
                     <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl text-white card-hover shadow-premium">
-                        <h3 class="text-blue-100 text-sm mb-1">Lucro Bruto</h3>
-                        <p class="text-3xl font-bold">R$ 261.857</p>
+                        <h3 class="text-blue-100 text-sm mb-1">A Receber</h3>
+                        <p class="text-3xl font-bold" id="dash-receber">R$ 0</p>
                     </div>
                     <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl text-white card-hover shadow-premium">
                         <h3 class="text-purple-100 text-sm mb-1">Clientes Ativos</h3>
-                        <p class="text-3xl font-bold">347</p>
+                        <p class="text-3xl font-bold" id="dash-clientes">0</p>
                     </div>
                     <div class="bg-gradient-to-br from-orange-500 to-red-500 p-6 rounded-2xl text-white card-hover shadow-premium">
                         <h3 class="text-orange-100 text-sm mb-1">Produtos Ativos</h3>
-                        <p class="text-3xl font-bold">2.847</p>
+                        <p class="text-3xl font-bold" id="dash-produtos">0</p>
                     </div>
                     <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-6 rounded-2xl text-white card-hover shadow-premium">
-                        <h3 class="text-indigo-100 text-sm mb-1">Meta do Mês</h3>
-                        <p class="text-3xl font-bold">91%</p>
+                        <h3 class="text-indigo-100 text-sm mb-1">Estoque Baixo</h3>
+                        <p class="text-3xl font-bold" id="dash-estoque-baixo">0</p>
                     </div>
                 </div>
                 <div class="bg-white p-8 rounded-2xl shadow-premium mb-8">
@@ -165,6 +203,7 @@
                     <table class="w-full">
                         <thead class="bg-gray-50">
                             <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
@@ -173,6 +212,44 @@
                             </tr>
                         </thead>
                         <tbody id="lista-vendas"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="contas-receber" class="hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900">💵 Contas a Receber</h2>
+                    <button onclick="exportarContasReceber()" class="btn-export text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-lg">
+                        <span>📄</span><span>Exportar</span>
+                    </button>
+                </div>
+                <div class="grid grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-premium">
+                        <h3 class="text-gray-600 text-sm mb-2">Total a Receber</h3>
+                        <p class="text-3xl font-bold text-orange-600" id="total-receber">R$ 0,00</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-premium">
+                        <h3 class="text-gray-600 text-sm mb-2">Vencidas</h3>
+                        <p class="text-3xl font-bold text-red-600" id="total-vencidas">R$ 0,00</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-premium">
+                        <h3 class="text-gray-600 text-sm mb-2">Recebido</h3>
+                        <p class="text-3xl font-bold text-green-600" id="total-recebido">R$ 0,00</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Venda</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vencimento</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-contas-receber"></tbody>
                     </table>
                 </div>
             </div>
@@ -206,6 +283,7 @@
                         <span>📄</span><span>Exportar Produtos</span>
                     </button>
                 </div>
+                <div id="alerta-estoque-baixo"></div>
                 <div class="bg-white rounded-xl shadow-premium overflow-hidden">
                     <table class="w-full">
                         <thead class="bg-gray-50">
@@ -221,7 +299,6 @@
                     </table>
                 </div>
             </div>
-
             <div id="vendedores" class="hidden">
                 <div class="flex justify-between items-center mb-8">
                     <h2 class="text-3xl font-bold text-gray-900">👨‍💼 Representantes</h2>
@@ -286,8 +363,33 @@
                     </table>
                 </div>
             </div>
+
+            <div id="historico-davs" class="hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900">📄 Histórico de DAVs</h2>
+                    <button onclick="exportarHistoricoDAVs()" class="btn-export text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-lg">
+                        <span>📄</span><span>Exportar Histórico</span>
+                    </button>
+                </div>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Número DAV</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-historico-davs"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+
     <!-- MODAL NOVA VENDA -->
     <div id="modalVenda" class="modal">
         <div class="modal-content">
@@ -318,6 +420,8 @@
                         <option value="À Vista">À Vista</option>
                         <option value="Cartão">Cartão de Crédito</option>
                         <option value="Boleto">Boleto</option>
+                        <option value="30 dias">30 dias</option>
+                        <option value="30/60 dias">30/60 dias</option>
                     </select>
                     <label>Observações</label>
                     <textarea id="venda-obs" rows="3"></textarea>
@@ -386,6 +490,7 @@
                         <div><label>Custo *</label><input type="number" id="produto-custo" required step="0.01" min="0"></div>
                         <div><label>Preço Venda *</label><input type="number" id="produto-preco" required step="0.01" min="0"></div>
                     </div>
+                    <div><label>Estoque Mínimo</label><input type="number" id="produto-estoque-minimo" value="5" min="0"></div>
                     <div class="flex justify-end space-x-3 mt-6">
                         <button type="button" onclick="closeModal('modalProduto')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Cancelar</button>
                         <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">💾 Salvar</button>
@@ -424,7 +529,7 @@
                     <div style="margin: 20px 0;">
                         <h4 style="font-weight: 700; color: #374151; margin-bottom: 10px;">Itens do DAV:</h4>
                         <div style="border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
-                            <table style="width: 100%; font-size: 14px;" id="tabela-itens-dav">
+                            <table style="width: 100%; font-size: 14px;">
                                 <thead style="background: #f9fafb;">
                                     <tr>
                                         <th style="padding: 10px; text-align: left;">Produto</th>
@@ -469,64 +574,270 @@
         </div>
     </div>
 
+    <!-- MODAL DAV GERADO -->
+    <div id="modalDAVGerado" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeModal('modalDAVGerado')">&times;</span>
+                <h2 class="text-2xl font-bold">✅ DAV Gerado com Sucesso!</h2>
+            </div>
+            <div class="modal-body">
+                <div id="dav-gerado-conteudo" style="background: #f9fafb; padding: 20px; border-radius: 10px; margin-bottom: 20px; font-family: monospace; white-space: pre-wrap;"></div>
+                
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107; margin-bottom: 20px;">
+                    <p style="margin: 0; color: #856404; font-weight: 600;">💡 O que você deseja fazer com este DAV?</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="imprimirDAV()" class="btn-action btn-print flex items-center justify-center space-x-2">
+                        <span>🖨️</span><span>Imprimir</span>
+                    </button>
+                    <button onclick="baixarDAVPDF()" class="btn-action btn-pdf flex items-center justify-center space-x-2">
+                        <span>📄</span><span>Baixar PDF</span>
+                    </button>
+                    <button onclick="enviarDAVEmail()" class="btn-action btn-email flex items-center justify-center space-x-2">
+                        <span>📧</span><span>Enviar Email</span>
+                    </button>
+                    <button onclick="enviarDAVWhatsApp()" class="btn-action btn-whatsapp flex items-center justify-center space-x-2">
+                        <span>💬</span><span>WhatsApp</span>
+                    </button>
+                </div>
+
+                <div class="flex justify-end mt-6">
+                    <button onclick="closeModal('modalDAVGerado')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <script>
 // ========================================
-// PROHOSPITALAR - DADOS DO SISTEMA
+// PROHOSPITALAR - DADOS DO SISTEMA v5.0
 // ========================================
 
-let vendas = [
-    { id: 1, data: '2024-10-17', cliente: 'Hospital São Lucas', produto: 'Monitor Cardíaco MC-500', representante: 'Ana Silva', valor: 45890, lucro: 15200, status: 'Concluída', pagamento: 'À Vista' },
-    { id: 2, data: '2024-10-17', cliente: 'Clínica Santa Maria', produto: 'Ultrassom US-300', representante: 'Carlos Mendes', valor: 78500, lucro: 28900, status: 'Concluída', pagamento: 'Boleto' },
-    { id: 3, data: '2024-10-16', cliente: 'Hospital Regional', produto: 'Equipamento Raio-X RX-700', representante: 'Ana Silva', valor: 125000, lucro: 42000, status: 'Pendente', pagamento: 'Cartão' },
-    { id: 4, data: '2024-10-16', cliente: 'Posto de Saúde Central', produto: 'Kit Equipamentos Básicos', representante: 'João Santos', valor: 32800, lucro: 11500, status: 'Concluída', pagamento: 'À Vista' },
-    { id: 5, data: '2024-10-15', cliente: 'Hospital Universitário', produto: 'Eletrocardiógrafo ECG-200', representante: 'Carlos Mendes', valor: 19800, lucro: 7300, status: 'Concluída', pagamento: 'Boleto' }
-];
-
-let produtos = [
-    { codigo: 'MC-500', nome: 'Monitor Cardíaco Digital', categoria: 'Monitoramento', quantidade: 12, custo: 30690, precoVenda: 45890, margem: '49.5%', status: 'Disponível' },
-    { codigo: 'US-300', nome: 'Ultrassom Portátil', categoria: 'Diagnóstico', quantidade: 5, custo: 49600, precoVenda: 78500, margem: '58.3%', status: 'Estoque Baixo' },
-    { codigo: 'RX-700', nome: 'Equipamento Raio-X Digital', categoria: 'Radiologia', quantidade: 3, custo: 83000, precoVenda: 125000, margem: '50.6%', status: 'Estoque Baixo' },
-    { codigo: 'ECG-200', nome: 'Eletrocardiógrafo 12 Canais', categoria: 'Cardiologia', quantidade: 18, custo: 12500, precoVenda: 19800, margem: '58.4%', status: 'Disponível' },
-    { codigo: 'OXI-100', nome: 'Oxímetro de Pulso Digital', categoria: 'Monitoramento', quantidade: 45, custo: 280, precoVenda: 520, margem: '85.7%', status: 'Disponível' },
-    { codigo: 'DFB-400', nome: 'Desfibrilador Automático', categoria: 'Emergência', quantidade: 8, custo: 15800, precoVenda: 24500, margem: '55.1%', status: 'Disponível' }
-];
-
-let clientes = [
-    { id: 1, nome: 'Hospital São Lucas', cnpj: '12.345.678/0001-90', cidade: 'São Paulo', responsavel: 'Dr. Roberto Silva', telefone: '(11) 98765-4321', status: 'Ativo' },
-    { id: 2, nome: 'Clínica Santa Maria', cnpj: '23.456.789/0001-01', cidade: 'Rio de Janeiro', responsavel: 'Dra. Marina Costa', telefone: '(21) 97654-3210', status: 'Ativo' },
-    { id: 3, nome: 'Hospital Regional', cnpj: '34.567.890/0001-12', cidade: 'Belo Horizonte', responsavel: 'Dr. Paulo Santos', telefone: '(31) 96543-2109', status: 'Ativo' },
-    { id: 4, nome: 'Posto de Saúde Central', cnpj: '45.678.901/0001-23', cidade: 'Salvador', responsavel: 'Dra. Juliana Lima', telefone: '(71) 95432-1098', status: 'Ativo' }
-];
-
-let representantes = [
-    { id: 1, nome: 'Ana Silva', regiao: 'Sudeste', vendasMes: 249390, meta: 220000, comissao: 12469, performance: '113%' },
-    { id: 2, nome: 'Carlos Mendes', regiao: 'Sul', vendasMes: 187600, meta: 200000, comissao: 9380, performance: '94%' },
-    { id: 3, nome: 'João Santos', regiao: 'Nordeste', vendasMes: 156800, meta: 180000, comissao: 7840, performance: '87%' },
-    { id: 4, nome: 'Marina Costa', regiao: 'Centro-Oeste', vendasMes: 198450, meta: 190000, comissao: 9922, performance: '104%' }
-];
-
-let fornecedores = [
-    { id: 1, nome: 'MedTech Equipamentos', cnpj: '56.789.012/0001-34', especialidade: 'Equipamentos de Diagnóstico', contato: 'Ricardo Alves', telefone: '(11) 3456-7890', status: 'Ativo' },
-    { id: 2, nome: 'CardioMed Importadora', cnpj: '67.890.123/0001-45', especialidade: 'Cardiologia', contato: 'Fernanda Costa', telefone: '(21) 3567-8901', status: 'Ativo' },
-    { id: 3, nome: 'Hospital Supply Co.', cnpj: '78.901.234/0001-56', especialidade: 'Equipamentos Gerais', contato: 'Marcos Silva', telefone: '(11) 3678-9012', status: 'Ativo' }
-];
-
-let transacoes = [
-    { id: 1, data: '2024-10-17', descricao: 'Venda - Hospital São Lucas', categoria: 'Receita', tipo: 'Entrada', valor: 45890, status: 'Confirmado' },
-    { id: 2, data: '2024-10-17', descricao: 'Venda - Clínica Santa Maria', categoria: 'Receita', tipo: 'Entrada', valor: 78500, status: 'Confirmado' },
-    { id: 3, data: '2024-10-16', descricao: 'Compra - MedTech Equipamentos', categoria: 'Operacional', tipo: 'Saída', valor: -83000, status: 'Pago' },
-    { id: 4, data: '2024-10-16', descricao: 'Comissão Representantes', categoria: 'Pessoal', tipo: 'Saída', valor: -12469, status: 'Pago' }
-];
-
+let vendas = [];
+let produtos = [];
+let clientes = [];
+let representantes = [];
+let fornecedores = [];
+let transacoes = [];
+let contasReceber = [];
 let itensDAV = [];
+let historicoDAVs = [];
+let davAtual = null;
 let chartVendas = null;
+    // ========================================
+// BACKUP E PERSISTÊNCIA (NOVO!)
+// ========================================
+
+function salvarDados() {
+    try {
+        const dados = {
+            vendas,
+            produtos,
+            clientes,
+            representantes,
+            fornecedores,
+            transacoes,
+            contasReceber,
+            historicoDAVs,
+            ultimoBackup: new Date().toLocaleString('pt-BR')
+        };
+        localStorage.setItem('prohospitalar_dados', JSON.stringify(dados));
+        document.getElementById('ultimo-backup').textContent = 'Agora mesmo';
+        return true;
+    } catch (e) {
+        console.error('Erro ao salvar dados:', e);
+        return false;
+    }
+}
+
+function carregarDados() {
+    try {
+        const dadosSalvos = localStorage.getItem('prohospitalar_dados');
+        if (dadosSalvos) {
+            const dados = JSON.parse(dadosSalvos);
+            vendas = dados.vendas || [];
+            produtos = dados.produtos || [];
+            clientes = dados.clientes || [];
+            representantes = dados.representantes || [];
+            fornecedores = dados.fornecedores || [];
+            transacoes = dados.transacoes || [];
+            contasReceber = dados.contasReceber || [];
+            historicoDAVs = dados.historicoDAVs || [];
+            
+            if (dados.ultimoBackup) {
+                document.getElementById('ultimo-backup').textContent = dados.ultimoBackup;
+            }
+            
+            console.log('✅ Dados carregados do backup!');
+            return true;
+        } else {
+            carregarDadosIniciais();
+            console.log('✅ Dados iniciais carregados!');
+            return false;
+        }
+    } catch (e) {
+        console.error('Erro ao carregar dados:', e);
+        carregarDadosIniciais();
+        return false;
+    }
+}
+
+function carregarDadosIniciais() {
+    vendas = [
+        { id: 1, data: '2024-10-17', cliente: 'Hospital São Lucas', produto: 'Monitor Cardíaco MC-500', codigoProduto: 'MC-500', quantidade: 1, representante: 'Ana Silva', valor: 45890, lucro: 15200, status: 'Concluída', pagamento: 'À Vista' },
+        { id: 2, data: '2024-10-17', cliente: 'Clínica Santa Maria', produto: 'Ultrassom US-300', codigoProduto: 'US-300', quantidade: 1, representante: 'Carlos Mendes', valor: 78500, lucro: 28900, status: 'Concluída', pagamento: 'Boleto' }
+    ];
+
+    produtos = [
+        { codigo: 'MC-500', nome: 'Monitor Cardíaco Digital', categoria: 'Monitoramento', quantidade: 12, custo: 30690, precoVenda: 45890, estoqueMinimo: 5, status: 'Disponível' },
+        { codigo: 'US-300', nome: 'Ultrassom Portátil', categoria: 'Diagnóstico', quantidade: 5, custo: 49600, precoVenda: 78500, estoqueMinimo: 3, status: 'Disponível' },
+        { codigo: 'RX-700', nome: 'Equipamento Raio-X Digital', categoria: 'Radiologia', quantidade: 3, custo: 83000, precoVenda: 125000, estoqueMinimo: 2, status: 'Disponível' }
+    ];
+
+    clientes = [
+        { id: 1, nome: 'Hospital São Lucas', cnpj: '12.345.678/0001-90', cidade: 'São Paulo', status: 'Ativo' },
+        { id: 2, nome: 'Clínica Santa Maria', cnpj: '23.456.789/0001-01', cidade: 'Rio de Janeiro', status: 'Ativo' }
+    ];
+
+    representantes = [
+        { id: 1, nome: 'Ana Silva', regiao: 'Sudeste', vendasMes: 249390, meta: 220000, performance: '113%' },
+        { id: 2, nome: 'Carlos Mendes', regiao: 'Sul', vendasMes: 187600, meta: 200000, performance: '94%' }
+    ];
+
+    fornecedores = [
+        { id: 1, nome: 'MedTech Equipamentos', cnpj: '56.789.012/0001-34', especialidade: 'Equipamentos de Diagnóstico', status: 'Ativo' }
+    ];
+
+    transacoes = [
+        { id: 1, data: '2024-10-17', descricao: 'Venda - Hospital São Lucas', tipo: 'Entrada', valor: 45890, status: 'Confirmado' }
+    ];
+
+    contasReceber = [];
+    historicoDAVs = [];
+}
+
+function fazerBackupManual() {
+    if (salvarDados()) {
+        alert('✅ BACKUP REALIZADO!\n\nTodos os dados foram salvos com sucesso!\n\n💾 Local: Navegador (localStorage)\n📅 Data: ' + new Date().toLocaleString('pt-BR'));
+    } else {
+        alert('❌ ERRO AO FAZER BACKUP!\n\nNão foi possível salvar os dados.');
+    }
+}
+
+// ========================================
+// CONTROLE DE ESTOQUE AUTOMÁTICO (NOVO!)
+// ========================================
+
+function baixarEstoque(codigoProduto, quantidade) {
+    const produto = produtos.find(p => p.codigo === codigoProduto);
+    if (produto) {
+        produto.quantidade -= quantidade;
+        if (produto.quantidade < 0) produto.quantidade = 0;
+        verificarEstoqueBaixo();
+        salvarDados();
+        return true;
+    }
+    return false;
+}
+
+function devolverEstoque(codigoProduto, quantidade) {
+    const produto = produtos.find(p => p.codigo === codigoProduto);
+    if (produto) {
+        produto.quantidade += quantidade;
+        verificarEstoqueBaixo();
+        salvarDados();
+        return true;
+    }
+    return false;
+}
+
+function verificarEstoqueBaixo() {
+    const produtosBaixos = produtos.filter(p => p.quantidade <= (p.estoqueMinimo || 5));
+    const countBaixos = produtosBaixos.length;
+    
+    document.getElementById('estoque-baixo').textContent = countBaixos;
+    document.getElementById('dash-estoque-baixo').textContent = countBaixos;
+    
+    if (countBaixos > 0) {
+        const alerta = document.getElementById('alerta-estoque-baixo');
+        if (alerta) {
+            alerta.innerHTML = `
+                <div class="alerta-estoque mb-4">
+                    <div class="flex items-start">
+                        <span class="text-2xl mr-3">⚠️</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-orange-800 mb-2">Atenção: ${countBaixos} produto(s) com estoque baixo!</h4>
+                            <ul class="text-sm text-orange-700">
+                                ${produtosBaixos.map(p => `<li>• ${p.nome} (${p.codigo}): ${p.quantidade} unidades</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    } else {
+        const alerta = document.getElementById('alerta-estoque-baixo');
+        if (alerta) alerta.innerHTML = '';
+    }
+}
+
+// ========================================
+// CONTAS A RECEBER (NOVO!)
+// ========================================
+
+function gerarContaReceber(venda) {
+    if (venda.pagamento !== 'À Vista') {
+        let diasVencimento = 30;
+        if (venda.pagamento === '30/60 dias') diasVencimento = 30;
+        
+        const dataVencimento = new Date(venda.data);
+        dataVencimento.setDate(dataVencimento.getDate() + diasVencimento);
+        
+        const conta = {
+            id: contasReceber.length + 1,
+            vendaId: venda.id,
+            cliente: venda.cliente,
+            valor: venda.valor,
+            dataVencimento: dataVencimento.toISOString().split('T')[0],
+            status: 'Pendente',
+            dataPagamento: null
+        };
+        
+        contasReceber.push(conta);
+        salvarDados();
+        atualizarContadores();
+    }
+}
+
+function marcarComoPago(contaId) {
+    const conta = contasReceber.find(c => c.id === contaId);
+    if (conta) {
+        conta.status = 'Pago';
+        conta.dataPagamento = new Date().toISOString().split('T')[0];
+        salvarDados();
+        alert('✅ Conta marcada como paga!');
+        renderContasReceber();
+        atualizarContadores();
+    }
+}
+
+function calcularTotaisReceber() {
+    const totalReceber = contasReceber.filter(c => c.status === 'Pendente').reduce((sum, c) => sum + c.valor, 0);
+    const hoje = new Date().toISOString().split('T')[0];
+    const totalVencidas = contasReceber.filter(c => c.status === 'Pendente' && c.dataVencimento < hoje).reduce((sum, c) => sum + c.valor, 0);
+    const totalRecebido = contasReceber.filter(c => c.status === 'Pago').reduce((sum, c) => sum + c.valor, 0);
+    
+    return { totalReceber, totalVencidas, totalRecebido };
+}
 
 // ========================================
 // FUNÇÕES DE NAVEGAÇÃO
 // ========================================
 
 function showTab(tabName) {
-    const tabs = ['dashboard', 'vendas', 'clientes', 'estoque', 'vendedores', 'fornecedores', 'financeiro'];
+    const tabs = ['dashboard', 'vendas', 'contas-receber', 'clientes', 'estoque', 'vendedores', 'fornecedores', 'financeiro', 'historico-davs'];
     
     tabs.forEach(tab => {
         const element = document.getElementById(tab);
@@ -553,18 +864,23 @@ function showTab(tabName) {
 
     if (tabName === 'dashboard') initDashboard();
     else if (tabName === 'vendas') renderVendas();
+    else if (tabName === 'contas-receber') renderContasReceber();
     else if (tabName === 'clientes') renderClientes();
     else if (tabName === 'estoque') renderProdutos();
     else if (tabName === 'vendedores') renderRepresentantes();
     else if (tabName === 'fornecedores') renderFornecedores();
     else if (tabName === 'financeiro') renderFinanceiro();
+    else if (tabName === 'historico-davs') renderHistoricoDAVs();
 }
 
 // ========================================
-// DASHBOARD
+// DASHBOARD E CONTADORES
 // ========================================
 
 function initDashboard() {
+    atualizarContadores();
+    verificarEstoqueBaixo();
+    
     const ctx = document.getElementById('chartVendasCategorias');
     if (ctx && !chartVendas) {
         chartVendas = new Chart(ctx, {
@@ -583,19 +899,35 @@ function initDashboard() {
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
-                plugins: { legend: { display: true, position: 'top' } },
+                plugins: { legend: { display: true } },
                 scales: {
                     y: { 
                         beginAtZero: true,
-                        ticks: { callback: function(value) { return 'R$ ' + value.toLocaleString('pt-BR'); } }
+                        ticks: { callback: value => 'R$ ' + value.toLocaleString('pt-BR') }
                     }
                 }
             }
         });
     }
 }
-    // ========================================
-// RENDERIZAR TABELAS COM BOTÕES DE AÇÃO
+
+function atualizarContadores() {
+    const totalVendas = vendas.reduce((sum, v) => sum + v.valor, 0);
+    const { totalReceber, totalVencidas } = calcularTotaisReceber();
+    const contasPendentes = contasReceber.filter(c => c.status === 'Pendente').length;
+    const produtosBaixos = produtos.filter(p => p.quantidade <= (p.estoqueMinimo || 5)).length;
+    
+    document.getElementById('dash-vendas').textContent = 'R$ ' + totalVendas.toLocaleString('pt-BR');
+    document.getElementById('dash-receber').textContent = 'R$ ' + totalReceber.toLocaleString('pt-BR');
+    document.getElementById('dash-clientes').textContent = clientes.length;
+    document.getElementById('dash-produtos').textContent = produtos.length;
+    document.getElementById('dash-estoque-baixo').textContent = produtosBaixos;
+    document.getElementById('receber-count').textContent = contasPendentes;
+    document.getElementById('alert-count').textContent = contasPendentes + produtosBaixos;
+}
+
+// ========================================
+// RENDERIZAR TABELAS
 // ========================================
 
 function renderVendas() {
@@ -606,6 +938,7 @@ function renderVendas() {
         const statusColor = venda.status === 'Concluída' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
         return `
             <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm">${new Date(venda.data).toLocaleDateString('pt-BR')}</td>
                 <td class="px-6 py-4">${venda.cliente}</td>
                 <td class="px-6 py-4 text-sm">${venda.produto}</td>
                 <td class="px-6 py-4 font-semibold text-green-600">R$ ${venda.valor.toLocaleString('pt-BR')}</td>
@@ -613,6 +946,42 @@ function renderVendas() {
                 <td class="px-6 py-4">
                     <button onclick="editarVenda(${venda.id})" class="btn-edit">✏️ Editar</button>
                     <button onclick="deletarVenda(${venda.id})" class="btn-delete">🗑️ Deletar</button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function renderContasReceber() {
+    const tbody = document.getElementById('lista-contas-receber');
+    if (!tbody) return;
+    
+    const { totalReceber, totalVencidas, totalRecebido } = calcularTotaisReceber();
+    document.getElementById('total-receber').textContent = 'R$ ' + totalReceber.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+    document.getElementById('total-vencidas').textContent = 'R$ ' + totalVencidas.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+    document.getElementById('total-recebido').textContent = 'R$ ' + totalRecebido.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+    
+    if (contasReceber.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">Nenhuma conta a receber cadastrada.</td></tr>';
+        return;
+    }
+    
+    const hoje = new Date().toISOString().split('T')[0];
+    
+    tbody.innerHTML = contasReceber.map(conta => {
+        const statusColor = conta.status === 'Pago' ? 'bg-green-100 text-green-800' : 
+                           (conta.dataVencimento < hoje ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800');
+        const statusTexto = conta.status === 'Pago' ? 'Pago' : (conta.dataVencimento < hoje ? 'Vencida' : 'Pendente');
+        
+        return `
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 font-medium">#${conta.vendaId}</td>
+                <td class="px-6 py-4">${conta.cliente}</td>
+                <td class="px-6 py-4 text-sm">${new Date(conta.dataVencimento).toLocaleDateString('pt-BR')}</td>
+                <td class="px-6 py-4 font-semibold text-green-600">R$ ${conta.valor.toLocaleString('pt-BR')}</td>
+                <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${statusColor}">${statusTexto}</span></td>
+                <td class="px-6 py-4">
+                    ${conta.status === 'Pendente' ? `<button onclick="marcarComoPago(${conta.id})" class="btn-pagar">✅ Receber</button>` : '<span class="text-sm text-green-600">✓ Recebido</span>'}
                 </td>
             </tr>
         `;
@@ -640,18 +1009,23 @@ function renderProdutos() {
     const tbody = document.getElementById('lista-produtos');
     if (!tbody) return;
     
-    tbody.innerHTML = produtos.map(produto => `
-        <tr class="hover:bg-gray-50">
-            <td class="px-6 py-4 font-medium">${produto.codigo}</td>
-            <td class="px-6 py-4">${produto.nome}</td>
-            <td class="px-6 py-4 text-center font-semibold">${produto.quantidade}</td>
-            <td class="px-6 py-4 font-semibold">R$ ${produto.precoVenda.toLocaleString('pt-BR')}</td>
-            <td class="px-6 py-4">
-                <button onclick="editarProduto('${produto.codigo}')" class="btn-edit">✏️ Editar</button>
-                <button onclick="deletarProduto('${produto.codigo}')" class="btn-delete">🗑️ Deletar</button>
-            </td>
-        </tr>
-    `).join('');
+    verificarEstoqueBaixo();
+    
+    tbody.innerHTML = produtos.map(produto => {
+        const estoqueClasse = produto.quantidade <= (produto.estoqueMinimo || 5) ? 'text-red-600 font-bold' : 'font-semibold';
+        return `
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 font-medium">${produto.codigo}</td>
+                <td class="px-6 py-4">${produto.nome}</td>
+                <td class="px-6 py-4 text-center ${estoqueClasse}">${produto.quantidade}</td>
+                <td class="px-6 py-4 font-semibold">R$ ${produto.precoVenda.toLocaleString('pt-BR')}</td>
+                <td class="px-6 py-4">
+                    <button onclick="editarProduto('${produto.codigo}')" class="btn-edit">✏️ Editar</button>
+                    <button onclick="deletarProduto('${produto.codigo}')" class="btn-delete">🗑️ Deletar</button>
+                </td>
+            </tr>
+        `;
+    }).join('');
 }
 
 function renderRepresentantes() {
@@ -664,8 +1038,7 @@ function renderRepresentantes() {
             <td class="px-6 py-4 text-sm">${rep.regiao}</td>
             <td class="px-6 py-4 font-semibold text-green-600">R$ ${rep.vendasMes.toLocaleString('pt-BR')}</td>
             <td class="px-6 py-4">
-                <button onclick="alert('Edição de representantes em desenvolvimento')" class="btn-edit">✏️ Editar</button>
-                <button onclick="alert('Exclusão de representantes em desenvolvimento')" class="btn-delete">🗑️ Deletar</button>
+                <button onclick="alert('Em desenvolvimento')" class="btn-edit">✏️ Editar</button>
             </td>
         </tr>
     `).join('');
@@ -681,8 +1054,7 @@ function renderFornecedores() {
             <td class="px-6 py-4 text-sm">${forn.cnpj}</td>
             <td class="px-6 py-4 text-sm">${forn.especialidade}</td>
             <td class="px-6 py-4">
-                <button onclick="alert('Edição de fornecedores em desenvolvimento')" class="btn-edit">✏️ Editar</button>
-                <button onclick="alert('Exclusão de fornecedores em desenvolvimento')" class="btn-delete">🗑️ Deletar</button>
+                <button onclick="alert('Em desenvolvimento')" class="btn-edit">✏️ Editar</button>
             </td>
         </tr>
     `).join('');
@@ -694,19 +1066,41 @@ function renderFinanceiro() {
     
     tbody.innerHTML = transacoes.map(trans => {
         const tipoColor = trans.tipo === 'Entrada' ? 'text-green-600' : 'text-red-600';
-        const valorFormatado = trans.tipo === 'Entrada' ? `R$ ${trans.valor.toLocaleString('pt-BR')}` : `R$ ${Math.abs(trans.valor).toLocaleString('pt-BR')}`;
-        
         return `
             <tr class="hover:bg-gray-50">
                 <td class="px-6 py-4 text-sm">${new Date(trans.data).toLocaleDateString('pt-BR')}</td>
                 <td class="px-6 py-4">${trans.descricao}</td>
-                <td class="px-6 py-4 font-semibold ${tipoColor}">${valorFormatado}</td>
+                <td class="px-6 py-4 font-semibold ${tipoColor}">R$ ${trans.valor.toLocaleString('pt-BR')}</td>
             </tr>
         `;
     }).join('');
 }
 
-// ========================================
+function renderHistoricoDAVs() {
+    const tbody = document.getElementById('lista-historico-davs');
+    if (!tbody) return;
+    
+    if (historicoDAVs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">Nenhum DAV gerado ainda.</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = historicoDAVs.map(dav => `
+        <tr class="hover:bg-gray-50">
+            <td class="px-6 py-4 font-medium">${dav.numero}</td>
+            <td class="px-6 py-4 text-sm">${new Date(dav.data).toLocaleDateString('pt-BR')}</td>
+            <td class="px-6 py-4">${dav.cliente}</td>
+            <td class="px-6 py-4 font-semibold text-green-600">R$ ${dav.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+            <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">${dav.status}</span></td>
+            <td class="px-6 py-4">
+                <button onclick="visualizarDAV('${dav.numero}')" class="btn-edit">👁️ Ver</button>
+                <button onclick="reimprimirDAV('${dav.numero}')" class="btn-edit">🖨️</button>
+                <button onclick="deletarDAV('${dav.numero}')" class="btn-delete">🗑️</button>
+            </td>
+        </tr>
+    `).join('');
+}
+    // ========================================
 // MODAIS - ABRIR E FECHAR
 // ========================================
 
@@ -746,7 +1140,7 @@ window.onclick = function(event) {
 }
 
 // ========================================
-// VENDAS - CRUD COMPLETO
+// VENDAS - CRUD COMPLETO COM ESTOQUE
 // ========================================
 
 function popularSelectsVenda() {
@@ -754,13 +1148,13 @@ function popularSelectsVenda() {
     const selectProduto = document.getElementById('venda-produto');
     const selectRep = document.getElementById('venda-representante');
     
-    selectCliente.innerHTML = '<option value="">Selecione um cliente</option>' + 
+    selectCliente.innerHTML = '<option value="">Selecione</option>' + 
         clientes.map(c => `<option value="${c.nome}">${c.nome}</option>`).join('');
     
-    selectProduto.innerHTML = '<option value="">Selecione um produto</option>' + 
-        produtos.map(p => `<option value="${p.codigo}" data-nome="${p.nome}" data-preco="${p.precoVenda}">${p.nome} - R$ ${p.precoVenda.toLocaleString('pt-BR')}</option>`).join('');
+    selectProduto.innerHTML = '<option value="">Selecione</option>' + 
+        produtos.map(p => `<option value="${p.codigo}" data-nome="${p.nome}" data-preco="${p.precoVenda}" data-qtd="${p.quantidade}">${p.nome} - R$ ${p.precoVenda.toLocaleString('pt-BR')} (Est: ${p.quantidade})</option>`).join('');
     
-    selectRep.innerHTML = '<option value="">Selecione um representante</option>' + 
+    selectRep.innerHTML = '<option value="">Selecione</option>' + 
         representantes.map(r => `<option value="${r.nome}">${r.nome} - ${r.regiao}</option>`).join('');
 }
 
@@ -768,9 +1162,11 @@ function atualizarPrecoVenda() {
     const select = document.getElementById('venda-produto');
     const selectedOption = select.options[select.selectedIndex];
     const preco = selectedOption.getAttribute('data-preco');
+    const qtdDisponivel = selectedOption.getAttribute('data-qtd');
     
     if (preco) {
         document.getElementById('venda-valor-unitario').value = 'R$ ' + parseFloat(preco).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        document.getElementById('venda-quantidade').max = qtdDisponivel;
         calcularTotalVenda();
     }
 }
@@ -795,45 +1191,62 @@ function salvarVenda(event) {
     const idEdit = document.getElementById('venda-id-edit').value;
     const select = document.getElementById('venda-produto');
     const selectedOption = select.options[select.selectedIndex];
+    const codigoProduto = select.value;
     const preco = parseFloat(selectedOption.getAttribute('data-preco')) || 0;
     const quantidade = parseInt(document.getElementById('venda-quantidade').value);
     const desconto = parseFloat(document.getElementById('venda-desconto').value) || 0;
+    const qtdDisponivel = parseInt(selectedOption.getAttribute('data-qtd'));
+    
+    if (quantidade > qtdDisponivel) {
+        alert('⚠️ ESTOQUE INSUFICIENTE!\n\nQuantidade disponível: ' + qtdDisponivel);
+        return;
+    }
     
     const subtotal = preco * quantidade;
     const valorDesconto = subtotal * (desconto / 100);
     const total = subtotal - valorDesconto;
     
     if (idEdit) {
-        // EDITAR
         const index = vendas.findIndex(v => v.id == idEdit);
         if (index !== -1) {
+            const vendaAntiga = vendas[index];
+            devolverEstoque(vendaAntiga.codigoProduto, vendaAntiga.quantidade);
+            
             vendas[index].cliente = document.getElementById('venda-cliente').value;
             vendas[index].produto = selectedOption.getAttribute('data-nome');
+            vendas[index].codigoProduto = codigoProduto;
+            vendas[index].quantidade = quantidade;
             vendas[index].representante = document.getElementById('venda-representante').value;
             vendas[index].valor = total;
             vendas[index].pagamento = document.getElementById('venda-pagamento').value;
             vendas[index].lucro = total * 0.35;
             
-            alert('✅ Venda atualizada com sucesso!');
+            baixarEstoque(codigoProduto, quantidade);
+            alert('✅ Venda atualizada com sucesso!\n\n📦 Estoque atualizado automaticamente!');
         }
     } else {
-        // NOVA
         const novaVenda = {
             id: vendas.length > 0 ? Math.max(...vendas.map(v => v.id)) + 1 : 1,
             data: new Date().toISOString().split('T')[0],
             cliente: document.getElementById('venda-cliente').value,
             produto: selectedOption.getAttribute('data-nome'),
+            codigoProduto: codigoProduto,
+            quantidade: quantidade,
             representante: document.getElementById('venda-representante').value,
             valor: total,
             lucro: total * 0.35,
-            status: 'Pendente',
+            status: 'Concluída',
             pagamento: document.getElementById('venda-pagamento').value
         };
         
         vendas.unshift(novaVenda);
-        alert('✅ Venda cadastrada com sucesso!');
+        baixarEstoque(codigoProduto, quantidade);
+        gerarContaReceber(novaVenda);
+        
+        alert('✅ Venda cadastrada com sucesso!\n\n📦 Estoque atualizado: -' + quantidade + ' unidades\n💰 Total: R$ ' + total.toLocaleString('pt-BR', {minimumFractionDigits: 2}));
     }
     
+    salvarDados();
     closeModal('modalVenda');
     document.getElementById('formVenda').reset();
     showTab('vendas');
@@ -846,26 +1259,36 @@ function editarVenda(id) {
     document.getElementById('modalVenda').style.display = 'block';
     document.getElementById('titulo-modal-venda').textContent = '✏️ Editar Venda';
     document.getElementById('venda-id-edit').value = venda.id;
-    
     popularSelectsVenda();
-    
     document.getElementById('venda-cliente').value = venda.cliente;
     document.getElementById('venda-representante').value = venda.representante;
     document.getElementById('venda-pagamento').value = venda.pagamento;
-    document.getElementById('venda-quantidade').value = 1;
+    document.getElementById('venda-quantidade').value = venda.quantidade || 1;
     document.getElementById('venda-desconto').value = 0;
 }
 
 function deletarVenda(id) {
-    if (confirm('⚠️ Tem certeza que deseja deletar esta venda?')) {
-        vendas = vendas.filter(v => v.id !== id);
-        alert('✅ Venda deletada com sucesso!');
-        renderVendas();
+    if (!confirm('⚠️ Tem certeza que deseja deletar esta venda?\n\nO estoque será devolvido automaticamente!')) return;
+    
+    const venda = vendas.find(v => v.id === id);
+    if (venda) {
+        devolverEstoque(venda.codigoProduto, venda.quantidade);
+        
+        const contaRelacionada = contasReceber.find(c => c.vendaId === id);
+        if (contaRelacionada) {
+            contasReceber = contasReceber.filter(c => c.vendaId !== id);
+        }
     }
+    
+    vendas = vendas.filter(v => v.id !== id);
+    salvarDados();
+    alert('✅ Venda deletada!\n\n📦 Estoque devolvido automaticamente!');
+    renderVendas();
+    atualizarContadores();
 }
 
 // ========================================
-// CLIENTES - CRUD COMPLETO
+// CLIENTES - CRUD
 // ========================================
 
 function salvarCliente(event) {
@@ -874,17 +1297,14 @@ function salvarCliente(event) {
     const idEdit = document.getElementById('cliente-id-edit').value;
     
     if (idEdit) {
-        // EDITAR
         const index = clientes.findIndex(c => c.id == idEdit);
         if (index !== -1) {
             clientes[index].nome = document.getElementById('cliente-nome').value;
             clientes[index].cnpj = document.getElementById('cliente-cnpj').value;
             clientes[index].cidade = document.getElementById('cliente-cidade').value;
-            
-            alert('✅ Cliente atualizado com sucesso!');
+            alert('✅ Cliente atualizado!');
         }
     } else {
-        // NOVO
         const novoCliente = {
             id: clientes.length > 0 ? Math.max(...clientes.map(c => c.id)) + 1 : 1,
             nome: document.getElementById('cliente-nome').value,
@@ -892,11 +1312,11 @@ function salvarCliente(event) {
             cidade: document.getElementById('cliente-cidade').value,
             status: 'Ativo'
         };
-        
         clientes.push(novoCliente);
-        alert('✅ Cliente cadastrado com sucesso!');
+        alert('✅ Cliente cadastrado!');
     }
     
+    salvarDados();
     closeModal('modalCliente');
     document.getElementById('formCliente').reset();
     showTab('clientes');
@@ -915,15 +1335,16 @@ function editarCliente(id) {
 }
 
 function deletarCliente(id) {
-    if (confirm('⚠️ Tem certeza que deseja deletar este cliente?')) {
+    if (confirm('⚠️ Deletar este cliente?')) {
         clientes = clientes.filter(c => c.id !== id);
-        alert('✅ Cliente deletado com sucesso!');
+        salvarDados();
+        alert('✅ Cliente deletado!');
         renderClientes();
     }
 }
 
 // ========================================
-// PRODUTOS - CRUD COMPLETO
+// PRODUTOS - CRUD
 // ========================================
 
 function salvarProduto(event) {
@@ -932,7 +1353,6 @@ function salvarProduto(event) {
     const codigoEdit = document.getElementById('produto-codigo-edit').value;
     
     if (codigoEdit) {
-        // EDITAR
         const index = produtos.findIndex(p => p.codigo === codigoEdit);
         if (index !== -1) {
             produtos[index].codigo = document.getElementById('produto-codigo').value;
@@ -941,11 +1361,10 @@ function salvarProduto(event) {
             produtos[index].quantidade = parseInt(document.getElementById('produto-quantidade').value);
             produtos[index].custo = parseFloat(document.getElementById('produto-custo').value);
             produtos[index].precoVenda = parseFloat(document.getElementById('produto-preco').value);
-            
-            alert('✅ Produto atualizado com sucesso!');
+            produtos[index].estoqueMinimo = parseInt(document.getElementById('produto-estoque-minimo').value);
+            alert('✅ Produto atualizado!');
         }
     } else {
-        // NOVO
         const novoProduto = {
             codigo: document.getElementById('produto-codigo').value,
             nome: document.getElementById('produto-nome').value,
@@ -953,13 +1372,15 @@ function salvarProduto(event) {
             quantidade: parseInt(document.getElementById('produto-quantidade').value),
             custo: parseFloat(document.getElementById('produto-custo').value),
             precoVenda: parseFloat(document.getElementById('produto-preco').value),
+            estoqueMinimo: parseInt(document.getElementById('produto-estoque-minimo').value),
             status: 'Disponível'
         };
-        
         produtos.push(novoProduto);
-        alert('✅ Produto cadastrado com sucesso!');
+        alert('✅ Produto cadastrado!');
     }
     
+    verificarEstoqueBaixo();
+    salvarDados();
     closeModal('modalProduto');
     document.getElementById('formProduto').reset();
     showTab('estoque');
@@ -978,17 +1399,20 @@ function editarProduto(codigo) {
     document.getElementById('produto-quantidade').value = produto.quantidade;
     document.getElementById('produto-custo').value = produto.custo;
     document.getElementById('produto-preco').value = produto.precoVenda;
+    document.getElementById('produto-estoque-minimo').value = produto.estoqueMinimo || 5;
 }
 
 function deletarProduto(codigo) {
-    if (confirm('⚠️ Tem certeza que deseja deletar este produto?')) {
+    if (confirm('⚠️ Deletar este produto?')) {
         produtos = produtos.filter(p => p.codigo !== codigo);
-        alert('✅ Produto deletado com sucesso!');
+        salvarDados();
+        alert('✅ Produto deletado!');
         renderProdutos();
     }
 }
-    // ========================================
-// GERAR DAV - FUNÇÕES COMPLETAS
+
+// ========================================
+// DAV - FUNÇÕES COMPLETAS
 // ========================================
 
 function popularSelectsDAV() {
@@ -996,13 +1420,13 @@ function popularSelectsDAV() {
     const selectRep = document.getElementById('dav-representante');
     const selectProduto = document.getElementById('dav-produto-select');
     
-    selectCliente.innerHTML = '<option value="">Selecione um cliente</option>' + 
+    selectCliente.innerHTML = '<option value="">Selecione</option>' + 
         clientes.map(c => `<option value="${c.nome}">${c.nome}</option>`).join('');
     
-    selectRep.innerHTML = '<option value="">Selecione um representante</option>' + 
+    selectRep.innerHTML = '<option value="">Selecione</option>' + 
         representantes.map(r => `<option value="${r.nome}">${r.nome} - ${r.regiao}</option>`).join('');
     
-    selectProduto.innerHTML = '<option value="">Selecione um produto</option>' + 
+    selectProduto.innerHTML = '<option value="">Selecione</option>' + 
         produtos.map(p => `<option value="${p.codigo}" data-nome="${p.nome}" data-preco="${p.precoVenda}">${p.nome} - R$ ${p.precoVenda.toLocaleString('pt-BR')}</option>`).join('');
 }
 
@@ -1068,7 +1492,7 @@ function finalizarDAV(event) {
     event.preventDefault();
     
     if (itensDAV.length === 0) {
-        alert('⚠️ Adicione pelo menos um produto ao DAV!');
+        alert('⚠️ Adicione pelo menos um produto!');
         return;
     }
     
@@ -1081,215 +1505,279 @@ function finalizarDAV(event) {
     const numeroDAV = 'DAV-' + new Date().getTime();
     const dataEmissao = new Date().toLocaleString('pt-BR');
     
-    let detalhesItens = itensDAV.map(item => 
-        `• ${item.nome} - Qtd: ${item.quantidade} - R$ ${item.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`
-    ).join('\n');
+    davAtual = {
+        numero: numeroDAV,
+        data: new Date().toISOString().split('T')[0],
+        dataEmissao: dataEmissao,
+        cliente: cliente,
+        representante: representante,
+        itens: [...itensDAV],
+        total: totalGeral,
+        pagamento: pagamento,
+        observacoes: obs,
+        status: 'Emitido'
+    };
     
-    alert(
-        `✅ DAV GERADO COM SUCESSO!\n\n` +
+    historicoDAVs.unshift(davAtual);
+    salvarDados();
+    
+    let detalhesItens = itensDAV.map(item => 
+        `${item.nome}\nQtd: ${item.quantidade} x R$ ${item.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})} = R$ ${item.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`
+    ).join('\n\n');
+    
+    const textoDAV = 
+        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+        `   PROHOSPITALAR - DAV\n` +
+        `   Documento Auxiliar de Venda\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
         `📄 Número: ${numeroDAV}\n` +
         `📅 Data: ${dataEmissao}\n\n` +
         `🏥 Cliente: ${cliente}\n` +
         `👨‍💼 Representante: ${representante}\n\n` +
-        `📦 ITENS:\n${detalhesItens}\n\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+        `ITENS DO PEDIDO:\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+        `${detalhesItens}\n\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
         `💰 TOTAL: R$ ${totalGeral.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n` +
-        `💳 Pagamento: ${pagamento}\n\n` +
-        `${obs ? '📝 Obs: ' + obs + '\n\n' : ''}` +
-        `O DAV foi gerado e está pronto para ser enviado ao cliente!`
-    );
+        `💳 Pagamento: ${pagamento}\n` +
+        `${obs ? '\n📝 Observações:\n' + obs + '\n' : ''}` +
+        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
     
+    document.getElementById('dav-gerado-conteudo').textContent = textoDAV;
     closeModal('modalDAV');
+    document.getElementById('modalDAVGerado').style.display = 'block';
     document.getElementById('formDAV').reset();
     itensDAV = [];
 }
 
-// ========================================
-// FUNÇÕES DE EXPORTAR (TODAS AS TELAS)
+function imprimirDAV() {
+    if (!davAtual) return;
+    const conteudo = document.getElementById('dav-gerado-conteudo').textContent;
+    const janela = window.open('', '', 'width=800,height=600');
+    janela.document.write('<html><head><title>DAV - ' + davAtual.numero + '</title>');
+    janela.document.write('<style>body{font-family:monospace;padding:20px;white-space:pre-wrap;}</style></head><body>');
+    janela.document.write(conteudo);
+    janela.document.write('</body></html>');
+    janela.document.close();
+    janela.print();
+}
+
+function baixarDAVPDF() {
+    alert('📄 Funcionalidade de PDF em desenvolvimento!\n\nUse "Imprimir" e salve como PDF.');
+}
+
+function enviarDAVEmail() {
+    const email = prompt('📧 Digite o email:');
+    if (email) alert('✅ Email enviado para: ' + email + '\n\n(Funcionalidade simulada)');
+}
+
+function enviarDAVWhatsApp() {
+    if (!davAtual) return;
+    const texto = encodeURIComponent(document.getElementById('dav-gerado-conteudo').textContent);
+    window.open(`https://wa.me/?text=${texto}`, '_blank');
+}
+
+function visualizarDAV(numeroDAV) {
+    davAtual = historicoDAVs.find(d => d.numero === numeroDAV);
+    if (!davAtual) return;
+    
+    let detalhes = davAtual.itens.map(item => 
+        `${item.nome}\nQtd: ${item.quantidade} x R$ ${item.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})} = R$ ${item.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`
+    ).join('\n\n');
+    
+    const texto = 
+        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+        `   PROHOSPITALAR - DAV\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+        `📄 ${davAtual.numero}\n📅 ${davAtual.dataEmissao}\n\n` +
+        `🏥 ${davAtual.cliente}\n👨‍💼 ${davAtual.representante}\n\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nITENS:\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n${detalhes}\n\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n💰 TOTAL: R$ ${davAtual.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n` +
+        `💳 ${davAtual.pagamento}\n${davAtual.observacoes ? '\n📝 ' + davAtual.observacoes : ''}`;
+    
+    document.getElementById('dav-gerado-conteudo').textContent = texto;
+    document.getElementById('modalDAVGerado').style.display = 'block';
+}
+
+function reimprimirDAV(numeroDAV) {
+    visualizarDAV(numeroDAV);
+    setTimeout(() => imprimirDAV(), 500);
+}
+
+function deletarDAV(numeroDAV) {
+    if (confirm('⚠️ Deletar DAV ' + numeroDAV + '?')) {
+        historicoDAVs = historicoDAVs.filter(d => d.numero !== numeroDAV);
+        salvarDados();
+        alert('✅ DAV deletado!');
+        renderHistoricoDAVs();
+    }
+}
+    // ========================================
+// PARTE 5 DE 5 - EXPORTAÇÕES E INICIALIZAÇÃO
 // ========================================
 
-function mostrarNotificacoes() {
-    alert('🔔 NOTIFICAÇÕES ProHospitalar\n\nVocê tem 3 notificações:\n\n• 2 produtos com estoque baixo\n• 1 pagamento vencendo hoje\n• 1 novo pedido pendente\n\nClique para ver detalhes.');
-}
+// ========================================
+// FUNÇÕES DE EXPORTAÇÃO
+// ========================================
 
 function exportarDashboard() {
     const totalVendas = vendas.reduce((sum, v) => sum + v.valor, 0);
-    const totalLucro = vendas.reduce((sum, v) => sum + v.lucro, 0);
+    const { totalReceber } = calcularTotaisReceber();
     
-    alert(
-        '📊 EXPORTAR DASHBOARD\n\n' +
-        'Gerando relatório executivo em PDF...\n\n' +
-        '✅ Dados incluídos:\n' +
-        `• Total de Vendas: R$ ${totalVendas.toLocaleString('pt-BR')}\n` +
-        `• Lucro Total: R$ ${totalLucro.toLocaleString('pt-BR')}\n` +
-        `• ${clientes.length} Clientes Ativos\n` +
-        `• ${produtos.length} Produtos\n` +
-        `• ${vendas.length} Vendas no Período\n\n` +
-        '📈 Gráficos de Performance\n' +
-        '🏆 Top 5 Produtos\n' +
-        '💼 Ranking de Representantes\n\n' +
-        'Download iniciado!'
-    );
+    let csv = 'DASHBOARD PROHOSPITALAR\n\n';
+    csv += 'RESUMO EXECUTIVO\n';
+    csv += `Total de Vendas,R$ ${totalVendas.toLocaleString('pt-BR')}\n`;
+    csv += `Total a Receber,R$ ${totalReceber.toLocaleString('pt-BR')}\n`;
+    csv += `Clientes Cadastrados,${clientes.length}\n`;
+    csv += `Produtos Ativos,${produtos.length}\n`;
+    csv += `Produtos com Estoque Baixo,${produtos.filter(p => p.quantidade <= (p.estoqueMinimo || 5)).length}\n`;
+    
+    baixarCSV(csv, 'dashboard_prohospitalar.csv');
 }
 
 function exportarVendas() {
-    const totalVendas = vendas.reduce((sum, v) => sum + v.valor, 0);
-    const totalLucro = vendas.reduce((sum, v) => sum + v.lucro, 0);
-    const vendasConcluidas = vendas.filter(v => v.status === 'Concluída').length;
-    
-    alert(
-        `💰 EXPORTAR VENDAS\n\n` +
-        `Gerando relatório de vendas...\n\n` +
-        `✅ Dados incluídos:\n` +
-        `• ${vendas.length} vendas no total\n` +
-        `• ${vendasConcluidas} vendas concluídas\n` +
-        `• Total Faturado: R$ ${totalVendas.toLocaleString('pt-BR')}\n` +
-        `• Lucro Total: R$ ${totalLucro.toLocaleString('pt-BR')}\n` +
-        `• Período: Out/2024\n\n` +
-        `📋 Detalhamento completo de cada venda\n` +
-        `📊 Análise por cliente e representante\n\n` +
-        `Formatos disponíveis: PDF, Excel, CSV\n\n` +
-        `Download iniciado!`
-    );
+    let csv = 'Data,Cliente,Produto,Quantidade,Valor,Status,Pagamento\n';
+    vendas.forEach(v => {
+        csv += `${v.data},${v.cliente},${v.produto},${v.quantidade || 1},R$ ${v.valor.toLocaleString('pt-BR')},${v.status},${v.pagamento}\n`;
+    });
+    baixarCSV(csv, 'vendas_prohospitalar.csv');
+}
+
+function exportarContasReceber() {
+    let csv = 'Venda,Cliente,Vencimento,Valor,Status\n';
+    contasReceber.forEach(c => {
+        csv += `#${c.vendaId},${c.cliente},${new Date(c.dataVencimento).toLocaleDateString('pt-BR')},R$ ${c.valor.toLocaleString('pt-BR')},${c.status}\n`;
+    });
+    baixarCSV(csv, 'contas_receber_prohospitalar.csv');
 }
 
 function exportarClientes() {
-    const clientesAtivos = clientes.filter(c => c.status === 'Ativo').length;
-    
-    alert(
-        `🏥 EXPORTAR CLIENTES\n\n` +
-        `Gerando relatório de clientes...\n\n` +
-        `✅ Dados incluídos:\n` +
-        `• ${clientes.length} clientes cadastrados\n` +
-        `• ${clientesAtivos} clientes ativos\n` +
-        `• Dados de contato completos\n` +
-        `• Histórico de compras\n` +
-        `• Localização por cidade\n\n` +
-        `📊 Análise de faturamento por cliente\n` +
-        `📍 Mapa de distribuição geográfica\n\n` +
-        `Formatos disponíveis: PDF, Excel, CSV\n\n` +
-        `Download iniciado!`
-    );
+    let csv = 'Nome,CNPJ,Cidade,Status\n';
+    clientes.forEach(c => {
+        csv += `${c.nome},${c.cnpj},${c.cidade},${c.status}\n`;
+    });
+    baixarCSV(csv, 'clientes_prohospitalar.csv');
 }
 
 function exportarProdutos() {
-    const produtosDisponiveis = produtos.filter(p => p.status === 'Disponível').length;
-    const produtosBaixos = produtos.filter(p => p.status === 'Estoque Baixo').length;
-    const valorEstoque = produtos.reduce((sum, p) => sum + (p.custo * p.quantidade), 0);
-    
-    alert(
-        `🩺 EXPORTAR PRODUTOS\n\n` +
-        `Gerando relatório de produtos...\n\n` +
-        `✅ Dados incluídos:\n` +
-        `• ${produtos.length} produtos cadastrados\n` +
-        `• ${produtosDisponiveis} disponíveis\n` +
-        `• ${produtosBaixos} com estoque baixo\n` +
-        `• Valor Total em Estoque: R$ ${valorEstoque.toLocaleString('pt-BR')}\n\n` +
-        `📦 Detalhamento por categoria\n` +
-        `💵 Análise de margem de lucro\n` +
-        `⚠️ Alertas de reposição\n\n` +
-        `Formatos disponíveis: PDF, Excel, CSV\n\n` +
-        `Download iniciado!`
-    );
+    let csv = 'Código,Nome,Categoria,Quantidade,Custo,Preço Venda,Estoque Mínimo\n';
+    produtos.forEach(p => {
+        csv += `${p.codigo},${p.nome},${p.categoria},${p.quantidade},R$ ${p.custo.toLocaleString('pt-BR')},R$ ${p.precoVenda.toLocaleString('pt-BR')},${p.estoqueMinimo}\n`;
+    });
+    baixarCSV(csv, 'produtos_prohospitalar.csv');
 }
 
 function exportarRepresentantes() {
-    const totalVendasRep = representantes.reduce((sum, r) => sum + r.vendasMes, 0);
-    const totalComissoes = representantes.reduce((sum, r) => sum + r.comissao, 0);
-    
-    alert(
-        `👨‍💼 EXPORTAR REPRESENTANTES\n\n` +
-        `Gerando relatório de representantes...\n\n` +
-        `✅ Dados incluídos:\n` +
-        `• ${representantes.length} representantes ativos\n` +
-        `• Total Vendido: R$ ${totalVendasRep.toLocaleString('pt-BR')}\n` +
-        `• Total Comissões: R$ ${totalComissoes.toLocaleString('pt-BR')}\n` +
-        `• Performance individual detalhada\n\n` +
-        `📊 Ranking de performance\n` +
-        `🎯 Análise de metas atingidas\n` +
-        `💰 Cálculo de comissões\n\n` +
-        `Formatos disponíveis: PDF, Excel, CSV\n\n` +
-        `Download iniciado!`
-    );
+    alert('📄 Função em desenvolvimento!');
 }
 
 function exportarFornecedores() {
-    const fornecedoresAtivos = fornecedores.filter(f => f.status === 'Ativo').length;
-    
-    alert(
-        `🏭 EXPORTAR FORNECEDORES\n\n` +
-        `Gerando relatório de fornecedores...\n\n` +
-        `✅ Dados incluídos:\n` +
-        `• ${fornecedores.length} fornecedores cadastrados\n` +
-        `• ${fornecedoresAtivos} fornecedores ativos\n` +
-        `• Dados de contato completos\n` +
-        `• Especialidades por categoria\n\n` +
-        `📊 Análise de compras por fornecedor\n` +
-        `💼 Histórico de transações\n\n` +
-        `Formatos disponíveis: PDF, Excel, CSV\n\n` +
-        `Download iniciado!`
-    );
+    alert('📄 Função em desenvolvimento!');
 }
 
 function exportarFinanceiro() {
-    const totalEntradas = transacoes.filter(t => t.tipo === 'Entrada').reduce((sum, t) => sum + t.valor, 0);
-    const totalSaidas = transacoes.filter(t => t.tipo === 'Saída').reduce((sum, t) => sum + Math.abs(t.valor), 0);
-    const saldo = totalEntradas - totalSaidas;
+    alert('📄 Função em desenvolvimento!');
+}
+
+function exportarHistoricoDAVs() {
+    alert('📄 Função em desenvolvimento!');
+}
+
+function baixarCSV(conteudo, nomeArquivo) {
+    const blob = new Blob([conteudo], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', nomeArquivo);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    alert('✅ Arquivo exportado com sucesso!\n\n📄 ' + nomeArquivo);
+}
+
+// ========================================
+// NOTIFICAÇÕES
+// ========================================
+
+function mostrarNotificacoes() {
+    const contasPendentes = contasReceber.filter(c => c.status === 'Pendente').length;
+    const produtosBaixos = produtos.filter(p => p.quantidade <= (p.estoqueMinimo || 5)).length;
     
-    alert(
-        `💳 EXPORTAR FINANCEIRO\n\n` +
-        `Gerando relatório financeiro...\n\n` +
-        `✅ Dados incluídos:\n` +
-        `• ${transacoes.length} transações\n` +
-        `• Total Entradas: R$ ${totalEntradas.toLocaleString('pt-BR')}\n` +
-        `• Total Saídas: R$ ${totalSaidas.toLocaleString('pt-BR')}\n` +
-        `• Saldo: R$ ${saldo.toLocaleString('pt-BR')}\n\n` +
-        `📊 Fluxo de caixa detalhado\n` +
-        `💰 Análise de receitas e despesas\n` +
-        `📈 Projeções e tendências\n\n` +
-        `Formatos disponíveis: PDF, Excel, CSV\n\n` +
-        `Download iniciado!`
-    );
+    let msg = '🔔 NOTIFICAÇÕES DO SISTEMA\n\n';
+    
+    if (contasPendentes > 0) {
+        msg += `💵 ${contasPendentes} conta(s) a receber pendente(s)\n`;
+    }
+    
+    if (produtosBaixos > 0) {
+        msg += `⚠️ ${produtosBaixos} produto(s) com estoque baixo\n`;
+        const lista = produtos.filter(p => p.quantidade <= (p.estoqueMinimo || 5));
+        lista.forEach(p => {
+            msg += `   • ${p.nome}: ${p.quantidade} unidades\n`;
+        });
+    }
+    
+    if (contasPendentes === 0 && produtosBaixos === 0) {
+        msg += '✅ Nenhuma notificação pendente!\n\nTudo está em ordem! 🎉';
+    }
+    
+    alert(msg);
 }
 
 // ========================================
 // INICIALIZAÇÃO DO SISTEMA
 // ========================================
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('🏥 ProHospitalar - Sistema ERP v3.1 COMPLETO');
-    console.log('📅 Carregado em:', new Date().toLocaleString('pt-BR'));
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+window.onload = function() {
+    console.log('🚀 Iniciando ProHospitalar v5.0...');
     
-    setTimeout(() => {
-        showTab('dashboard');
-    }, 100);
+    // Carregar dados do backup
+    carregarDados();
     
-    console.log('📊 Dados carregados:');
-    console.log(`   • ${vendas.length} vendas`);
-    console.log(`   • ${produtos.length} produtos`);
-    console.log(`   • ${clientes.length} clientes`);
-    console.log(`   • ${representantes.length} representantes`);
-    console.log(`   • ${fornecedores.length} fornecedores`);
+    // Inicializar dashboard
+    showTab('dashboard');
     
-    console.log('\n✅ Funcionalidades COMPLETAS implementadas:');
-    console.log('   • ✏️ EDITAR Vendas, Clientes e Produtos');
-    console.log('   • 🗑️ DELETAR Vendas, Clientes e Produtos');
-    console.log('   • ➕ CADASTRAR Vendas, Clientes e Produtos');
-    console.log('   • 📄 GERAR DAV completo com múltiplos itens');
-    console.log('   • 📊 EXPORTAR Dashboard');
-    console.log('   • 💰 EXPORTAR Vendas');
-    console.log('   • 🏥 EXPORTAR Clientes');
-    console.log('   • 🩺 EXPORTAR Produtos');
-    console.log('   • 👨‍💼 EXPORTAR Representantes');
-    console.log('   • 🏭 EXPORTAR Fornecedores');
-    console.log('   • 💳 EXPORTAR Financeiro');
-    console.log('   • 📈 Dashboard com gráficos interativos');
+    // Verificar estoque baixo
+    verificarEstoqueBaixo();
     
-    console.log('\n🎉 Sistema TOTALMENTE FUNCIONAL v3.1!');
-    console.log('✅ CRUD completo + Botões de EXPORTAR em todas as telas!');
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-});
+    // Atualizar contadores
+    atualizarContadores();
+    
+    console.log('✅ Sistema iniciado com sucesso!');
+    console.log('📊 Vendas:', vendas.length);
+    console.log('🏥 Clientes:', clientes.length);
+    console.log('🩺 Produtos:', produtos.length);
+    console.log('💵 Contas a Receber:', contasReceber.length);
+};
+
+// ========================================
+// FECHAR MODAL AO CLICAR FORA
+// ========================================
+
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+    }
+}
+
+// ========================================
+// SALVAR AUTOMATICAMENTE A CADA 30 SEGUNDOS
+// ========================================
+
+setInterval(() => {
+    salvarDados();
+    console.log('💾 Backup automático realizado:', new Date().toLocaleString('pt-BR'));
+}, 30000); // 30 segundos
+
+console.log('✅ ProHospitalar v5.0 - FASE 1 COMPLETA carregado!');
+console.log('📦 Funcionalidades implementadas:');
+console.log('   ✅ Baixa automática de estoque');
+console.log('   ✅ Contas a Receber');
+console.log('   ✅ Backup localStorage automático');
+console.log('   ✅ Exportação de dados (CSV)');
+console.log('   ✅ Alertas de estoque baixo');
+console.log('   ✅ Dashboard executivo');
 </script>
 </body>
 </html>
