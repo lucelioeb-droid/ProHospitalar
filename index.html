@@ -1,4 +1,561 @@
-<!DOCTYPE html>
+console.log('🎯 Sistema ProHospitalar ERP v2.0 - Totalmente Funcional');
+        console.log('💡 Dica: Use Ctrl+K para buscar rapidamente');
+
+        // ==================== SISTEMA DAV ====================
+
+        // Renderizar tabela de DAVs
+        function renderDAVs() {
+            const tbody = document.getElementById('dav-table');
+            if (!tbody) return;
+            
+            tbody.innerHTML = dados.davs.map(dav => {
+                const statusColors = {
+                    'Pendente': 'bg-yellow-100 text-yellow-800',
+                    'Aprovado': 'bg-green-100 text-green-800',
+                    'Cancelado': 'bg-red-100 text-red-800',
+                    'Convertido': 'bg-blue-100 text-blue-800'
+                };
+                
+                return `
+                    <tr class="table-row">
+                        <td class="px-6 py-4 text-sm font-bold text-gray-900">${dav.numero}</td>
+                        <td class="px-6 py-4 text-sm text-gray-600">${formatarData(dav.data)}</td>
+                        <td class="px-6 py-4 text-sm text-gray-900">${dav.cliente}</td>
+                        <td class="px-6 py-4 text-sm text-gray-600">${dav.produtos.length} item(ns)</td>
+                        <td class="px-6 py-4 text-sm font-bold text-green-600">${formatarMoeda(dav.valorTotal)}</td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 text-xs rounded-full ${statusColors[dav.status]}">
+                                ${dav.status}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-sm space-x-2">
+                            <button onclick="visualizarDAV(${dav.id})" class="text-blue-600 hover:text-blue-800" title="Visualizar">👁️</button>
+                            <button onclick="editarDAV(${dav.id})" class="text-purple-600 hover:text-purple-800" title="Editar">✏️</button>
+                            <button onclick="exportarDAVPDF(${dav.id})" class="text-green-600 hover:text-green-800" title="Exportar PDF">📄</button>
+                            <button onclick="converterParaNFe(${dav.id})" class="text-indigo-600 hover:text-indigo-800" title="Converter em NFe">🧾</button>
+                            <button onclick="confirmarExclusaoDAV(${dav.id})" class="text-red-600 hover:text-red-800" title="Excluir">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Atualizar estatísticas do DAV
+        function atualizarEstatisticasDAV() {
+            const totalDavs = dados.davs.length;
+            const davsAprovados = dados.davs.filter(d => d.status === 'Aprovado').length;
+            const davsPendentes = dados.davs.filter(d => d.status === 'Pendente').length;
+            const valorTotal = dados.davs.reduce((acc, d) => acc + d.valorTotal, 0);
+            
+            const totalEl = document.getElementById('total-davs');
+            const aprovadosEl = document.getElementById('davs-aprovados');
+            const pendentesEl = document.getElementById('davs-pendentes');
+            const valorEl = document.getElementById('valor-total-davs');
+            
+            if (totalEl) totalEl.textContent = totalDavs;
+            if (aprovadosEl) aprovadosEl.textContent = davsAprovados;
+            if (pendentesEl) pendentesEl.textContent = davsPendentes;
+            if (valorEl) valorEl.textContent = formatarMoeda(valorTotal);
+        }
+
+        // Adicionar produto ao formulário DAV
+        function adicionarProdutoDAV() {
+            const container = document.getElementById('produtos-dav');
+            const novoProduto = `
+                <div class="produto-item space-y-2 p-4 bg-gray-50 rounded-lg mb-3">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-sm font-medium text-gray-700">Produto</label>
+                        <button type="button" onclick="this.closest('.produto-item').remove(); calcularTotalDAV()" class="text-red-600 hover:text-red-800">❌</button>
+                    </div>
+                    <select name="produto[]" required class="w-full px-4 py-2 border rounded-lg produto-select">
+                        <option value="">Selecione o produto...</option>
+                        ${dados.produtos.map(p => `<option value="${p.nome}" data-preco="${p.preco}">${p.nome} - R$ ${p.preco.toLocaleString('pt-BR')}</option>`).join('')}
+                    </select>
+                    <div class="flex space-x-2">
+                        <input type="number" name="quantidade[]" placeholder="Qtd" required min="1" class="w-1/3 px-4 py-2 border rounded-lg quantidade-input">
+                        <input type="number" name="valorUnitario[]" placeholder="Valor Unit." required class="w-2/3 px-4 py-2 border rounded-lg valor-input">
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', novoProduto);
+            configurarCalculoDAV();
+        }
+
+        // Configurar cálculo automático do DAV
+        function configurarCalculoDAV() {
+            const form = document.querySelector('form');
+            if (!form) return;
+            
+            form.addEventListener('change', calcularTotalDAV);
+            form.addEventListener('input', calcularTotalDAV);
+            
+            // Auto-preencher valor ao selecionar produto
+            const produtoSelects = form.querySelectorAll('.produto-select, select[name="produto[]"]');
+            produtoSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    const option = this.options[this.selectedIndex];
+                    const preco = option.getAttribute('data-preco');
+                    const valorInput = this.closest('.produto-item').querySelector('.valor-input, input[name="valorUnitario[]"]');
+                    if (preco && valorInput) {
+                        valorInput.value = preco;
+                        calcularTotalDAV();
+                    }
+                });
+            });
+        }
+
+        // Calcular total do DAV
+        function calcularTotalDAV() {
+            const quantidades = document.querySelectorAll('input[name="quantidade[]"]');
+            const valores = document.querySelectorAll('input[name="valorUnitario[]"]');
+            let total = 0;
+            
+            quantidades.forEach((qtdInput, index) => {
+                const qtd = parseFloat(qtdInput.value) || 0;
+                const valor = parseFloat(valores[index].value) || 0;
+                total += qtd * valor;
+            });
+            
+            const preview = document.getElementById('valor-total-preview');
+            if (preview) {
+                preview.textContent = formatarMoeda(total);
+            }
+        }
+
+        // Salvar DAV
+        function salvarDAV(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            const cliente = formData.get('cliente');
+            const produtosNomes = formData.getAll('produto[]');
+            const quantidades = formData.getAll('quantidade[]');
+            const valoresUnitarios = formData.getAll('valorUnitario[]');
+            const observacoes = formData.get('observacoes');
+            
+            // Montar array de produtos
+            const produtos = produtosNomes.map((nome, index) => {
+                const quantidade = parseInt(quantidades[index]);
+                const valorUnitario = parseFloat(valoresUnitarios[index]);
+                return {
+                    nome: nome,
+                    quantidade: quantidade,
+                    valorUnitario: valorUnitario,
+                    valorTotal: quantidade * valorUnitario
+                };
+            });
+            
+            // Calcular valor total
+            const valorTotal = produtos.reduce((acc, p) => acc + p.valorTotal, 0);
+            
+            // Gerar número do DAV
+            const ultimoId = dados.davs.length > 0 ? Math.max(...dados.davs.map(d => d.id)) : 0;
+            const novoId = ultimoId + 1;
+            const numeroDAV = `DAV-2024-${String(novoId).padStart(3, '0')}`;
+            
+            // Criar novo DAV
+            const novoDAV = {
+                id: novoId,
+                numero: numeroDAV,
+                data: new Date().toISOString().split('T')[0],
+                cliente: cliente,
+                produtos: produtos,
+                valorTotal: valorTotal,
+                status: 'Pendente',
+                observacoes: observacoes || ''
+            };
+            
+            // Adicionar ao array
+            dados.davs.unshift(novoDAV);
+            
+            closeModal();
+            showTab('dav');
+            renderDAVs();
+            atualizarEstatisticasDAV();
+            mostrarAlerta('DAV gerado com sucesso! 📄', 'success');
+            registrarLog('DAV Criado', `${numeroDAV} - ${cliente}`);
+        }
+
+        // Visualizar DAV
+        function visualizarDAV(id) {
+            const dav = dados.davs.find(d => d.id === id);
+            if (!dav) return;
+            
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+            
+            title.textContent = `📄 DAV ${dav.numero}`;
+            
+            const statusColors = {
+                'Pendente': 'bg-yellow-100 text-yellow-800',
+                'Aprovado': 'bg-green-100 text-green-800',
+                'Cancelado': 'bg-red-100 text-red-800',
+                'Convertido': 'bg-blue-100 text-blue-800'
+            };
+            
+            body.innerHTML = `
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900">${dav.numero}</h3>
+                                <p class="text-gray-600">Emitido em ${formatarData(dav.data)}</p>
+                            </div>
+                            <span class="px-4 py-2 rounded-full text-sm font-medium ${statusColors[dav.status]}">
+                                ${dav.status}
+                            </span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-600">Cliente</p>
+                                <p class="font-bold text-gray-900">${dav.cliente}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Valor Total</p>
+                                <p class="font-bold text-green-600 text-xl">${formatarMoeda(dav.valorTotal)}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold text-gray-900 mb-3">📦 Produtos</h4>
+                        <div class="space-y-2">
+                            ${dav.produtos.map(p => `
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <div class="flex-1">
+                                        <p class="font-medium text-gray-900">${p.nome}</p>
+                                        <p class="text-sm text-gray-600">Qtd: ${p.quantidade} x ${formatarMoeda(p.valorUnitario)}</p>
+                                    </div>
+                                    <p class="font-bold text-green-600">${formatarMoeda(p.valorTotal)}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    ${dav.observacoes ? `
+                        <div>
+                            <h4 class="font-bold text-gray-900 mb-2">📝 Observações</h4>
+                            <p class="text-gray-700 bg-gray-50 p-4 rounded-lg">${dav.observacoes}</p>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="flex space-x-3">
+                        <button onclick="exportarDAVPDF(${id})" class="btn-primary flex-1">📄 Exportar PDF</button>
+                        <button onclick="imprimirDAVIndividual(${id})" class="btn-secondary">🖨️ Imprimir</button>
+                        <button onclick="closeModal()" class="btn-secondary">Fechar</button>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        // Editar DAV
+        function editarDAV(id) {
+            const dav = dados.davs.find(d => d.id === id);
+            if (!dav) return;
+            
+            if (dav.status === 'Convertido' || dav.status === 'Cancelado') {
+                mostrarAlerta('Não é possível editar DAVs convertidos ou cancelados', 'warning');
+                return;
+            }
+            
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+            
+            title.textContent = `✏️ Editar DAV ${dav.numero}`;
+            
+            body.innerHTML = `
+                <form onsubmit="atualizarDAV(event, ${id})" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Cliente</label>
+                        <select name="cliente" required class="w-full px-4 py-2 border rounded-lg">
+                            ${dados.clientes.map(c => `
+                                <option value="${c.nome}" ${c.nome === dav.cliente ? 'selected' : ''}>${c.nome}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select name="status" required class="w-full px-4 py-2 border rounded-lg">
+                            <option value="Pendente" ${dav.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                            <option value="Aprovado" ${dav.status === 'Aprovado' ? 'selected' : ''}>Aprovado</option>
+                            <option value="Cancelado" ${dav.status === 'Cancelado' ? 'selected' : ''}>Cancelado</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Observações</label>
+                        <textarea name="observacoes" rows="3" class="w-full px-4 py-2 border rounded-lg">${dav.observacoes}</textarea>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <p class="text-sm text-blue-800">💡 Para alterar produtos, crie um novo DAV e cancele este.</p>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button type="submit" class="btn-primary flex-1">Salvar Alterações</button>
+                        <button type="button" onclick="closeModal()" class="btn-secondary">Cancelar</button>
+                    </div>
+                </form>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        // Atualizar DAV
+        function atualizarDAV(event, id) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            const dav = dados.davs.find(d => d.id === id);
+            if (!dav) return;
+            
+            dav.cliente = formData.get('cliente');
+            dav.status = formData.get('status');
+            dav.observacoes = formData.get('observacoes');
+            
+            closeModal();
+            renderDAVs();
+            atualizarEstatisticasDAV();
+            mostrarAlerta('DAV atualizado com sucesso! ✅', 'success');
+            registrarLog('DAV Atualizado', `${dav.numero} - Status: ${dav.status}`);
+        }
+
+        // Confirmar exclusão de DAV
+        function confirmarExclusaoDAV(id) {
+            const dav = dados.davs.find(d => d.id === id);
+            if (!dav) return;
+            
+            if (dav.status === 'Convertido') {
+                mostrarAlerta('Não é possível excluir DAVs já convertidos em NFe', 'warning');
+                return;
+            }
+            
+            if (confirm(`Tem certeza que deseja excluir o DAV ${dav.numero}?\nCliente: ${dav.cliente}\nValor: ${formatarMoeda(dav.valorTotal)}`)) {
+                dados.davs = dados.davs.filter(d => d.id !== id);
+                renderDAVs();
+                atualizarEstatisticasDAV();
+                mostrarAlerta('DAV excluído com sucesso! 🗑️', 'success');
+                registrarLog('DAV Excluído', `${dav.numero}`);
+            }
+        }
+
+        // Exportar DAV para PDF (simulado)
+        function exportarDAVPDF(id) {
+            const dav = dados.davs.find(d => d.id === id);
+            if (!dav) return;
+            
+            // Criar conteúdo do PDF simulado
+            let conteudoCSV = `DOCUMENTO AUXILIAR DE VENDA\n\n`;
+            conteudoCSV += `Número: ${dav.numero}\n`;
+            conteudoCSV += `Data: ${formatarData(dav.data)}\n`;
+            conteudoCSV += `Cliente: ${dav.cliente}\n`;
+            conteudoCSV += `Status: ${dav.status}\n\n`;
+            conteudoCSV += `PRODUTOS:\n`;
+            conteudoCSV += `Produto,Quantidade,Valor Unit.,Valor Total\n`;
+            
+            dav.produtos.forEach(p => {
+                conteudoCSV += `${p.nome},${p.quantidade},${p.valorUnitario},${p.valorTotal}\n`;
+            });
+            
+            conteudoCSV += `\nVALOR TOTAL: R$ ${dav.valorTotal.toFixed(2)}\n`;
+            
+            if (dav.observacoes) {
+                conteudoCSV += `\nObservações: ${dav.observacoes}\n`;
+            }
+            
+            // Download como arquivo de texto
+            const blob = new Blob([conteudoCSV], { type: 'text/plain;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${dav.numero}.txt`;
+            a.click();
+            
+            mostrarAlerta('DAV exportado com sucesso! 📄', 'success');
+            registrarLog('DAV Exportado', `${dav.numero} - PDF`);
+        }
+
+        // Imprimir DAV individual
+        function imprimirDAVIndividual(id) {
+            const dav = dados.davs.find(d => d.id === id);
+            if (!dav) return;
+            
+            const janelaImpressao = window.open('', '_blank');
+            janelaImpressao.document.write(`
+                <html>
+                <head>
+                    <title>DAV ${dav.numero}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 40px; }
+                        h1 { color: #059669; }
+                        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+                        th { background-color: #059669; color: white; }
+                        .total { font-size: 24px; font-weight: bold; color: #059669; }
+                        .header { display: flex; justify-content: space-between; margin-bottom: 30px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>🏥 ProHospitalar - Documento Auxiliar de Venda</h1>
+                    <div class="header">
+                        <div>
+                            <p><strong>Número:</strong> ${dav.numero}</p>
+                            <p><strong>Data:</strong> ${formatarData(dav.data)}</p>
+                            <p><strong>Cliente:</strong> ${dav.cliente}</p>
+                            <p><strong>Status:</strong> ${dav.status}</p>
+                        </div>
+                    </div>
+                    
+                    <h2>Produtos</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Quantidade</th>
+                                <th>Valor Unitário</th>
+                                <th>Valor Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${dav.produtos.map(p => `
+                                <tr>
+                                    <td>${p.nome}</td>
+                                    <td>${p.quantidade}</td>
+                                    <td>${formatarMoeda(p.valorUnitario)}</td>
+                                    <td>${formatarMoeda(p.valorTotal)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    
+                    <p class="total">VALOR TOTAL: ${formatarMoeda(dav.valorTotal)}</p>
+                    
+                    ${dav.observacoes ? `<p><strong>Observações:</strong> ${dav.observacoes}</p>` : ''}
+                    
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            setTimeout(function() { window.close(); }, 100);
+                        }
+                    </script>
+                </body>
+                </html>
+            `);
+            janelaImpressao.document.close();
+            
+            registrarLog('DAV Impresso', `${dav.numero}`);
+        }
+
+        // Imprimir todos os DAVs
+        function imprimirDAVs() {
+            const janelaImpressao = window.open('', '_blank');
+            janelaImpressao.document.write(`
+                <html>
+                <head>
+                    <title>Lista de DAVs - ProHospitalar</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 40px; }
+                        h1 { color: #059669; }
+                        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+                        th { background-color: #059669; color: white; }
+                    </style>
+                </head>
+                <body>
+                    <h1>🏥 ProHospitalar - Relatório de DAVs</h1>
+                    <p>Data: ${new Date().toLocaleDateString('pt-BR')}</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Data</th>
+                                <th>Cliente</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${dados.davs.map(dav => `
+                                <tr>
+                                    <td>${dav.numero}</td>
+                                    <td>${formatarData(dav.data)}</td>
+                                    <td>${dav.cliente}</td>
+                                    <td>${formatarMoeda(dav.valorTotal)}</td>
+                                    <td>${dav.status}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            setTimeout(function() { window.close(); }, 100);
+                        }
+                    </script>
+                </body>
+                </html>
+            `);
+            janelaImpressao.document.close();
+        }
+
+        // Converter DAV em NFe
+        function converterParaNFe(id) {
+            const dav = dados.davs.find(d => d.id === id);
+            if (!dav) return;
+            
+            if (dav.status === 'Convertido') {
+                mostrarAlerta('Este DAV já foi convertido em NFe', 'warning');
+                return;
+            }
+            
+            if (dav.status === 'Cancelado') {
+                mostrarAlerta('Não é possível converter DAVs cancelados', 'warning');
+                return;
+            }
+            
+            if (confirm(`Converter o DAV ${dav.numero} em Nota Fiscal Eletrônica?\nEsta ação não pode ser desfeita.`)) {
+                dav.status = 'Convertido';
+                const numeroNFe = Math.floor(Math.random() * 90000) + 10000;
+                dav.observacoes += `\nConvertido em NFe ${numeroNFe} em ${new Date().toLocaleString('pt-BR')}`;
+                
+                renderDAVs();
+                atualizarEstatisticasDAV();
+                mostrarAlerta(`DAV convertido em NFe ${numeroNFe} com sucesso! 🧾`, 'success');
+                registrarLog('DAV Convertido', `${dav.numero} → NFe ${numeroNFe}`);
+            }
+        }
+
+        // Filtro de status DAV
+        document.addEventListener('DOMContentLoaded', function() {
+            const filtroStatus = document.getElementById('filtro-status-dav');
+            if (filtroStatus) {
+                filtroStatus.addEventListener('change', function() {
+                    const statusSelecionado = this.value;
+                    const linhas = document.querySelectorAll('#dav-table tr');
+                    
+                    linhas.forEach(linha => {
+                        const statusCell = linha.querySelector('span.px-3');
+                        if (statusSelecionado === 'Todos') {
+                            linha.style.display = '';
+                        } else if (statusCell && statusCell.textContent.trim() === statusSelecionado) {
+                            linha.style.display = '';
+                        } else {
+                            linha.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+
+        console.log('📄 Sistema DAV integrado com sucesso!');<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -118,6 +675,13 @@
                             <p class="text-xs text-gray-500">Analytics e BI</p>
                         </div>
                     </button>
+                    <button onclick="showTab('dav')" id="tab-dav" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
+                        <span class="text-xl">📄</span>
+                        <div class="flex-1 text-left">
+                            <span class="font-medium">DAV</span>
+                            <p class="text-xs text-gray-500">Documentos Auxiliares de Venda</p>
+                        </div>
+                    </button>
                 </div>
 
                 <div class="mt-8 px-4">
@@ -126,6 +690,7 @@
                         <button onclick="openModal('venda')" class="w-full bg-green-50 text-green-700 px-3 py-2 rounded-lg text-sm hover:bg-green-100 transition-colors">➕ Nova Venda</button>
                         <button onclick="openModal('produto')" class="w-full bg-blue-50 text-blue-700 px-3 py-2 rounded-lg text-sm hover:bg-blue-100 transition-colors">🩺 Novo Produto</button>
                         <button onclick="openModal('cliente')" class="w-full bg-purple-50 text-purple-700 px-3 py-2 rounded-lg text-sm hover:bg-purple-100 transition-colors">🏥 Novo Cliente</button>
+                        <button onclick="openModal('dav')" class="w-full bg-orange-50 text-orange-700 px-3 py-2 rounded-lg text-sm hover:bg-orange-100 transition-colors">📄 Gerar DAV</button>
                     </div>
                 </div>
             </nav>
@@ -410,6 +975,87 @@
                     </div>
                 </div>
             </div>
+
+            <!-- DAV - Documentos Auxiliares de Venda -->
+            <div id="content-dav" class="fade-in hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-900">DAV - Documentos Auxiliares de Venda</h2>
+                        <p class="text-gray-600 mt-1">Geração e controle de documentos fiscais</p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button onclick="exportarDados('dav')" class="btn-secondary">📤 Exportar</button>
+                        <button onclick="openModal('dav')" class="btn-primary">📄 Gerar DAV</button>
+                    </div>
+                </div>
+
+                <!-- Estatísticas DAV -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-xl text-white">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-2xl">📄</span>
+                            <span class="text-blue-100 text-sm">este mês</span>
+                        </div>
+                        <h3 class="text-blue-100 text-sm mb-1">DAVs Emitidos</h3>
+                        <p class="text-3xl font-bold" id="total-davs">0</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-xl text-white">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-2xl">✅</span>
+                            <span class="text-green-100 text-sm">aprovados</span>
+                        </div>
+                        <h3 class="text-green-100 text-sm mb-1">DAVs Aprovados</h3>
+                        <p class="text-3xl font-bold" id="davs-aprovados">0</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-yellow-500 to-orange-500 p-6 rounded-xl text-white">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-2xl">⏳</span>
+                            <span class="text-yellow-100 text-sm">aguardando</span>
+                        </div>
+                        <h3 class="text-yellow-100 text-sm mb-1">Pendentes</h3>
+                        <p class="text-3xl font-bold" id="davs-pendentes">0</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-xl text-white">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-2xl">💰</span>
+                            <span class="text-purple-100 text-sm">total</span>
+                        </div>
+                        <h3 class="text-purple-100 text-sm mb-1">Valor Total</h3>
+                        <p class="text-3xl font-bold" id="valor-total-davs">R$ 0</p>
+                    </div>
+                </div>
+
+                <!-- Tabela de DAVs -->
+                <div class="bg-white rounded-2xl shadow-premium overflow-hidden">
+                    <div class="p-4 border-b flex justify-between items-center">
+                        <input type="text" placeholder="🔍 Buscar DAVs..." class="px-4 py-2 border rounded-lg w-96">
+                        <div class="flex space-x-3">
+                            <select id="filtro-status-dav" class="px-4 py-2 border rounded-lg">
+                                <option value="Todos">Todos Status</option>
+                                <option value="Pendente">Pendente</option>
+                                <option value="Aprovado">Aprovado</option>
+                                <option value="Cancelado">Cancelado</option>
+                                <option value="Convertido">Convertido em NFe</option>
+                            </select>
+                            <button onclick="imprimirDAVs()" class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">🖨️ Imprimir</button>
+                        </div>
+                    </div>
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nº DAV</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produtos</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor Total</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dav-table" class="divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -487,6 +1133,58 @@
                 { data: '2024-01-17', descricao: 'Compra de estoque', tipo: 'Despesa', valor: -85000 },
                 { data: '2024-01-17', descricao: 'Venda - Hospital Central', tipo: 'Receita', valor: 89500 },
                 { data: '2024-01-16', descricao: 'Pagamento fornecedor', tipo: 'Despesa', valor: -125000 }
+            ],
+            davs: [
+                { 
+                    id: 1, 
+                    numero: 'DAV-2024-001', 
+                    data: '2024-01-19', 
+                    cliente: 'Hospital São Lucas', 
+                    produtos: [
+                        { nome: 'Monitor Cardíaco', quantidade: 2, valorUnitario: 45890, valorTotal: 91780 },
+                        { nome: 'Desfibrilador', quantidade: 1, valorUnitario: 32000, valorTotal: 32000 }
+                    ],
+                    valorTotal: 123780, 
+                    status: 'Aprovado',
+                    observacoes: 'Entrega urgente solicitada'
+                },
+                { 
+                    id: 2, 
+                    numero: 'DAV-2024-002', 
+                    data: '2024-01-18', 
+                    cliente: 'Clínica Santa Maria', 
+                    produtos: [
+                        { nome: 'Ultrassom', quantidade: 1, valorUnitario: 89500, valorTotal: 89500 }
+                    ],
+                    valorTotal: 89500, 
+                    status: 'Pendente',
+                    observacoes: 'Aguardando aprovação do gerente'
+                },
+                { 
+                    id: 3, 
+                    numero: 'DAV-2024-003', 
+                    data: '2024-01-17', 
+                    cliente: 'Hospital Central', 
+                    produtos: [
+                        { nome: 'Raio-X Digital', quantidade: 1, valorUnitario: 125000, valorTotal: 125000 },
+                        { nome: 'Microscópio', quantidade: 3, valorUnitario: 28000, valorTotal: 84000 }
+                    ],
+                    valorTotal: 209000, 
+                    status: 'Convertido',
+                    observacoes: 'Convertido em NFe 12345'
+                },
+                { 
+                    id: 4, 
+                    numero: 'DAV-2024-004', 
+                    data: '2024-01-16', 
+                    cliente: 'UPA Norte', 
+                    produtos: [
+                        { nome: 'Ventilador Pulmonar', quantidade: 2, valorUnitario: 156000, valorTotal: 312000 }
+                    ],
+                    valorTotal: 312000, 
+                    status: 'Pendente',
+                    observacoes: ''
+                }
             ]
         };
 
@@ -530,6 +1228,10 @@
                     break;
                 case 'financeiro':
                     renderFinanceiro();
+                    break;
+                case 'dav':
+                    renderDAVs();
+                    atualizarEstatisticasDAV();
                     break;
             }
         }
@@ -759,6 +1461,53 @@
                             </div>
                         </form>
                     `;
+                    break;
+
+                case 'dav':
+                    title.textContent = '📄 Gerar DAV';
+                    formHTML = `
+                        <form onsubmit="salvarDAV(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Cliente</label>
+                                <select name="cliente" required class="w-full px-4 py-2 border rounded-lg">
+                                    <option value="">Selecione o cliente...</option>
+                                    ${dados.clientes.map(c => `<option value="${c.nome}">${c.nome}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div id="produtos-dav">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Produtos</label>
+                                <div class="produto-item space-y-2 p-4 bg-gray-50 rounded-lg mb-3">
+                                    <select name="produto[]" required class="w-full px-4 py-2 border rounded-lg">
+                                        <option value="">Selecione o produto...</option>
+                                        ${dados.produtos.map(p => `<option value="${p.nome}" data-preco="${p.preco}">${p.nome} - R$ ${p.preco.toLocaleString('pt-BR')}</option>`).join('')}
+                                    </select>
+                                    <div class="flex space-x-2">
+                                        <input type="number" name="quantidade[]" placeholder="Qtd" required min="1" class="w-1/3 px-4 py-2 border rounded-lg">
+                                        <input type="number" name="valorUnitario[]" placeholder="Valor Unit." required class="w-2/3 px-4 py-2 border rounded-lg">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" onclick="adicionarProdutoDAV()" class="w-full px-4 py-2 border-2 border-dashed border-green-300 text-green-600 rounded-lg hover:bg-green-50">
+                                ➕ Adicionar Produto
+                            </button>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Observações</label>
+                                <textarea name="observacoes" rows="3" class="w-full px-4 py-2 border rounded-lg" placeholder="Informações adicionais..."></textarea>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-medium text-gray-700">Valor Total:</span>
+                                    <span id="valor-total-preview" class="text-2xl font-bold text-green-600">R$ 0,00</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-3">
+                                <button type="submit" class="btn-primary flex-1">Gerar DAV</button>
+                                <button type="button" onclick="closeModal()" class="btn-secondary">Cancelar</button>
+                            </div>
+                        </form>
+                    `;
+                    // Adicionar listener para calcular total
+                    setTimeout(configurarCalculoDAV, 100);
                     break;
             }
             
