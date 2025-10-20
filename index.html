@@ -3,52 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProHospitalar - Sistema ERP Completo</title>
+    <title>ProHospitalar - Sistema ERP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .active-tab { background: linear-gradient(135deg, #059669, #047857); color: white; }
-        .card-hover:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .fade-in { animation: fadeIn 0.6s ease-out; }
-        .gradient-bg { background: linear-gradient(135deg, #059669 0%, #047857 100%); }
-        .shadow-premium { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
-        .btn-export { background: linear-gradient(135deg, #10b981, #059669); transition: all 0.3s ease; }
-        .btn-export:hover { background: linear-gradient(135deg, #059669, #047857); transform: translateY(-2px); }
-        .notification-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .status-online { width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); }
-        .modal-content { background-color: white; margin: 2% auto; padding: 0; border-radius: 15px; width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
-        .modal-header { background: linear-gradient(135deg, #059669, #047857); color: white; padding: 20px; border-radius: 15px 15px 0 0; }
-        .modal-body { padding: 25px; }
-        .close { color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
-        .close:hover { opacity: 0.8; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; margin-top: 5px; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #059669; }
-        label { font-weight: 600; color: #374151; margin-top: 12px; display: block; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .btn-add { background: #10b981; color: white; padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; }
-        .btn-add:hover { background: #059669; }
-        .btn-remove { background: #ef4444; color: white; padding: 4px 12px; border-radius: 4px; border: none; cursor: pointer; font-size: 12px; }
-        .btn-remove:hover { background: #dc2626; }
-        .btn-edit { background: #3b82f6; color: white; padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; margin-right: 5px; }
-        .btn-edit:hover { background: #2563eb; }
-        .btn-delete { background: #ef4444; color: white; padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; }
-        .btn-delete:hover { background: #dc2626; }
-        .btn-action { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s; }
-        .btn-print { background: #3b82f6; color: white; }
-        .btn-print:hover { background: #2563eb; transform: translateY(-2px); }
-        .btn-pdf { background: #ef4444; color: white; }
-        .btn-pdf:hover { background: #dc2626; transform: translateY(-2px); }
-        .btn-email { background: #8b5cf6; color: white; }
-        .btn-email:hover { background: #7c3aed; transform: translateY(-2px); }
-        .btn-whatsapp { background: #25d366; color: white; }
-        .btn-whatsapp:hover { background: #20ba5a; transform: translateY(-2px); }
-        .btn-pagar { background: #10b981; color: white; padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; margin-right: 5px; }
-        .btn-pagar:hover { background: #059669; }
-        .alerta-estoque { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 10px; border-radius: 6px; margin: 10px 0; }
+        .active-tab{background:linear-gradient(135deg,#059669,#047857);color:white}
+        .card-hover:hover{transform:translateY(-3px);box-shadow:0 15px 35px rgba(0,0,0,0.1);transition:all 0.3s}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        .fade-in{animation:fadeIn 0.6s ease-out}
+        .gradient-bg{background:linear-gradient(135deg,#059669 0%,#047857 100%)}
+        .shadow-premium{box-shadow:0 25px 50px -12px rgba(0,0,0,0.25)}
+        .btn-export{background:linear-gradient(135deg,#10b981,#059669);transition:all 0.3s}
+        .btn-export:hover{background:linear-gradient(135deg,#059669,#047857);transform:translateY(-2px)}
+        .notification-badge{position:absolute;top:-5px;right:-5px;background:#ef4444;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:bold}
+        .status-online{width:8px;height:8px;background:#10b981;border-radius:50%;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+        *{margin:0;padding:0;box-sizing:border-box}
+        .modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.6)}
+        .modal-content{background-color:white;margin:2% auto;padding:0;border-radius:15px;width:90%;max-width:900px;max-height:90vh;overflow-y:auto;box-shadow:0 25px 50px rgba(0,0,0,0.3)}
+        .modal-header{background:linear-gradient(135deg,#059669,#047857);color:white;padding:20px;border-radius:15px 15px 0 0}
+        .modal-body{padding:25px}
+        .close{color:white;float:right;font-size:28px;font-weight:bold;cursor:pointer}
+        .close:hover{opacity:0.8}
+        input,select,textarea{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;margin-top:5px}
+        input:focus,select:focus,textarea:focus{outline:none;border-color:#059669}
+        label{font-weight:600;color:#374151;margin-top:12px;display:block}
+        .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+        .btn-add{background:#10b981;color:white;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-weight:600}
+        .btn-add:hover{background:#059669}
+        .btn-remove{background:#ef4444;color:white;padding:4px 12px;border-radius:4px;border:none;cursor:pointer;font-size:12px}
+        .btn-remove:hover{background:#dc2626}
+        .btn-edit{background:#3b82f6;color:white;padding:6px 12px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-weight:600;margin-right:5px}
+        .btn-edit:hover{background:#2563eb}
+        .btn-delete{background:#ef4444;color:white;padding:6px 12px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-weight:600}
+        .btn-delete:hover{background:#dc2626}
+        .btn-action{padding:10px 20px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:14px;transition:all 0.3s}
+        .btn-print{background:#3b82f6;color:white}
+        .btn-print:hover{background:#2563eb;transform:translateY(-2px)}
+        .btn-pdf{background:#ef4444;color:white}
+        .btn-pdf:hover{background:#dc2626;transform:translateY(-2px)}
+        .btn-email{background:#8b5cf6;color:white}
+        .btn-email:hover{background:#7c3aed;transform:translateY(-2px)}
+        .btn-whatsapp{background:#25d366;color:white}
+        .btn-whatsapp:hover{background:#20ba5a;transform:translateY(-2px)}
+        .btn-pagar{background:#10b981;color:white;padding:6px 12px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-weight:600;margin-right:5px}
+        .btn-pagar:hover{background:#059669}
+        .alerta-estoque{background:#fef3c7;border-left:4px solid #f59e0b;padding:10px;border-radius:6px;margin:10px 0}
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -64,11 +64,9 @@
                 </div>
                 <div class="flex items-center space-x-6">
                     <button onclick="mostrarNotificacoes()" class="p-2 bg-white bg-opacity-20 rounded-lg hover:bg-opacity-30 transition-all relative">
-                        🔔<div class="notification-badge" id="alert-count">3</div>
+                        🔔<div class="notification-badge" id="alert-count">0</div>
                     </button>
-                    <button onclick="fazerBackupManual()" class="p-2 bg-white bg-opacity-20 rounded-lg hover:bg-opacity-30 transition-all" title="Backup Manual">
-                        💾
-                    </button>
+                    <button onclick="fazerBackupManual()" class="p-2 bg-white bg-opacity-20 rounded-lg hover:bg-opacity-30 transition-all" title="Backup Manual">💾</button>
                     <div class="flex items-center space-x-2">
                         <div class="status-online"></div>
                         <span class="text-sm text-green-100">Online</span>
@@ -76,7 +74,7 @@
                     <div class="flex items-center space-x-3">
                         <div class="text-right">
                             <p class="text-sm font-medium">Admin ProHospitalar</p>
-                            <p class="text-xs text-green-100">Conectado agora</p>
+                            <p class="text-xs text-green-100">Conectado</p>
                         </div>
                         <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">👨‍💼</div>
                     </div>
@@ -84,64 +82,47 @@
             </div>
         </div>
     </header>
-
     <div class="flex">
         <div class="w-80 bg-white shadow-2xl min-h-screen">
             <nav class="mt-6">
                 <div class="px-4 space-y-1">
                     <button onclick="showTab('dashboard')" id="tab-dashboard" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all active-tab">
-                        <span class="text-xl">📊</span>
-                        <div class="flex-1 text-left"><span class="font-medium">Dashboard</span><p class="text-xs opacity-80">Painel Executivo</p></div>
+                        <span class="text-xl">📊</span><div class="flex-1 text-left"><span class="font-medium">Dashboard</span></div>
                     </button>
                     <button onclick="showTab('vendas')" id="tab-vendas" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
-                        <span class="text-xl">💰</span>
-                        <div class="flex-1 text-left"><span class="font-medium">Vendas</span><p class="text-xs text-gray-500">Pedidos e faturamento</p></div>
+                        <span class="text-xl">💰</span><div class="flex-1 text-left"><span class="font-medium">Vendas</span></div>
                     </button>
                     <button onclick="showTab('contas-receber')" id="tab-contas-receber" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
-                        <span class="text-xl">💵</span>
-                        <div class="flex-1 text-left"><span class="font-medium">Contas a Receber</span><p class="text-xs text-gray-500">Recebimentos</p></div>
-                        <div class="notification-badge" id="receber-count">0</div>
+                        <span class="text-xl">💵</span><div class="flex-1 text-left"><span class="font-medium">Contas a Receber</span></div><div class="notification-badge" id="receber-count">0</div>
                     </button>
                     <button onclick="showTab('clientes')" id="tab-clientes" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
-                        <span class="text-xl">🏥</span>
-                        <div class="flex-1 text-left"><span class="font-medium">Clientes</span><p class="text-xs text-gray-500">Hospitais e Clínicas</p></div>
+                        <span class="text-xl">🏥</span><div class="flex-1 text-left"><span class="font-medium">Clientes</span></div>
                     </button>
                     <button onclick="showTab('estoque')" id="tab-estoque" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
-                        <span class="text-xl">🩺</span>
-                        <div class="flex-1 text-left"><span class="font-medium">Produtos</span><p class="text-xs text-gray-500">Equipamentos médicos</p></div>
-                        <div class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded font-medium" id="estoque-baixo">0</div>
+                        <span class="text-xl">🩺</span><div class="flex-1 text-left"><span class="font-medium">Produtos</span></div><div class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded font-medium" id="estoque-baixo">0</div>
                     </button>
                     <button onclick="showTab('vendedores')" id="tab-vendedores" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
-                        <span class="text-xl">👨‍💼</span>
-                        <div class="flex-1 text-left"><span class="font-medium">Representantes</span><p class="text-xs text-gray-500">Equipe comercial</p></div>
+                        <span class="text-xl">👨‍💼</span><div class="flex-1 text-left"><span class="font-medium">Representantes</span></div>
                     </button>
                     <button onclick="showTab('fornecedores')" id="tab-fornecedores" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
-                        <span class="text-xl">🏭</span>
-                        <div class="flex-1 text-left"><span class="font-medium">Fornecedores</span><p class="text-xs text-gray-500">Indústria médica</p></div>
-                    </button>
-                    <button onclick="showTab('financeiro')" id="tab-financeiro" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
-                        <span class="text-xl">💳</span>
-                        <div class="flex-1 text-left"><span class="font-medium">Financeiro</span><p class="text-xs text-gray-500">Fluxo de caixa</p></div>
+                        <span class="text-xl">🏭</span><div class="flex-1 text-left"><span class="font-medium">Fornecedores</span></div>
                     </button>
                     <button onclick="showTab('historico-davs')" id="tab-historico-davs" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
-                        <span class="text-xl">📄</span>
-                        <div class="flex-1 text-left"><span class="font-medium">Histórico DAVs</span><p class="text-xs text-gray-500">Documentos gerados</p></div>
+                        <span class="text-xl">📄</span><div class="flex-1 text-left"><span class="font-medium">Histórico DAVs</span></div>
                     </button>
                 </div>
                 <div class="mt-8 px-4">
                     <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">Ações Rápidas</h3>
                     <div class="space-y-2">
-                        <button onclick="openModal('venda')" class="w-full bg-green-50 text-green-700 px-3 py-2 rounded-lg text-sm hover:bg-green-100 transition-colors font-medium">➕ Nova Venda</button>
-                        <button onclick="openModal('produto')" class="w-full bg-blue-50 text-blue-700 px-3 py-2 rounded-lg text-sm hover:bg-blue-100 transition-colors font-medium">🩺 Novo Produto</button>
-                        <button onclick="openModal('cliente')" class="w-full bg-purple-50 text-purple-700 px-3 py-2 rounded-lg text-sm hover:bg-purple-100 transition-colors font-medium">🏥 Novo Cliente</button>
-                        <button onclick="openModal('dav')" class="w-full bg-orange-50 text-orange-700 px-3 py-2 rounded-lg text-sm hover:bg-orange-100 transition-colors font-medium">📄 Gerar DAV</button>
+                        <button onclick="openModal('venda')" class="w-full bg-green-50 text-green-700 px-3 py-2 rounded-lg text-sm hover:bg-green-100 font-medium">➕ Nova Venda</button>
+                        <button onclick="openModal('produto')" class="w-full bg-blue-50 text-blue-700 px-3 py-2 rounded-lg text-sm hover:bg-blue-100 font-medium">🩺 Novo Produto</button>
+                        <button onclick="openModal('cliente')" class="w-full bg-purple-50 text-purple-700 px-3 py-2 rounded-lg text-sm hover:bg-purple-100 font-medium">🏥 Novo Cliente</button>
+                        <button onclick="openModal('dav')" class="w-full bg-orange-50 text-orange-700 px-3 py-2 rounded-lg text-sm hover:bg-orange-100 font-medium">📄 Gerar DAV</button>
                     </div>
                 </div>
                 <div class="mt-8 mx-4 p-4 bg-green-50 rounded-xl border border-green-200">
                     <div class="text-center">
-                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                            <span class="text-2xl">💾</span>
-                        </div>
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2"><span class="text-2xl">💾</span></div>
                         <h4 class="font-bold text-green-800">Backup Automático</h4>
                         <p class="text-xs text-green-600 mt-1">Dados salvos automaticamente</p>
                         <p class="text-xs text-green-500 mt-2 font-medium" id="ultimo-backup">Nunca</p>
@@ -149,341 +130,118 @@
                 </div>
             </nav>
         </div>
-
-        <div class="flex-1 p-8 overflow-y-auto" style="max-height: calc(100vh - 80px);">
+        <div class="flex-1 p-8 overflow-y-auto" style="max-height:calc(100vh - 80px)">
             <div id="dashboard" class="fade-in">
                 <div class="flex justify-between items-center mb-8">
-                    <div>
-                        <h2 class="text-3xl font-bold text-gray-900">Dashboard ProHospitalar</h2>
-                        <p class="text-gray-600 mt-1">Gestão completa de equipamentos médico-hospitalares</p>
-                    </div>
-                    <button onclick="exportarDashboard()" class="btn-export text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-lg">
-                        <span>📊</span><span>Exportar Dashboard</span>
-                    </button>
+                    <div><h2 class="text-3xl font-bold text-gray-900">Dashboard ProHospitalar</h2><p class="text-gray-600 mt-1">Gestão completa de equipamentos médico-hospitalares</p></div>
+                    <button onclick="exportarDashboard()" class="btn-export text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-lg"><span>📊</span><span>Exportar</span></button>
                 </div>
-                
                 <div id="alertas-dashboard"></div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-                    <div class="bg-gradient-to-br from-green-500 to-emerald-600 p-6 rounded-2xl text-white card-hover shadow-premium">
-                        <h3 class="text-green-100 text-sm mb-1">Vendas do Mês</h3>
-                        <p class="text-3xl font-bold" id="dash-vendas">R$ 0</p>
-                    </div>
-                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl text-white card-hover shadow-premium">
-                        <h3 class="text-blue-100 text-sm mb-1">A Receber</h3>
-                        <p class="text-3xl font-bold" id="dash-receber">R$ 0</p>
-                    </div>
-                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl text-white card-hover shadow-premium">
-                        <h3 class="text-purple-100 text-sm mb-1">Clientes Ativos</h3>
-                        <p class="text-3xl font-bold" id="dash-clientes">0</p>
-                    </div>
-                    <div class="bg-gradient-to-br from-orange-500 to-red-500 p-6 rounded-2xl text-white card-hover shadow-premium">
-                        <h3 class="text-orange-100 text-sm mb-1">Produtos Ativos</h3>
-                        <p class="text-3xl font-bold" id="dash-produtos">0</p>
-                    </div>
-                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-6 rounded-2xl text-white card-hover shadow-premium">
-                        <h3 class="text-indigo-100 text-sm mb-1">Estoque Baixo</h3>
-                        <p class="text-3xl font-bold" id="dash-estoque-baixo">0</p>
-                    </div>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+                    <div class="bg-gradient-to-br from-green-500 to-emerald-600 p-6 rounded-2xl text-white card-hover shadow-premium"><h3 class="text-green-100 text-sm mb-1">Vendas do Mês</h3><p class="text-3xl font-bold" id="dash-vendas">R$ 0</p></div>
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl text-white card-hover shadow-premium"><h3 class="text-blue-100 text-sm mb-1">A Receber</h3><p class="text-3xl font-bold" id="dash-receber">R$ 0</p></div>
+                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl text-white card-hover shadow-premium"><h3 class="text-purple-100 text-sm mb-1">Clientes</h3><p class="text-3xl font-bold" id="dash-clientes">0</p></div>
+                    <div class="bg-gradient-to-br from-orange-500 to-red-500 p-6 rounded-2xl text-white card-hover shadow-premium"><h3 class="text-orange-100 text-sm mb-1">Produtos</h3><p class="text-3xl font-bold" id="dash-produtos">0</p></div>
+                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-6 rounded-2xl text-white card-hover shadow-premium"><h3 class="text-indigo-100 text-sm mb-1">Estoque Baixo</h3><p class="text-3xl font-bold" id="dash-estoque-baixo">0</p></div>
                 </div>
-                <div class="bg-white p-8 rounded-2xl shadow-premium mb-8">
-                    <h3 class="text-xl font-bold text-gray-900 mb-6">📊 Vendas por Categoria</h3>
-                    <canvas id="chartVendasCategorias"></canvas>
-                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-premium mb-8"><h3 class="text-xl font-bold text-gray-900 mb-6">📊 Vendas</h3><canvas id="chartVendasCategorias"></canvas></div>
             </div>
-
             <div id="vendas" class="hidden">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900">💰 Gestão de Vendas</h2>
-                    <button onclick="exportarVendas()" class="btn-export text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-lg">
-                        <span>📄</span><span>Exportar Vendas</span>
-                    </button>
-                </div>
-                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista-vendas"></tbody>
-                    </table>
-                </div>
+                <div class="flex justify-between items-center mb-8"><h2 class="text-3xl font-bold text-gray-900">💰 Vendas</h2><button onclick="exportarVendas()" class="btn-export text-white px-6 py-3 rounded-lg shadow-lg">📄 Exportar</button></div>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden"><table class="w-full"><thead class="bg-gray-50"><tr><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th></tr></thead><tbody id="lista-vendas"></tbody></table></div>
             </div>
-
             <div id="contas-receber" class="hidden">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900">💵 Contas a Receber</h2>
-                    <button onclick="exportarContasReceber()" class="btn-export text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-lg">
-                        <span>📄</span><span>Exportar</span>
-                    </button>
-                </div>
+                <div class="flex justify-between items-center mb-8"><h2 class="text-3xl font-bold text-gray-900">💵 Contas a Receber</h2><button onclick="exportarContasReceber()" class="btn-export text-white px-6 py-3 rounded-lg shadow-lg">📄 Exportar</button></div>
                 <div class="grid grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-xl shadow-premium">
-                        <h3 class="text-gray-600 text-sm mb-2">Total a Receber</h3>
-                        <p class="text-3xl font-bold text-orange-600" id="total-receber">R$ 0,00</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-premium">
-                        <h3 class="text-gray-600 text-sm mb-2">Vencidas</h3>
-                        <p class="text-3xl font-bold text-red-600" id="total-vencidas">R$ 0,00</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-premium">
-                        <h3 class="text-gray-600 text-sm mb-2">Recebido</h3>
-                        <p class="text-3xl font-bold text-green-600" id="total-recebido">R$ 0,00</p>
-                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-premium"><h3 class="text-gray-600 text-sm mb-2">Total a Receber</h3><p class="text-3xl font-bold text-orange-600" id="total-receber">R$ 0</p></div>
+                    <div class="bg-white p-6 rounded-xl shadow-premium"><h3 class="text-gray-600 text-sm mb-2">Vencidas</h3><p class="text-3xl font-bold text-red-600" id="total-vencidas">R$ 0</p></div>
+                    <div class="bg-white p-6 rounded-xl shadow-premium"><h3 class="text-gray-600 text-sm mb-2">Recebido</h3><p class="text-3xl font-bold text-green-600" id="total-recebido">R$ 0</p></div>
                 </div>
-                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Venda</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vencimento</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista-contas-receber"></tbody>
-                    </table>
-                </div>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden"><table class="w-full"><thead class="bg-gray-50"><tr><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Venda</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vencimento</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th></tr></thead><tbody id="lista-contas-receber"></tbody></table></div>
             </div>
-
             <div id="clientes" class="hidden">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900">🏥 Gestão de Clientes</h2>
-                    <button onclick="exportarClientes()" class="btn-export text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-lg">
-                        <span>📄</span><span>Exportar Clientes</span>
-                    </button>
-                </div>
-                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">CNPJ</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cidade</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista-clientes"></tbody>
-                    </table>
-                </div>
+                <div class="flex justify-between items-center mb-8"><h2 class="text-3xl font-bold text-gray-900">🏥 Clientes</h2><button onclick="exportarClientes()" class="btn-export text-white px-6 py-3 rounded-lg shadow-lg">📄 Exportar</button></div>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden"><table class="w-full"><thead class="bg-gray-50"><tr><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">CNPJ</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cidade</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th></tr></thead><tbody id="lista-clientes"></tbody></table></div>
             </div>
-
             <div id="estoque" class="hidden">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900">🩺 Gestão de Produtos</h2>
-                    <button onclick="exportarProdutos()" class="btn-export text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-lg">
-                        <span>📄</span><span>Exportar Produtos</span>
-                    </button>
-                </div>
+                <div class="flex justify-between items-center mb-8"><h2 class="text-3xl font-bold text-gray-900">🩺 Produtos</h2><button onclick="exportarProdutos()" class="btn-export text-white px-6 py-3 rounded-lg shadow-lg">📄 Exportar</button></div>
                 <div id="alerta-estoque-baixo"></div>
-                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Código</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantidade</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Preço</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista-produtos"></tbody>
-                    </table>
-                </div>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden"><table class="w-full"><thead class="bg-gray-50"><tr><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Código</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantidade</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Preço</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th></tr></thead><tbody id="lista-produtos"></tbody></table></div>
             </div>
             <div id="vendedores" class="hidden">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900">👨‍💼 Representantes</h2>
-                    <button onclick="exportarRepresentantes()" class="btn-export text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-lg">
-                        <span>📄</span><span>Exportar Representantes</span>
-                    </button>
-                </div>
-                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Região</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vendas</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista-representantes"></tbody>
-                    </table>
-                </div>
+                <div class="flex justify-between items-center mb-8"><h2 class="text-3xl font-bold text-gray-900">👨‍💼 Representantes</h2></div>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden"><table class="w-full"><thead class="bg-gray-50"><tr><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Região</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vendas</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th></tr></thead><tbody id="lista-representantes"></tbody></table></div>
             </div>
-
             <div id="fornecedores" class="hidden">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900">🏭 Fornecedores</h2>
-                    <button onclick="exportarFornecedores()" class="btn-export text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-lg">
-                        <span>📄</span><span>Exportar Fornecedores</span>
-                    </button>
-                </div>
-                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">CNPJ</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Especialidade</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista-fornecedores"></tbody>
-                    </table>
-                </div>
+                <div class="flex justify-between items-center mb-8"><h2 class="text-3xl font-bold text-gray-900">🏭 Fornecedores</h2></div>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden"><table class="w-full"><thead class="bg-gray-50"><tr><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">CNPJ</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Especialidade</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th></tr></thead><tbody id="lista-fornecedores"></tbody></table></div>
             </div>
-
-            <div id="financeiro" class="hidden">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900">💳 Financeiro</h2>
-                    <button onclick="exportarFinanceiro()" class="btn-export text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-lg">
-                        <span>📄</span><span>Exportar Financeiro</span>
-                    </button>
-                </div>
-                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Descrição</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista-transacoes"></tbody>
-                    </table>
-                </div>
-            </div>
-
             <div id="historico-davs" class="hidden">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900">📄 Histórico de DAVs</h2>
-                    <button onclick="exportarHistoricoDAVs()" class="btn-export text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-lg">
-                        <span>📄</span><span>Exportar Histórico</span>
-                    </button>
-                </div>
-                <div class="bg-white rounded-xl shadow-premium overflow-hidden">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Número DAV</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista-historico-davs"></tbody>
-                    </table>
-                </div>
+                <div class="flex justify-between items-center mb-8"><h2 class="text-3xl font-bold text-gray-900">📄 Histórico DAVs</h2></div>
+                <div class="bg-white rounded-xl shadow-premium overflow-hidden"><table class="w-full"><thead class="bg-gray-50"><tr><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Número</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th></tr></thead><tbody id="lista-historico-davs"></tbody></table></div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL NOVA VENDA -->
     <div id="modalVenda" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <span class="close" onclick="closeModal('modalVenda')">&times;</span>
-                <h2 class="text-2xl font-bold" id="titulo-modal-venda">💰 Nova Venda</h2>
-            </div>
+            <div class="modal-header"><span class="close" onclick="closeModal('modalVenda')">&times;</span><h2 class="text-2xl font-bold" id="titulo-modal-venda">💰 Nova Venda</h2></div>
             <div class="modal-body">
-                <form id="formVenda" onsubmit="salvarVenda(event)">
+                <div id="form-venda-container">
                     <input type="hidden" id="venda-id-edit">
-                    <label>Cliente *</label>
-                    <select id="venda-cliente" required><option value="">Selecione</option></select>
-                    <label>Produto *</label>
-                    <select id="venda-produto" required onchange="atualizarPrecoVenda()"><option value="">Selecione</option></select>
-                    <label>Representante *</label>
-                    <select id="venda-representante" required><option value="">Selecione</option></select>
+                    <label>Cliente *</label><select id="venda-cliente" required><option value="">Selecione</option></select>
+                    <label>Produto *</label><select id="venda-produto" required onchange="atualizarPrecoVenda()"><option value="">Selecione</option></select>
+                    <label>Representante *</label><select id="venda-representante" required><option value="">Selecione</option></select>
                     <div class="form-grid">
                         <div><label>Quantidade *</label><input type="number" id="venda-quantidade" min="1" value="1" required oninput="calcularTotalVenda()"></div>
-                        <div><label>Valor Unitário *</label><input type="text" id="venda-valor-unitario" readonly required style="background:#f9fafb"></div>
+                        <div><label>Valor Unitário *</label><input type="text" id="venda-valor-unitario" readonly style="background:#f9fafb"></div>
                     </div>
                     <div class="form-grid">
                         <div><label>Desconto (%)</label><input type="number" id="venda-desconto" min="0" max="100" value="0" oninput="calcularTotalVenda()"></div>
                         <div><label>Total *</label><input type="text" id="venda-total" readonly style="background:#ecfdf5;font-weight:bold;color:#059669;font-size:18px"></div>
                     </div>
                     <label>Forma de Pagamento *</label>
-                    <select id="venda-pagamento" required>
-                        <option value="">Selecione</option>
-                        <option value="À Vista">À Vista</option>
-                        <option value="Cartão">Cartão de Crédito</option>
-                        <option value="Boleto">Boleto</option>
-                        <option value="30 dias">30 dias</option>
-                        <option value="30/60 dias">30/60 dias</option>
-                    </select>
-                    <label>Observações</label>
-                    <textarea id="venda-obs" rows="3"></textarea>
+                    <select id="venda-pagamento" required><option value="">Selecione</option><option value="À Vista">À Vista</option><option value="Cartão">Cartão</option><option value="Boleto">Boleto</option><option value="30 dias">30 dias</option><option value="30/60 dias">30/60 dias</option></select>
+                    <label>Observações</label><textarea id="venda-obs" rows="3"></textarea>
                     <div class="flex justify-end space-x-3 mt-6">
                         <button type="button" onclick="closeModal('modalVenda')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Cancelar</button>
-                        <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">💾 Salvar</button>
+                        <button onclick="salvarVenda(event)" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">💾 Salvar</button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL NOVO CLIENTE -->
     <div id="modalCliente" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <span class="close" onclick="closeModal('modalCliente')">&times;</span>
-                <h2 class="text-2xl font-bold" id="titulo-modal-cliente">🏥 Novo Cliente</h2>
-            </div>
+            <div class="modal-header"><span class="close" onclick="closeModal('modalCliente')">&times;</span><h2 class="text-2xl font-bold" id="titulo-modal-cliente">🏥 Novo Cliente</h2></div>
             <div class="modal-body">
-                <form id="formCliente" onsubmit="salvarCliente(event)">
+                <div>
                     <input type="hidden" id="cliente-id-edit">
-                    <label>Nome *</label>
-                    <input type="text" id="cliente-nome" required placeholder="Ex: Hospital São Lucas">
+                    <label>Nome *</label><input type="text" id="cliente-nome" required placeholder="Ex: Hospital São Lucas">
                     <div class="form-grid">
                         <div><label>CNPJ *</label><input type="text" id="cliente-cnpj" required></div>
                         <div><label>Cidade *</label><input type="text" id="cliente-cidade" required></div>
                     </div>
                     <div class="flex justify-end space-x-3 mt-6">
                         <button type="button" onclick="closeModal('modalCliente')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Cancelar</button>
-                        <button type="submit" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">💾 Salvar</button>
+                        <button onclick="salvarCliente(event)" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">💾 Salvar</button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL NOVO PRODUTO -->
     <div id="modalProduto" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <span class="close" onclick="closeModal('modalProduto')">&times;</span>
-                <h2 class="text-2xl font-bold" id="titulo-modal-produto">🩺 Novo Produto</h2>
-            </div>
+            <div class="modal-header"><span class="close" onclick="closeModal('modalProduto')">&times;</span><h2 class="text-2xl font-bold" id="titulo-modal-produto">🩺 Novo Produto</h2></div>
             <div class="modal-body">
-                <form id="formProduto" onsubmit="salvarProduto(event)">
+                <div>
                     <input type="hidden" id="produto-codigo-edit">
-                    <label>Código *</label>
-                    <input type="text" id="produto-codigo" required placeholder="Ex: MC-500">
-                    <label>Nome *</label>
-                    <input type="text" id="produto-nome" required placeholder="Ex: Monitor Cardíaco">
+                    <label>Código *</label><input type="text" id="produto-codigo" required placeholder="Ex: MC-500">
+                    <label>Nome *</label><input type="text" id="produto-nome" required placeholder="Ex: Monitor Cardíaco">
                     <div class="form-grid">
-                        <div><label>Categoria *</label>
-                            <select id="produto-categoria" required>
-                                <option value="">Selecione</option>
-                                <option value="Monitoramento">Monitoramento</option>
-                                <option value="Diagnóstico">Diagnóstico</option>
-                                <option value="Cardiologia">Cardiologia</option>
-                                <option value="Radiologia">Radiologia</option>
-                                <option value="Emergência">Emergência</option>
-                            </select>
-                        </div>
+                        <div><label>Categoria *</label><select id="produto-categoria" required><option value="">Selecione</option><option value="Monitoramento">Monitoramento</option><option value="Diagnóstico">Diagnóstico</option><option value="Cardiologia">Cardiologia</option><option value="Radiologia">Radiologia</option><option value="Emergência">Emergência</option></select></div>
                         <div><label>Quantidade *</label><input type="number" id="produto-quantidade" required min="0"></div>
                     </div>
                     <div class="form-grid">
@@ -493,2046 +251,589 @@
                     <div><label>Estoque Mínimo</label><input type="number" id="produto-estoque-minimo" value="5" min="0"></div>
                     <div class="flex justify-end space-x-3 mt-6">
                         <button type="button" onclick="closeModal('modalProduto')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Cancelar</button>
-                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">💾 Salvar</button>
+                        <button onclick="salvarProduto(event)" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">💾 Salvar</button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL GERAR DAV -->
     <div id="modalDAV" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <span class="close" onclick="closeModal('modalDAV')">&times;</span>
-                <h2 class="text-2xl font-bold">📄 Gerar DAV - Documento Auxiliar de Venda</h2>
-            </div>
+            <div class="modal-header"><span class="close" onclick="closeModal('modalDAV')">&times;</span><h2 class="text-2xl font-bold">📄 Gerar DAV</h2></div>
             <div class="modal-body">
-                <form id="formDAV" onsubmit="finalizarDAV(event)">
-                    <label>Cliente *</label>
-                    <select id="dav-cliente" required><option value="">Selecione um cliente</option></select>
-                    
-                    <label>Representante *</label>
-                    <select id="dav-representante" required><option value="">Selecione um representante</option></select>
-
-                    <div style="border-top: 2px solid #e5e7eb; margin: 20px 0; padding-top: 20px;">
+                <div>
+                    <label>Cliente *</label><select id="dav-cliente" required><option value="">Selecione</option></select>
+                    <label>Representante *</label><select id="dav-representante" required><option value="">Selecione</option></select>
+                    <div style="border-top:2px solid #e5e7eb;margin:20px 0;padding-top:20px">
                         <label>Adicionar Produtos</label>
-                        <div class="form-grid" style="margin-top: 10px;">
+                        <div class="form-grid" style="margin-top:10px">
                             <div><select id="dav-produto-select"><option value="">Selecione produto</option></select></div>
-                            <div style="display:flex; gap:10px;">
-                                <input type="number" id="dav-quantidade-input" min="1" value="1" placeholder="Qtd" style="width:80px">
-                                <button type="button" onclick="adicionarItemDAV()" class="btn-add">➕ Adicionar</button>
-                            </div>
+                            <div style="display:flex;gap:10px"><input type="number" id="dav-quantidade-input" min="1" value="1" placeholder="Qtd" style="width:80px"><button type="button" onclick="adicionarItemDAV()" class="btn-add">➕ Adicionar</button></div>
                         </div>
                     </div>
-
-                    <div style="margin: 20px 0;">
-                        <h4 style="font-weight: 700; color: #374151; margin-bottom: 10px;">Itens do DAV:</h4>
-                        <div style="border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
-                            <table style="width: 100%; font-size: 14px;">
-                                <thead style="background: #f9fafb;">
-                                    <tr>
-                                        <th style="padding: 10px; text-align: left;">Produto</th>
-                                        <th style="padding: 10px; text-align: center;">Qtd</th>
-                                        <th style="padding: 10px; text-align: right;">Preço Un.</th>
-                                        <th style="padding: 10px; text-align: right;">Total</th>
-                                        <th style="padding: 10px; text-align: center;">Ação</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="lista-itens-dav">
-                                    <tr><td colspan="5" style="padding: 20px; text-align: center; color: #9ca3af;">Nenhum item adicionado</td></tr>
-                                </tbody>
+                    <div style="margin:20px 0">
+                        <h4 style="font-weight:700;color:#374151;margin-bottom:10px">Itens do DAV:</h4>
+                        <div style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden">
+                            <table style="width:100%;font-size:14px">
+                                <thead style="background:#f9fafb"><tr><th style="padding:10px;text-align:left">Produto</th><th style="padding:10px;text-align:center">Qtd</th><th style="padding:10px;text-align:right">Preço Un.</th><th style="padding:10px;text-align:right">Total</th><th style="padding:10px;text-align:center">Ação</th></tr></thead>
+                                <tbody id="lista-itens-dav"><tr><td colspan="5" style="padding:20px;text-align:center;color:#9ca3af">Nenhum item adicionado</td></tr></tbody>
                             </table>
                         </div>
                     </div>
-
-                    <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-size: 18px; font-weight: 700; color: #166534;">TOTAL DO DAV:</span>
-                            <span id="dav-total-geral" style="font-size: 24px; font-weight: 700; color: #059669;">R$ 0,00</span>
-                        </div>
+                    <div style="background:#f0fdf4;padding:15px;border-radius:8px;margin:20px 0">
+                        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:18px;font-weight:700;color:#166534">TOTAL:</span><span id="dav-total-geral" style="font-size:24px;font-weight:700;color:#059669">R$ 0,00</span></div>
                     </div>
-
-                    <label>Condições de Pagamento</label>
-                    <select id="dav-pagamento" required>
-                        <option value="">Selecione</option>
-                        <option value="À Vista">À Vista</option>
-                        <option value="30 dias">30 dias</option>
-                        <option value="30/60 dias">30/60 dias</option>
-                        <option value="30/60/90 dias">30/60/90 dias</option>
-                    </select>
-
-                    <label>Observações</label>
-                    <textarea id="dav-obs" rows="3" placeholder="Observações adicionais sobre o DAV..."></textarea>
-
+                    <label>Condições de Pagamento</label><select id="dav-pagamento" required><option value="">Selecione</option><option value="À Vista">À Vista</option><option value="30 dias">30 dias</option><option value="30/60 dias">30/60 dias</option></select>
+                    <label>Observações</label><textarea id="dav-obs" rows="3"></textarea>
                     <div class="flex justify-end space-x-3 mt-6">
                         <button type="button" onclick="closeModal('modalDAV')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Cancelar</button>
-                        <button type="submit" class="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700">📄 Gerar DAV</button>
+                        <button onclick="finalizarDAV(event)" class="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700">📄 Gerar</button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DAV GERADO -->
     <div id="modalDAVGerado" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <span class="close" onclick="closeModal('modalDAVGerado')">&times;</span>
-                <h2 class="text-2xl font-bold">✅ DAV Gerado com Sucesso!</h2>
-            </div>
+            <div class="modal-header"><span class="close" onclick="closeModal('modalDAVGerado')">&times;</span><h2 class="text-2xl font-bold">✅ DAV Gerado!</h2></div>
             <div class="modal-body">
-                <div id="dav-gerado-conteudo" style="background: #f9fafb; padding: 20px; border-radius: 10px; margin-bottom: 20px; font-family: monospace; white-space: pre-wrap;"></div>
-                
-                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107; margin-bottom: 20px;">
-                    <p style="margin: 0; color: #856404; font-weight: 600;">💡 O que você deseja fazer com este DAV?</p>
-                </div>
-
+                <div id="dav-gerado-conteudo" style="background:#f9fafb;padding:20px;border-radius:10px;margin-bottom:20px;font-family:monospace;white-space:pre-wrap"></div>
                 <div class="grid grid-cols-2 gap-4">
-                    <button onclick="imprimirDAV()" class="btn-action btn-print flex items-center justify-center space-x-2">
-                        <span>🖨️</span><span>Imprimir</span>
-                    </button>
-                    <button onclick="baixarDAVPDF()" class="btn-action btn-pdf flex items-center justify-center space-x-2">
-                        <span>📄</span><span>Baixar PDF</span>
-                    </button>
-                    <button onclick="enviarDAVEmail()" class="btn-action btn-email flex items-center justify-center space-x-2">
-                        <span>📧</span><span>Enviar Email</span>
-                    </button>
-                    <button onclick="enviarDAVWhatsApp()" class="btn-action btn-whatsapp flex items-center justify-center space-x-2">
-                        <span>💬</span><span>WhatsApp</span>
-                    </button>
+                    <button onclick="imprimirDAV()" class="btn-action btn-print flex items-center justify-center space-x-2"><span>🖨️</span><span>Imprimir</span></button>
+                    <button onclick="baixarDAVPDF()" class="btn-action btn-pdf flex items-center justify-center space-x-2"><span>📄</span><span>PDF</span></button>
+                    <button onclick="enviarDAVEmail()" class="btn-action btn-email flex items-center justify-center space-x-2"><span>📧</span><span>Email</span></button>
+                    <button onclick="enviarDAVWhatsApp()" class="btn-action btn-whatsapp flex items-center justify-center space-x-2"><span>💬</span><span>WhatsApp</span></button>
                 </div>
-
-                <div class="flex justify-end mt-6">
-                    <button onclick="closeModal('modalDAVGerado')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Fechar</button>
-                </div>
+                <div class="flex justify-end mt-6"><button onclick="closeModal('modalDAVGerado')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Fechar</button></div>
             </div>
         </div>
     </div>
-
-<script>
-// ========================================
-// PROHOSPITALAR - DADOS DO SISTEMA v5.0
-// ========================================
-
-let vendas = [];
-let produtos = [];
-let clientes = [];
-let representantes = [];
-let fornecedores = [];
-let transacoes = [];
-let contasReceber = [];
-let itensDAV = [];
-let historicoDAVs = [];
-let davAtual = null;
-let chartVendas = null;
-    <!-- ========================================
-     PARTE A - MODAIS REPRESENTANTE E FORNECEDOR
-     Cole ANTES da tag <script> (depois do Modal Produto)
-     ======================================== -->
-
-<!-- MODAL REPRESENTANTE -->
-<div id="modalRepresentante" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span class="close" onclick="closeModal('modalRepresentante')">&times;</span>
-            <h2 class="text-2xl font-bold" id="titulo-modal-representante">👨‍💼 Novo Representante</h2>
-        </div>
-        <div class="modal-body">
-            <form id="formRepresentante" onsubmit="salvarRepresentante(event)">
-                <input type="hidden" id="representante-id-edit">
-                
-                <label>Nome Completo *</label>
-                <input type="text" id="representante-nome" required placeholder="Ex: João da Silva">
-                
-                <div class="form-grid">
-                    <div>
-                        <label>CPF *</label>
-                        <input type="text" id="representante-cpf" required placeholder="000.000.000-00">
-                    </div>
-                    <div>
-                        <label>Telefone *</label>
-                        <input type="text" id="representante-telefone" required placeholder="(11) 99999-9999">
-                    </div>
-                </div>
-                
-                <div class="form-grid">
-                    <div>
-                        <label>Email *</label>
-                        <input type="email" id="representante-email" required placeholder="email@exemplo.com">
-                    </div>
-                    <div>
-                        <label>Região *</label>
-                        <select id="representante-regiao" required>
-                            <option value="">Selecione</option>
-                            <option value="Norte">Norte</option>
-                            <option value="Nordeste">Nordeste</option>
-                            <option value="Centro-Oeste">Centro-Oeste</option>
-                            <option value="Sudeste">Sudeste</option>
-                            <option value="Sul">Sul</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-grid">
-                    <div>
-                        <label>Meta Mensal (R$) *</label>
-                        <input type="number" id="representante-meta" required step="0.01" min="0" placeholder="200000.00">
-                    </div>
-                    <div>
-                        <label>Comissão (%) *</label>
-                        <input type="number" id="representante-comissao" required step="0.01" min="0" max="100" value="5" placeholder="5.00">
-                    </div>
-                </div>
-                
-                <label>Observações</label>
-                <textarea id="representante-obs" rows="3" placeholder="Informações adicionais sobre o representante..."></textarea>
-                
-                <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" onclick="closeModal('modalRepresentante')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Cancelar</button>
-                    <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">💾 Salvar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL FORNECEDOR -->
-<div id="modalFornecedor" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span class="close" onclick="closeModal('modalFornecedor')">&times;</span>
-            <h2 class="text-2xl font-bold" id="titulo-modal-fornecedor">🏭 Novo Fornecedor</h2>
-        </div>
-        <div class="modal-body">
-            <form id="formFornecedor" onsubmit="salvarFornecedor(event)">
-                <input type="hidden" id="fornecedor-id-edit">
-                
-                <label>Razão Social *</label>
-                <input type="text" id="fornecedor-nome" required placeholder="Ex: MedTech Equipamentos Ltda">
-                
-                <div class="form-grid">
-                    <div>
-                        <label>CNPJ *</label>
-                        <input type="text" id="fornecedor-cnpj" required placeholder="00.000.000/0001-00">
-                    </div>
-                    <div>
-                        <label>Inscrição Estadual</label>
-                        <input type="text" id="fornecedor-ie" placeholder="000.000.000.000">
-                    </div>
-                </div>
-                
-                <div class="form-grid">
-                    <div>
-                        <label>Telefone *</label>
-                        <input type="text" id="fornecedor-telefone" required placeholder="(11) 3333-3333">
-                    </div>
-                    <div>
-                        <label>Email *</label>
-                        <input type="email" id="fornecedor-email" required placeholder="contato@fornecedor.com">
-                    </div>
-                </div>
-                
-                <label>Especialidade *</label>
-                <select id="fornecedor-especialidade" required>
-                    <option value="">Selecione</option>
-                    <option value="Equipamentos de Diagnóstico">Equipamentos de Diagnóstico</option>
-                    <option value="Equipamentos de Monitoramento">Equipamentos de Monitoramento</option>
-                    <option value="Equipamentos de Cirurgia">Equipamentos de Cirurgia</option>
-                    <option value="Mobiliário Hospitalar">Mobiliário Hospitalar</option>
-                    <option value="Equipamentos de Imagem">Equipamentos de Imagem</option>
-                    <option value="Equipamentos de Emergência">Equipamentos de Emergência</option>
-                    <option value="Outros">Outros</option>
-                </select>
-                
-                <div class="form-grid">
-                    <div>
-                        <label>Cidade *</label>
-                        <input type="text" id="fornecedor-cidade" required placeholder="São Paulo">
-                    </div>
-                    <div>
-                        <label>Estado *</label>
-                        <select id="fornecedor-estado" required>
-                            <option value="">Selecione</option>
-                            <option value="AC">AC</option>
-                            <option value="AL">AL</option>
-                            <option value="AP">AP</option>
-                            <option value="AM">AM</option>
-                            <option value="BA">BA</option>
-                            <option value="CE">CE</option>
-                            <option value="DF">DF</option>
-                            <option value="ES">ES</option>
-                            <option value="GO">GO</option>
-                            <option value="MA">MA</option>
-                            <option value="MT">MT</option>
-                            <option value="MS">MS</option>
-                            <option value="MG">MG</option>
-                            <option value="PA">PA</option>
-                            <option value="PB">PB</option>
-                            <option value="PR">PR</option>
-                            <option value="PE">PE</option>
-                            <option value="PI">PI</option>
-                            <option value="RJ">RJ</option>
-                            <option value="RN">RN</option>
-                            <option value="RS">RS</option>
-                            <option value="RO">RO</option>
-                            <option value="RR">RR</option>
-                            <option value="SC">SC</option>
-                            <option value="SP">SP</option>
-                            <option value="SE">SE</option>
-                            <option value="TO">TO</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <label>Observações</label>
-                <textarea id="fornecedor-obs" rows="3" placeholder="Informações adicionais sobre o fornecedor..."></textarea>
-                
-                <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" onclick="closeModal('modalFornecedor')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Cancelar</button>
-                    <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">💾 Salvar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- ========================================
-     FIM DA PARTE A
-     Agora aguarde a PARTE B (JavaScript)
-     ======================================== -->
-         // ========================================
-// BACKUP E PERSISTÊNCIA (NOVO!)
-// ========================================
-
-function salvarDados() {
-    try {
-        const dados = {
-            vendas,
-            produtos,
-            clientes,
-            representantes,
-            fornecedores,
-            transacoes,
-            contasReceber,
-            historicoDAVs,
-            ultimoBackup: new Date().toLocaleString('pt-BR')
-        };
-        localStorage.setItem('prohospitalar_dados', JSON.stringify(dados));
-        document.getElementById('ultimo-backup').textContent = 'Agora mesmo';
-        return true;
-    } catch (e) {
-        console.error('Erro ao salvar dados:', e);
-        return false;
+    return;
     }
-}
-
-function carregarDados() {
-    try {
-        const dadosSalvos = localStorage.getItem('prohospitalar_dados');
-        if (dadosSalvos) {
-            const dados = JSON.parse(dadosSalvos);
-            vendas = dados.vendas || [];
-            produtos = dados.produtos || [];
-            clientes = dados.clientes || [];
-            representantes = dados.representantes || [];
-            fornecedores = dados.fornecedores || [];
-            transacoes = dados.transacoes || [];
-            contasReceber = dados.contasReceber || [];
-            historicoDAVs = dados.historicoDAVs || [];
-            
-            if (dados.ultimoBackup) {
-                document.getElementById('ultimo-backup').textContent = dados.ultimoBackup;
-            }
-            
-            console.log('✅ Dados carregados do backup!');
-            return true;
-        } else {
-            carregarDadosIniciais();
-            console.log('✅ Dados iniciais carregados!');
-            return false;
-        }
-    } catch (e) {
-        console.error('Erro ao carregar dados:', e);
-        carregarDadosIniciais();
-        return false;
-    }
-}
-
-function carregarDadosIniciais() {
-    vendas = [
-        { id: 1, data: '2024-10-17', cliente: 'Hospital São Lucas', produto: 'Monitor Cardíaco MC-500', codigoProduto: 'MC-500', quantidade: 1, representante: 'Ana Silva', valor: 45890, lucro: 15200, status: 'Concluída', pagamento: 'À Vista' },
-        { id: 2, data: '2024-10-17', cliente: 'Clínica Santa Maria', produto: 'Ultrassom US-300', codigoProduto: 'US-300', quantidade: 1, representante: 'Carlos Mendes', valor: 78500, lucro: 28900, status: 'Concluída', pagamento: 'Boleto' }
-    ];
-
-    produtos = [
-        { codigo: 'MC-500', nome: 'Monitor Cardíaco Digital', categoria: 'Monitoramento', quantidade: 12, custo: 30690, precoVenda: 45890, estoqueMinimo: 5, status: 'Disponível' },
-        { codigo: 'US-300', nome: 'Ultrassom Portátil', categoria: 'Diagnóstico', quantidade: 5, custo: 49600, precoVenda: 78500, estoqueMinimo: 3, status: 'Disponível' },
-        { codigo: 'RX-700', nome: 'Equipamento Raio-X Digital', categoria: 'Radiologia', quantidade: 3, custo: 83000, precoVenda: 125000, estoqueMinimo: 2, status: 'Disponível' }
-    ];
-
-    clientes = [
-        { id: 1, nome: 'Hospital São Lucas', cnpj: '12.345.678/0001-90', cidade: 'São Paulo', status: 'Ativo' },
-        { id: 2, nome: 'Clínica Santa Maria', cnpj: '23.456.789/0001-01', cidade: 'Rio de Janeiro', status: 'Ativo' }
-    ];
-
-    representantes = [
-        { id: 1, nome: 'Ana Silva', regiao: 'Sudeste', vendasMes: 249390, meta: 220000, performance: '113%' },
-        { id: 2, nome: 'Carlos Mendes', regiao: 'Sul', vendasMes: 187600, meta: 200000, performance: '94%' }
-    ];
-
-    fornecedores = [
-        { id: 1, nome: 'MedTech Equipamentos', cnpj: '56.789.012/0001-34', especialidade: 'Equipamentos de Diagnóstico', status: 'Ativo' }
-    ];
-
-    transacoes = [
-        { id: 1, data: '2024-10-17', descricao: 'Venda - Hospital São Lucas', tipo: 'Entrada', valor: 45890, status: 'Confirmado' }
-    ];
-
-    contasReceber = [];
-    historicoDAVs = [];
-}
-
-function fazerBackupManual() {
-    if (salvarDados()) {
-        alert('✅ BACKUP REALIZADO!\n\nTodos os dados foram salvos com sucesso!\n\n💾 Local: Navegador (localStorage)\n📅 Data: ' + new Date().toLocaleString('pt-BR'));
+    
+    const itemExistente = itensDAV.find(i => i.codigo === codigoProduto);
+    
+    if (itemExistente) {
+        itemExistente.quantidade += quantidade;
+        itemExistente.subtotal = itemExistente.quantidade * itemExistente.precoUnitario;
     } else {
-        alert('❌ ERRO AO FAZER BACKUP!\n\nNão foi possível salvar os dados.');
-    }
-}
-
-// ========================================
-// CONTROLE DE ESTOQUE AUTOMÁTICO (NOVO!)
-// ========================================
-
-function baixarEstoque(codigoProduto, quantidade) {
-    const produto = produtos.find(p => p.codigo === codigoProduto);
-    if (produto) {
-        produto.quantidade -= quantidade;
-        if (produto.quantidade < 0) produto.quantidade = 0;
-        verificarEstoqueBaixo();
-        salvarDados();
-        return true;
-    }
-    return false;
-}
-
-function devolverEstoque(codigoProduto, quantidade) {
-    const produto = produtos.find(p => p.codigo === codigoProduto);
-    if (produto) {
-        produto.quantidade += quantidade;
-        verificarEstoqueBaixo();
-        salvarDados();
-        return true;
-    }
-    return false;
-}
-
-function verificarEstoqueBaixo() {
-    const produtosBaixos = produtos.filter(p => p.quantidade <= (p.estoqueMinimo || 5));
-    const countBaixos = produtosBaixos.length;
-    
-    document.getElementById('estoque-baixo').textContent = countBaixos;
-    document.getElementById('dash-estoque-baixo').textContent = countBaixos;
-    
-    if (countBaixos > 0) {
-        const alerta = document.getElementById('alerta-estoque-baixo');
-        if (alerta) {
-            alerta.innerHTML = `
-                <div class="alerta-estoque mb-4">
-                    <div class="flex items-start">
-                        <span class="text-2xl mr-3">⚠️</span>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-orange-800 mb-2">Atenção: ${countBaixos} produto(s) com estoque baixo!</h4>
-                            <ul class="text-sm text-orange-700">
-                                ${produtosBaixos.map(p => `<li>• ${p.nome} (${p.codigo}): ${p.quantidade} unidades</li>`).join('')}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-    } else {
-        const alerta = document.getElementById('alerta-estoque-baixo');
-        if (alerta) alerta.innerHTML = '';
-    }
-}
-
-// ========================================
-// CONTAS A RECEBER (NOVO!)
-// ========================================
-
-function gerarContaReceber(venda) {
-    if (venda.pagamento !== 'À Vista') {
-        let diasVencimento = 30;
-        if (venda.pagamento === '30/60 dias') diasVencimento = 30;
-        
-        const dataVencimento = new Date(venda.data);
-        dataVencimento.setDate(dataVencimento.getDate() + diasVencimento);
-        
-        const conta = {
-            id: contasReceber.length + 1,
-            vendaId: venda.id,
-            cliente: venda.cliente,
-            valor: venda.valor,
-            dataVencimento: dataVencimento.toISOString().split('T')[0],
-            status: 'Pendente',
-            dataPagamento: null
+        const novoItem = {
+            codigo: produto.codigo,
+            nome: produto.nome,
+            quantidade: quantidade,
+            precoUnitario: produto.precoVenda,
+            subtotal: quantidade * produto.precoVenda
         };
-        
-        contasReceber.push(conta);
-        salvarDados();
-        atualizarContadores();
-    }
-}
-
-function marcarComoPago(contaId) {
-    const conta = contasReceber.find(c => c.id === contaId);
-    if (conta) {
-        conta.status = 'Pago';
-        conta.dataPagamento = new Date().toISOString().split('T')[0];
-        salvarDados();
-        alert('✅ Conta marcada como paga!');
-        renderContasReceber();
-        atualizarContadores();
-    }
-}
-
-function calcularTotaisReceber() {
-    const totalReceber = contasReceber.filter(c => c.status === 'Pendente').reduce((sum, c) => sum + c.valor, 0);
-    const hoje = new Date().toISOString().split('T')[0];
-    const totalVencidas = contasReceber.filter(c => c.status === 'Pendente' && c.dataVencimento < hoje).reduce((sum, c) => sum + c.valor, 0);
-    const totalRecebido = contasReceber.filter(c => c.status === 'Pago').reduce((sum, c) => sum + c.valor, 0);
-    
-    return { totalReceber, totalVencidas, totalRecebido };
-}
-
-// ========================================
-// FUNÇÕES DE NAVEGAÇÃO
-// ========================================
-
-function showTab(tabName) {
-    const tabs = ['dashboard', 'vendas', 'contas-receber', 'clientes', 'estoque', 'vendedores', 'fornecedores', 'financeiro', 'historico-davs'];
-    
-    tabs.forEach(tab => {
-        const element = document.getElementById(tab);
-        if (element) element.classList.add('hidden');
-        
-        const tabButton = document.getElementById(`tab-${tab}`);
-        if (tabButton) {
-            tabButton.classList.remove('active-tab');
-            tabButton.classList.add('text-gray-700', 'hover:bg-gray-100');
-        }
-    });
-
-    const selectedTab = document.getElementById(tabName);
-    if (selectedTab) {
-        selectedTab.classList.remove('hidden');
-        selectedTab.classList.add('fade-in');
+        itensDAV.push(novoItem);
     }
     
-    const selectedButton = document.getElementById(`tab-${tabName}`);
-    if (selectedButton) {
-        selectedButton.classList.add('active-tab');
-        selectedButton.classList.remove('text-gray-700', 'hover:bg-gray-100');
-    }
-
-    if (tabName === 'dashboard') initDashboard();
-    else if (tabName === 'vendas') renderVendas();
-    else if (tabName === 'contas-receber') renderContasReceber();
-    else if (tabName === 'clientes') renderClientes();
-    else if (tabName === 'estoque') renderProdutos();
-    else if (tabName === 'vendedores') renderRepresentantes();
-    else if (tabName === 'fornecedores') renderFornecedores();
-    else if (tabName === 'financeiro') renderFinanceiro();
-    else if (tabName === 'historico-davs') renderHistoricoDAVs();
+    document.getElementById('dav-produto-select').value = '';
+    document.getElementById('dav-quantidade-input').value = 1;
+    renderItensDAV();
 }
 
-// ========================================
-// DASHBOARD E CONTADORES
-// ========================================
-
-function initDashboard() {
-    atualizarContadores();
-    verificarEstoqueBaixo();
-    
-    const ctx = document.getElementById('chartVendasCategorias');
-    if (ctx && !chartVendas) {
-        chartVendas = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'],
-                datasets: [{
-                    label: 'Vendas (R$)',
-                    data: [245000, 289000, 312000, 278000, 356000, 398000, 367000, 425000, 489000, 685490],
-                    borderColor: '#059669',
-                    backgroundColor: 'rgba(5, 150, 105, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: { legend: { display: true } },
-                scales: {
-                    y: { 
-                        beginAtZero: true,
-                        ticks: { callback: value => 'R$ ' + value.toLocaleString('pt-BR') }
-                    }
-                }
-            }
-        });
-    }
+function removerItemDAV(codigo) {
+    itensDAV = itensDAV.filter(i => i.codigo !== codigo);
+    renderItensDAV();
 }
 
-function atualizarContadores() {
-    const totalVendas = vendas.reduce((sum, v) => sum + v.valor, 0);
-    const { totalReceber, totalVencidas } = calcularTotaisReceber();
-    const contasPendentes = contasReceber.filter(c => c.status === 'Pendente').length;
-    const produtosBaixos = produtos.filter(p => p.quantidade <= (p.estoqueMinimo || 5)).length;
+function renderItensDAV() {
+    const tbody = document.getElementById('lista-itens-dav');
+    const totalGeral = itensDAV.reduce((sum, i) => sum + i.subtotal, 0);
     
-    document.getElementById('dash-vendas').textContent = 'R$ ' + totalVendas.toLocaleString('pt-BR');
-    document.getElementById('dash-receber').textContent = 'R$ ' + totalReceber.toLocaleString('pt-BR');
-    document.getElementById('dash-clientes').textContent = clientes.length;
-    document.getElementById('dash-produtos').textContent = produtos.length;
-    document.getElementById('dash-estoque-baixo').textContent = produtosBaixos;
-    document.getElementById('receber-count').textContent = contasPendentes;
-    document.getElementById('alert-count').textContent = contasPendentes + produtosBaixos;
-}
-
-// ========================================
-// RENDERIZAR TABELAS
-// ========================================
-
-function renderVendas() {
-    const tbody = document.getElementById('lista-vendas');
-    if (!tbody) return;
-    
-    tbody.innerHTML = vendas.map(venda => {
-        const statusColor = venda.status === 'Concluída' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
-        return `
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 text-sm">${new Date(venda.data).toLocaleDateString('pt-BR')}</td>
-                <td class="px-6 py-4">${venda.cliente}</td>
-                <td class="px-6 py-4 text-sm">${venda.produto}</td>
-                <td class="px-6 py-4 font-semibold text-green-600">R$ ${venda.valor.toLocaleString('pt-BR')}</td>
-                <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${statusColor}">${venda.status}</span></td>
-                <td class="px-6 py-4">
-                    <button onclick="editarVenda(${venda.id})" class="btn-edit">✏️ Editar</button>
-                    <button onclick="deletarVenda(${venda.id})" class="btn-delete">🗑️ Deletar</button>
-                </td>
-            </tr>
-        `;
-    }).join('');
-}
-
-function renderContasReceber() {
-    const tbody = document.getElementById('lista-contas-receber');
-    if (!tbody) return;
-    
-    const { totalReceber, totalVencidas, totalRecebido } = calcularTotaisReceber();
-    document.getElementById('total-receber').textContent = 'R$ ' + totalReceber.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-    document.getElementById('total-vencidas').textContent = 'R$ ' + totalVencidas.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-    document.getElementById('total-recebido').textContent = 'R$ ' + totalRecebido.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-    
-    if (contasReceber.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">Nenhuma conta a receber cadastrada.</td></tr>';
+    if (itensDAV.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-6 text-center text-gray-500">Nenhum item adicionado</td></tr>';
+        document.getElementById('dav-total-geral').textContent = 'R$ 0,00';
         return;
     }
     
-    const hoje = new Date().toISOString().split('T')[0];
+    tbody.innerHTML = itensDAV.map(i => `
+        <tr class="border-b">
+            <td class="px-4 py-3">${i.nome}</td>
+            <td class="px-4 py-3 text-center">${i.quantidade}</td>
+            <td class="px-4 py-3 text-right">${formatarMoeda(i.precoUnitario)}</td>
+            <td class="px-4 py-3 text-right font-bold">${formatarMoeda(i.subtotal)}</td>
+            <td class="px-4 py-3 text-center">
+                <button onclick="removerItemDAV('${i.codigo}')" class="text-red-600 hover:text-red-800">🗑️</button>
+            </td>
+        </tr>
+    `).join('');
     
-    tbody.innerHTML = contasReceber.map(conta => {
-        const statusColor = conta.status === 'Pago' ? 'bg-green-100 text-green-800' : 
-                           (conta.dataVencimento < hoje ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800');
-        const statusTexto = conta.status === 'Pago' ? 'Pago' : (conta.dataVencimento < hoje ? 'Vencida' : 'Pendente');
+    document.getElementById('dav-total-geral').textContent = formatarMoeda(totalGeral);
+}
+
+function finalizarDAV(event) {
+    event.preventDefault();
+    
+    const cliente = document.getElementById('dav-cliente').value;
+    const representante = document.getElementById('dav-representante').value;
+    const pagamento = document.getElementById('dav-pagamento').value;
+    const observacoes = document.getElementById('dav-obs').value;
+    
+    if (!cliente) {
+        alert('⚠️ Selecione um cliente!');
+        return;
+    }
+    
+    if (!representante) {
+        alert('⚠️ Selecione um representante!');
+        return;
+    }
+    
+    if (!pagamento) {
+        alert('⚠️ Selecione a forma de pagamento!');
+        return;
+    }
+    
+    if (itensDAV.length === 0) {
+        alert('⚠️ Adicione pelo menos um item ao DAV!');
+        return;
+    }
+    
+    const totalGeral = itensDAV.reduce((sum, i) => sum + i.subtotal, 0);
+    
+    const novoDAV = {
+        id: historicoDAVs.length + 1,
+        data: new Date().toISOString().split('T')[0],
+        cliente: cliente,
+        representante: representante,
+        itens: [...itensDAV],
+        total: totalGeral,
+        pagamento: pagamento,
+        observacoes: observacoes,
+        status: 'Pendente'
+    };
+    
+    historicoDAVs.push(novoDAV);
+    salvarDados();
+    
+    alert('✅ DAV gerado com sucesso!\n\n📋 DAV #' + novoDAV.id + '\n💰 Total: ' + formatarMoeda(totalGeral));
+    
+    closeModal('modalDAV');
+    renderHistoricoDAVs();
+}
+
+function converterDAVEmVenda(id) {
+    const dav = historicoDAVs.find(d => d.id === id);
+    
+    if (!dav) {
+        alert('❌ DAV não encontrado!');
+        return;
+    }
+    
+    if (confirm('✅ Converter DAV em venda?\n\nIsso irá:\n• Baixar o estoque dos produtos\n• Gerar as contas a receber\n• Registrar as vendas')) {
         
-        return `
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 font-medium">#${conta.vendaId}</td>
-                <td class="px-6 py-4">${conta.cliente}</td>
-                <td class="px-6 py-4 text-sm">${new Date(conta.dataVencimento).toLocaleDateString('pt-BR')}</td>
-                <td class="px-6 py-4 font-semibold text-green-600">R$ ${conta.valor.toLocaleString('pt-BR')}</td>
-                <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${statusColor}">${statusTexto}</span></td>
-                <td class="px-6 py-4">
-                    ${conta.status === 'Pendente' ? `<button onclick="marcarComoPago(${conta.id})" class="btn-pagar">✅ Receber</button>` : '<span class="text-sm text-green-600">✓ Recebido</span>'}
-                </td>
-            </tr>
-        `;
-    }).join('');
+        let vendasCriadas = 0;
+        
+        for (const item of dav.itens) {
+            const produto = produtos.find(p => p.codigo === item.codigo);
+            
+            if (!produto) {
+                alert(`❌ Produto ${item.codigo} não encontrado!`);
+                continue;
+            }
+            
+            if (item.quantidade > produto.quantidade) {
+                alert(`❌ Estoque insuficiente para ${produto.nome}!\nDisponível: ${produto.quantidade} | Necessário: ${item.quantidade}`);
+                continue;
+            }
+            
+            const novaVenda = {
+                id: vendas.length + 1,
+                data: new Date().toISOString().split('T')[0],
+                cliente: dav.cliente,
+                produto: item.codigo,
+                produtoNome: item.nome,
+                representante: dav.representante,
+                quantidade: item.quantidade,
+                desconto: 0,
+                valor: item.subtotal,
+                pagamento: dav.pagamento,
+                status: dav.pagamento === 'À Vista' ? 'Pago' : 'Pendente',
+                observacoes: `Origem: DAV #${dav.id} - ${dav.observacoes || ''}`
+            };
+            
+            vendas.push(novaVenda);
+            baixarEstoque(item.codigo, item.quantidade);
+            gerarContaReceber(novaVenda);
+            vendasCriadas++;
+        }
+        
+        dav.status = 'Convertido';
+        
+        salvarDados();
+        renderVendas();
+        renderHistoricoDAVs();
+        atualizarContadores();
+        atualizarGrafico();
+        
+        alert(`✅ DAV convertido com sucesso!\n\n${vendasCriadas} venda(s) criada(s)`);
+    }
 }
 
-function renderClientes() {
-    const tbody = document.getElementById('lista-clientes');
-    if (!tbody) return;
-    
-    tbody.innerHTML = clientes.map(cliente => `
-        <tr class="hover:bg-gray-50">
-            <td class="px-6 py-4 font-medium">${cliente.nome}</td>
-            <td class="px-6 py-4 text-sm">${cliente.cnpj}</td>
-            <td class="px-6 py-4 text-sm">${cliente.cidade}</td>
-            <td class="px-6 py-4">
-                <button onclick="editarCliente(${cliente.id})" class="btn-edit">✏️ Editar</button>
-                <button onclick="deletarCliente(${cliente.id})" class="btn-delete">🗑️ Deletar</button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-function renderProdutos() {
-    const tbody = document.getElementById('lista-produtos');
-    if (!tbody) return;
-    
-    verificarEstoqueBaixo();
-    
-    tbody.innerHTML = produtos.map(produto => {
-        const estoqueClasse = produto.quantidade <= (produto.estoqueMinimo || 5) ? 'text-red-600 font-bold' : 'font-semibold';
-        return `
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 font-medium">${produto.codigo}</td>
-                <td class="px-6 py-4">${produto.nome}</td>
-                <td class="px-6 py-4 text-center ${estoqueClasse}">${produto.quantidade}</td>
-                <td class="px-6 py-4 font-semibold">R$ ${produto.precoVenda.toLocaleString('pt-BR')}</td>
-                <td class="px-6 py-4">
-                    <button onclick="editarProduto('${produto.codigo}')" class="btn-edit">✏️ Editar</button>
-                    <button onclick="deletarProduto('${produto.codigo}')" class="btn-delete">🗑️ Deletar</button>
-                </td>
-            </tr>
-        `;
-    }).join('');
-}
-
-function renderRepresentantes() {
-    const tbody = document.getElementById('lista-representantes');
-    if (!tbody) return;
-    
-    tbody.innerHTML = representantes.map(rep => `
-        <tr class="hover:bg-gray-50">
-            <td class="px-6 py-4 font-medium">${rep.nome}</td>
-            <td class="px-6 py-4 text-sm">${rep.regiao}</td>
-            <td class="px-6 py-4 font-semibold text-green-600">R$ ${rep.vendasMes.toLocaleString('pt-BR')}</td>
-            <td class="px-6 py-4">
-                <button onclick="alert('Em desenvolvimento')" class="btn-edit">✏️ Editar</button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-function renderFornecedores() {
-    const tbody = document.getElementById('lista-fornecedores');
-    if (!tbody) return;
-    
-    tbody.innerHTML = fornecedores.map(forn => `
-        <tr class="hover:bg-gray-50">
-            <td class="px-6 py-4 font-medium">${forn.nome}</td>
-            <td class="px-6 py-4 text-sm">${forn.cnpj}</td>
-            <td class="px-6 py-4 text-sm">${forn.especialidade}</td>
-            <td class="px-6 py-4">
-                <button onclick="alert('Em desenvolvimento')" class="btn-edit">✏️ Editar</button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-function renderFinanceiro() {
-    const tbody = document.getElementById('lista-transacoes');
-    if (!tbody) return;
-    
-    tbody.innerHTML = transacoes.map(trans => {
-        const tipoColor = trans.tipo === 'Entrada' ? 'text-green-600' : 'text-red-600';
-        return `
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 text-sm">${new Date(trans.data).toLocaleDateString('pt-BR')}</td>
-                <td class="px-6 py-4">${trans.descricao}</td>
-                <td class="px-6 py-4 font-semibold ${tipoColor}">R$ ${trans.valor.toLocaleString('pt-BR')}</td>
-            </tr>
-        `;
-    }).join('');
+function cancelarDAV(id) {
+    if (confirm('⚠️ Tem certeza que deseja cancelar este DAV?')) {
+        const dav = historicoDAVs.find(d => d.id === id);
+        if (dav) {
+            dav.status = 'Cancelado';
+            salvarDados();
+            renderHistoricoDAVs();
+            alert('✅ DAV cancelado!');
+        }
+    }
 }
 
 function renderHistoricoDAVs() {
     const tbody = document.getElementById('lista-historico-davs');
-    if (!tbody) return;
     
     if (historicoDAVs.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">Nenhum DAV gerado ainda.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">Nenhum DAV registrado</td></tr>';
         return;
     }
     
-    tbody.innerHTML = historicoDAVs.map(dav => `
-        <tr class="hover:bg-gray-50">
-            <td class="px-6 py-4 font-medium">${dav.numero}</td>
-            <td class="px-6 py-4 text-sm">${new Date(dav.data).toLocaleDateString('pt-BR')}</td>
-            <td class="px-6 py-4">${dav.cliente}</td>
-            <td class="px-6 py-4 font-semibold text-green-600">R$ ${dav.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-            <td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">${dav.status}</span></td>
+    tbody.innerHTML = historicoDAVs.map(d => {
+        const statusClass = d.status === 'Convertido' ? 'status-success' : 
+                          d.status === 'Cancelado' ? 'status-danger' : 'status-warning';
+        
+        return `
+            <tr class="border-b hover:bg-gray-50">
+                <td class="px-6 py-4 font-medium">#${d.id}</td>
+                <td class="px-6 py-4">${formatarData(d.data)}</td>
+                <td class="px-6 py-4">${d.cliente}</td>
+                <td class="px-6 py-4 font-bold text-green-600">${formatarMoeda(d.total)}</td>
+                <td class="px-6 py-4"><span class="status-badge ${statusClass}">${d.status}</span></td>
+                <td class="px-6 py-4">
+                    ${d.status === 'Pendente' ? `
+                        <button onclick="converterDAVEmVenda(${d.id})" class="btn-action btn-success text-sm mr-2">✅ Converter</button>
+                        <button onclick="cancelarDAV(${d.id})" class="btn-action btn-delete text-sm">❌ Cancelar</button>
+                    ` : `<span class="text-gray-500 text-sm">—</span>`}
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// ========== REPRESENTANTES ==========
+function abrirModalRepresentante(id = null) {
+    if (id) {
+        const rep = representantes.find(r => r.id === id);
+        if (rep) {
+            document.getElementById('titulo-modal-representante').textContent = '✏️ Editar Representante';
+            document.getElementById('rep-id-edit').value = id;
+            document.getElementById('rep-nome').value = rep.nome;
+            document.getElementById('rep-regiao').value = rep.regiao;
+            document.getElementById('rep-meta').value = rep.meta;
+        }
+    } else {
+        document.getElementById('titulo-modal-representante').textContent = '👔 Novo Representante';
+        document.getElementById('rep-id-edit').value = '';
+        document.getElementById('rep-nome').value = '';
+        document.getElementById('rep-regiao').value = '';
+        document.getElementById('rep-meta').value = '';
+    }
+    
+    document.getElementById('modalRepresentante').style.display = 'block';
+}
+
+function salvarRepresentante(event) {
+    event.preventDefault();
+    
+    const id = document.getElementById('rep-id-edit').value;
+    const nome = document.getElementById('rep-nome').value;
+    const regiao = document.getElementById('rep-regiao').value;
+    const meta = parseFloat(document.getElementById('rep-meta').value);
+    
+    if (!nome || !regiao || isNaN(meta)) {
+        alert('⚠️ Preencha todos os campos!');
+        return;
+    }
+    
+    if (id) {
+        const rep = representantes.find(r => r.id === parseInt(id));
+        if (rep) {
+            rep.nome = nome;
+            rep.regiao = regiao;
+            rep.meta = meta;
+        }
+    } else {
+        const novoRep = {
+            id: representantes.length + 1,
+            nome: nome,
+            regiao: regiao,
+            vendasMes: 0,
+            meta: meta,
+            performance: '0%'
+        };
+        representantes.push(novoRep);
+    }
+    
+    salvarDados();
+    renderRepresentantes();
+    atualizarContadores();
+    closeModal('modalRepresentante');
+    alert('✅ Representante salvo com sucesso!');
+}
+
+function excluirRepresentante(id) {
+    if (confirm('⚠️ Tem certeza que deseja excluir este representante?')) {
+        representantes = representantes.filter(r => r.id !== id);
+        salvarDados();
+        renderRepresentantes();
+        atualizarContadores();
+        alert('✅ Representante excluído!');
+    }
+}
+
+function renderRepresentantes() {
+    const tbody = document.getElementById('lista-representantes');
+    
+    if (representantes.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Nenhum representante cadastrado</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = representantes.map(r => {
+        const performance = r.meta > 0 ? ((r.vendasMes / r.meta) * 100).toFixed(1) : 0;
+        const performanceClass = performance >= 100 ? 'text-green-600' : performance >= 70 ? 'text-yellow-600' : 'text-red-600';
+        
+        return `
+            <tr class="border-b hover:bg-gray-50">
+                <td class="px-6 py-4 font-medium">${r.nome}</td>
+                <td class="px-6 py-4">${r.regiao}</td>
+                <td class="px-6 py-4 font-bold text-green-600">${formatarMoeda(r.vendasMes || 0)}</td>
+                <td class="px-6 py-4">${formatarMoeda(r.meta)}</td>
+                <td class="px-6 py-4 font-bold ${performanceClass}">${performance}%</td>
+                <td class="px-6 py-4">
+                    <button onclick="abrirModalRepresentante(${r.id})" class="btn-action btn-edit text-sm mr-2">✏️</button>
+                    <button onclick="excluirRepresentante(${r.id})" class="btn-action btn-delete text-sm">🗑️</button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// ========== FORNECEDORES ==========
+function abrirModalFornecedor(id = null) {
+    if (id) {
+        const forn = fornecedores.find(f => f.id === id);
+        if (forn) {
+            document.getElementById('titulo-modal-fornecedor').textContent = '✏️ Editar Fornecedor';
+            document.getElementById('forn-id-edit').value = id;
+            document.getElementById('forn-nome').value = forn.nome;
+            document.getElementById('forn-cnpj').value = forn.cnpj;
+            document.getElementById('forn-especialidade').value = forn.especialidade;
+        }
+    } else {
+        document.getElementById('titulo-modal-fornecedor').textContent = '🏭 Novo Fornecedor';
+        document.getElementById('forn-id-edit').value = '';
+        document.getElementById('forn-nome').value = '';
+        document.getElementById('forn-cnpj').value = '';
+        document.getElementById('forn-especialidade').value = '';
+    }
+    
+    document.getElementById('modalFornecedor').style.display = 'block';
+}
+
+function salvarFornecedor(event) {
+    event.preventDefault();
+    
+    const id = document.getElementById('forn-id-edit').value;
+    const nome = document.getElementById('forn-nome').value;
+    const cnpj = document.getElementById('forn-cnpj').value;
+    const especialidade = document.getElementById('forn-especialidade').value;
+    
+    if (!nome || !cnpj || !especialidade) {
+        alert('⚠️ Preencha todos os campos!');
+        return;
+    }
+    
+    if (id) {
+        const forn = fornecedores.find(f => f.id === parseInt(id));
+        if (forn) {
+            forn.nome = nome;
+            forn.cnpj = cnpj;
+            forn.especialidade = especialidade;
+        }
+    } else {
+        const novoForn = {
+            id: fornecedores.length + 1,
+            nome: nome,
+            cnpj: cnpj,
+            especialidade: especialidade,
+            status: 'Ativo'
+        };
+        fornecedores.push(novoForn);
+    }
+    
+    salvarDados();
+    renderFornecedores();
+    closeModal('modalFornecedor');
+    alert('✅ Fornecedor salvo com sucesso!');
+}
+
+function excluirFornecedor(id) {
+    if (confirm('⚠️ Tem certeza que deseja excluir este fornecedor?')) {
+        fornecedores = fornecedores.filter(f => f.id !== id);
+        salvarDados();
+        renderFornecedores();
+        alert('✅ Fornecedor excluído!');
+    }
+}
+
+function renderFornecedores() {
+    const tbody = document.getElementById('lista-fornecedores');
+    
+    if (fornecedores.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">Nenhum fornecedor cadastrado</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = fornecedores.map(f => `
+        <tr class="border-b hover:bg-gray-50">
+            <td class="px-6 py-4 font-medium">${f.nome}</td>
+            <td class="px-6 py-4">${f.cnpj}</td>
+            <td class="px-6 py-4">${f.especialidade}</td>
             <td class="px-6 py-4">
-                <button onclick="visualizarDAV('${dav.numero}')" class="btn-edit">👁️ Ver</button>
-                <button onclick="reimprimirDAV('${dav.numero}')" class="btn-edit">🖨️</button>
-                <button onclick="deletarDAV('${dav.numero}')" class="btn-delete">🗑️</button>
+                <button onclick="abrirModalFornecedor(${f.id})" class="btn-action btn-edit text-sm mr-2">✏️</button>
+                <button onclick="excluirFornecedor(${f.id})" class="btn-action btn-delete text-sm">🗑️</button>
             </td>
         </tr>
     `).join('');
 }
-    // ========================================
-// MODAIS - ABRIR E FECHAR
-// ========================================
 
-function openModal(tipo) {
-    if (tipo === 'venda') {
-        document.getElementById('modalVenda').style.display = 'block';
-        document.getElementById('titulo-modal-venda').textContent = '💰 Nova Venda';
-        document.getElementById('venda-id-edit').value = '';
-        popularSelectsVenda();
-        document.getElementById('formVenda').reset();
-    } else if (tipo === 'cliente') {
-        document.getElementById('modalCliente').style.display = 'block';
-        document.getElementById('titulo-modal-cliente').textContent = '🏥 Novo Cliente';
-        document.getElementById('cliente-id-edit').value = '';
-        document.getElementById('formCliente').reset();
-    } else if (tipo === 'produto') {
-        document.getElementById('modalProduto').style.display = 'block';
-        document.getElementById('titulo-modal-produto').textContent = '🩺 Novo Produto';
-        document.getElementById('produto-codigo-edit').value = '';
-        document.getElementById('formProduto').reset();
-    } else if (tipo === 'dav') {
-        document.getElementById('modalDAV').style.display = 'block';
-        popularSelectsDAV();
-        itensDAV = [];
-        atualizarTabelaDAV();
-    }
+// ========== FUNÇÕES AUXILIARES ==========
+function preencherSelectClientes(idSelect = 'venda-cliente') {
+    const select = document.getElementById(idSelect);
+    select.innerHTML = '<option value="">Selecione...</option>' + 
+        clientes.map(c => `<option value="${c.nome}">${c.nome}</option>`).join('');
+}
+
+function preencherSelectProdutos(idSelect = 'venda-produto') {
+    const select = document.getElementById(idSelect);
+    select.innerHTML = '<option value="">Selecione...</option>' + 
+        produtos.map(p => `<option value="${p.codigo}">${p.nome} (${p.codigo})</option>`).join('');
+}
+
+function preencherSelectRepresentantes(idSelect = 'venda-representante') {
+    const select = document.getElementById(idSelect);
+    select.innerHTML = '<option value="">Selecione...</option>' + 
+        representantes.map(r => `<option value="${r.nome}">${r.nome}</option>`).join('');
+}
+
+function formatarMoeda(valor) {
+    return new Intl.NumberFormat('pt-BR', { 
+        style: 'currency', 
+        currency: 'BRL' 
+    }).format(valor);
+}
+
+function formatarData(data) {
+    if (!data) return '-';
+    const [ano, mes, dia] = data.split('-');
+    return `${dia}/${mes}/${ano}`;
 }
 
 function closeModal(modalId) {
     document.getElementById(modalId).style.display = 'none';
 }
 
-window.onclick = function(event) {
-    if (event.target.classList.contains('modal')) {
-        event.target.style.display = 'none';
-    }
+function mudarSecao(secao) {
+    document.querySelectorAll('.secao').forEach(s => s.classList.add('hidden'));
+    document.getElementById(secao).classList.remove('hidden');
+    
+    document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.closest('.menu-btn').classList.add('active');
 }
 
-// ========================================
-// VENDAS - CRUD COMPLETO COM ESTOQUE
-// ========================================
-
-function popularSelectsVenda() {
-    const selectCliente = document.getElementById('venda-cliente');
-    const selectProduto = document.getElementById('venda-produto');
-    const selectRep = document.getElementById('venda-representante');
+function atualizarContadores() {
+    // Atualizar contadores do dashboard
+    document.getElementById('total-vendas').textContent = vendas.length;
+    document.getElementById('total-clientes').textContent = clientes.length;
+    document.getElementById('total-produtos').textContent = produtos.length;
     
-    selectCliente.innerHTML = '<option value="">Selecione</option>' + 
-        clientes.map(c => `<option value="${c.nome}">${c.nome}</option>`).join('');
-    
-    selectProduto.innerHTML = '<option value="">Selecione</option>' + 
-        produtos.map(p => `<option value="${p.codigo}" data-nome="${p.nome}" data-preco="${p.precoVenda}" data-qtd="${p.quantidade}">${p.nome} - R$ ${p.precoVenda.toLocaleString('pt-BR')} (Est: ${p.quantidade})</option>`).join('');
-    
-    selectRep.innerHTML = '<option value="">Selecione</option>' + 
-        representantes.map(r => `<option value="${r.nome}">${r.nome} - ${r.regiao}</option>`).join('');
-}
-
-function atualizarPrecoVenda() {
-    const select = document.getElementById('venda-produto');
-    const selectedOption = select.options[select.selectedIndex];
-    const preco = selectedOption.getAttribute('data-preco');
-    const qtdDisponivel = selectedOption.getAttribute('data-qtd');
-    
-    if (preco) {
-        document.getElementById('venda-valor-unitario').value = 'R$ ' + parseFloat(preco).toLocaleString('pt-BR', {minimumFractionDigits: 2});
-        document.getElementById('venda-quantidade').max = qtdDisponivel;
-        calcularTotalVenda();
-    }
-}
-
-function calcularTotalVenda() {
-    const select = document.getElementById('venda-produto');
-    const selectedOption = select.options[select.selectedIndex];
-    const preco = parseFloat(selectedOption.getAttribute('data-preco')) || 0;
-    const quantidade = parseInt(document.getElementById('venda-quantidade').value) || 0;
-    const desconto = parseFloat(document.getElementById('venda-desconto').value) || 0;
-    
-    const subtotal = preco * quantidade;
-    const valorDesconto = subtotal * (desconto / 100);
-    const total = subtotal - valorDesconto;
-    
-    document.getElementById('venda-total').value = 'R$ ' + total.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-}
-
-function salvarVenda(event) {
-    event.preventDefault();
-    
-    const idEdit = document.getElementById('venda-id-edit').value;
-    const select = document.getElementById('venda-produto');
-    const selectedOption = select.options[select.selectedIndex];
-    const codigoProduto = select.value;
-    const preco = parseFloat(selectedOption.getAttribute('data-preco')) || 0;
-    const quantidade = parseInt(document.getElementById('venda-quantidade').value);
-    const desconto = parseFloat(document.getElementById('venda-desconto').value) || 0;
-    const qtdDisponivel = parseInt(selectedOption.getAttribute('data-qtd'));
-    
-    if (quantidade > qtdDisponivel) {
-        alert('⚠️ ESTOQUE INSUFICIENTE!\n\nQuantidade disponível: ' + qtdDisponivel);
-        return;
-    }
-    
-    const subtotal = preco * quantidade;
-    const valorDesconto = subtotal * (desconto / 100);
-    const total = subtotal - valorDesconto;
-    
-    if (idEdit) {
-        const index = vendas.findIndex(v => v.id == idEdit);
-        if (index !== -1) {
-            const vendaAntiga = vendas[index];
-            devolverEstoque(vendaAntiga.codigoProduto, vendaAntiga.quantidade);
-            
-            vendas[index].cliente = document.getElementById('venda-cliente').value;
-            vendas[index].produto = selectedOption.getAttribute('data-nome');
-            vendas[index].codigoProduto = codigoProduto;
-            vendas[index].quantidade = quantidade;
-            vendas[index].representante = document.getElementById('venda-representante').value;
-            vendas[index].valor = total;
-            vendas[index].pagamento = document.getElementById('venda-pagamento').value;
-            vendas[index].lucro = total * 0.35;
-            
-            baixarEstoque(codigoProduto, quantidade);
-            alert('✅ Venda atualizada com sucesso!\n\n📦 Estoque atualizado automaticamente!');
-        }
-    } else {
-        const novaVenda = {
-            id: vendas.length > 0 ? Math.max(...vendas.map(v => v.id)) + 1 : 1,
-            data: new Date().toISOString().split('T')[0],
-            cliente: document.getElementById('venda-cliente').value,
-            produto: selectedOption.getAttribute('data-nome'),
-            codigoProduto: codigoProduto,
-            quantidade: quantidade,
-            representante: document.getElementById('venda-representante').value,
-            valor: total,
-            lucro: total * 0.35,
-            status: 'Concluída',
-            pagamento: document.getElementById('venda-pagamento').value
-        };
-        
-        vendas.unshift(novaVenda);
-        baixarEstoque(codigoProduto, quantidade);
-        gerarContaReceber(novaVenda);
-        
-        alert('✅ Venda cadastrada com sucesso!\n\n📦 Estoque atualizado: -' + quantidade + ' unidades\n💰 Total: R$ ' + total.toLocaleString('pt-BR', {minimumFractionDigits: 2}));
-    }
-    
-    salvarDados();
-    closeModal('modalVenda');
-    document.getElementById('formVenda').reset();
-    showTab('vendas');
-}
-
-function editarVenda(id) {
-    const venda = vendas.find(v => v.id === id);
-    if (!venda) return;
-    
-    document.getElementById('modalVenda').style.display = 'block';
-    document.getElementById('titulo-modal-venda').textContent = '✏️ Editar Venda';
-    document.getElementById('venda-id-edit').value = venda.id;
-    popularSelectsVenda();
-    document.getElementById('venda-cliente').value = venda.cliente;
-    document.getElementById('venda-representante').value = venda.representante;
-    document.getElementById('venda-pagamento').value = venda.pagamento;
-    document.getElementById('venda-quantidade').value = venda.quantidade || 1;
-    document.getElementById('venda-desconto').value = 0;
-}
-
-function deletarVenda(id) {
-    if (!confirm('⚠️ Tem certeza que deseja deletar esta venda?\n\nO estoque será devolvido automaticamente!')) return;
-    
-    const venda = vendas.find(v => v.id === id);
-    if (venda) {
-        devolverEstoque(venda.codigoProduto, venda.quantidade);
-        
-        const contaRelacionada = contasReceber.find(c => c.vendaId === id);
-        if (contaRelacionada) {
-            contasReceber = contasReceber.filter(c => c.vendaId !== id);
-        }
-    }
-    
-    vendas = vendas.filter(v => v.id !== id);
-    salvarDados();
-    alert('✅ Venda deletada!\n\n📦 Estoque devolvido automaticamente!');
-    renderVendas();
-    atualizarContadores();
-}
-
-// ========================================
-// CLIENTES - CRUD
-// ========================================
-
-function salvarCliente(event) {
-    event.preventDefault();
-    
-    const idEdit = document.getElementById('cliente-id-edit').value;
-    
-    if (idEdit) {
-        const index = clientes.findIndex(c => c.id == idEdit);
-        if (index !== -1) {
-            clientes[index].nome = document.getElementById('cliente-nome').value;
-            clientes[index].cnpj = document.getElementById('cliente-cnpj').value;
-            clientes[index].cidade = document.getElementById('cliente-cidade').value;
-            alert('✅ Cliente atualizado!');
-        }
-    } else {
-        const novoCliente = {
-            id: clientes.length > 0 ? Math.max(...clientes.map(c => c.id)) + 1 : 1,
-            nome: document.getElementById('cliente-nome').value,
-            cnpj: document.getElementById('cliente-cnpj').value,
-            cidade: document.getElementById('cliente-cidade').value,
-            status: 'Ativo'
-        };
-        clientes.push(novoCliente);
-        alert('✅ Cliente cadastrado!');
-    }
-    
-    salvarDados();
-    closeModal('modalCliente');
-    document.getElementById('formCliente').reset();
-    showTab('clientes');
-}
-
-function editarCliente(id) {
-    const cliente = clientes.find(c => c.id === id);
-    if (!cliente) return;
-    
-    document.getElementById('modalCliente').style.display = 'block';
-    document.getElementById('titulo-modal-cliente').textContent = '✏️ Editar Cliente';
-    document.getElementById('cliente-id-edit').value = cliente.id;
-    document.getElementById('cliente-nome').value = cliente.nome;
-    document.getElementById('cliente-cnpj').value = cliente.cnpj;
-    document.getElementById('cliente-cidade').value = cliente.cidade;
-}
-
-function deletarCliente(id) {
-    if (confirm('⚠️ Deletar este cliente?')) {
-        clientes = clientes.filter(c => c.id !== id);
-        salvarDados();
-        alert('✅ Cliente deletado!');
-        renderClientes();
-    }
-}
-
-// ========================================
-// PRODUTOS - CRUD
-// ========================================
-
-function salvarProduto(event) {
-    event.preventDefault();
-    
-    const codigoEdit = document.getElementById('produto-codigo-edit').value;
-    
-    if (codigoEdit) {
-        const index = produtos.findIndex(p => p.codigo === codigoEdit);
-        if (index !== -1) {
-            produtos[index].codigo = document.getElementById('produto-codigo').value;
-            produtos[index].nome = document.getElementById('produto-nome').value;
-            produtos[index].categoria = document.getElementById('produto-categoria').value;
-            produtos[index].quantidade = parseInt(document.getElementById('produto-quantidade').value);
-            produtos[index].custo = parseFloat(document.getElementById('produto-custo').value);
-            produtos[index].precoVenda = parseFloat(document.getElementById('produto-preco').value);
-            produtos[index].estoqueMinimo = parseInt(document.getElementById('produto-estoque-minimo').value);
-            alert('✅ Produto atualizado!');
-        }
-    } else {
-        const novoProduto = {
-            codigo: document.getElementById('produto-codigo').value,
-            nome: document.getElementById('produto-nome').value,
-            categoria: document.getElementById('produto-categoria').value,
-            quantidade: parseInt(document.getElementById('produto-quantidade').value),
-            custo: parseFloat(document.getElementById('produto-custo').value),
-            precoVenda: parseFloat(document.getElementById('produto-preco').value),
-            estoqueMinimo: parseInt(document.getElementById('produto-estoque-minimo').value),
-            status: 'Disponível'
-        };
-        produtos.push(novoProduto);
-        alert('✅ Produto cadastrado!');
-    }
+    const vendasMes = vendas.reduce((sum, v) => sum + v.valor, 0);
+    document.getElementById('vendas-mes').textContent = formatarMoeda(vendasMes);
     
     verificarEstoqueBaixo();
-    salvarDados();
-    closeModal('modalProduto');
-    document.getElementById('formProduto').reset();
-    showTab('estoque');
 }
 
-function editarProduto(codigo) {
-    const produto = produtos.find(p => p.codigo === codigo);
-    if (!produto) return;
+function atualizarGrafico() {
+    const ctx = document.getElementById('graficoVendas');
+    if (!ctx) return;
     
-    document.getElementById('modalProduto').style.display = 'block';
-    document.getElementById('titulo-modal-produto').textContent = '✏️ Editar Produto';
-    document.getElementById('produto-codigo-edit').value = produto.codigo;
-    document.getElementById('produto-codigo').value = produto.codigo;
-    document.getElementById('produto-nome').value = produto.nome;
-    document.getElementById('produto-categoria').value = produto.categoria;
-    document.getElementById('produto-quantidade').value = produto.quantidade;
-    document.getElementById('produto-custo').value = produto.custo;
-    document.getElementById('produto-preco').value = produto.precoVenda;
-    document.getElementById('produto-estoque-minimo').value = produto.estoqueMinimo || 5;
-}
-
-function deletarProduto(codigo) {
-    if (confirm('⚠️ Deletar este produto?')) {
-        produtos = produtos.filter(p => p.codigo !== codigo);
-        salvarDados();
-        alert('✅ Produto deletado!');
-        renderProdutos();
-    }
-}
-
-// ========================================
-// DAV - FUNÇÕES COMPLETAS
-// ========================================
-
-function popularSelectsDAV() {
-    const selectCliente = document.getElementById('dav-cliente');
-    const selectRep = document.getElementById('dav-representante');
-    const selectProduto = document.getElementById('dav-produto-select');
-    
-    selectCliente.innerHTML = '<option value="">Selecione</option>' + 
-        clientes.map(c => `<option value="${c.nome}">${c.nome}</option>`).join('');
-    
-    selectRep.innerHTML = '<option value="">Selecione</option>' + 
-        representantes.map(r => `<option value="${r.nome}">${r.nome} - ${r.regiao}</option>`).join('');
-    
-    selectProduto.innerHTML = '<option value="">Selecione</option>' + 
-        produtos.map(p => `<option value="${p.codigo}" data-nome="${p.nome}" data-preco="${p.precoVenda}">${p.nome} - R$ ${p.precoVenda.toLocaleString('pt-BR')}</option>`).join('');
-}
-
-function adicionarItemDAV() {
-    const select = document.getElementById('dav-produto-select');
-    const quantidade = parseInt(document.getElementById('dav-quantidade-input').value);
-    
-    if (!select.value || quantidade <= 0) {
-        alert('⚠️ Selecione um produto e quantidade válida!');
-        return;
-    }
-    
-    const selectedOption = select.options[select.selectedIndex];
-    const codigo = select.value;
-    const nome = selectedOption.getAttribute('data-nome');
-    const preco = parseFloat(selectedOption.getAttribute('data-preco'));
-    const total = preco * quantidade;
-    
-    const itemExistente = itensDAV.find(item => item.codigo === codigo);
-    if (itemExistente) {
-        itemExistente.quantidade += quantidade;
-        itemExistente.total = itemExistente.preco * itemExistente.quantidade;
-    } else {
-        itensDAV.push({ codigo, nome, quantidade, preco, total });
-    }
-    
-    atualizarTabelaDAV();
-    select.value = '';
-    document.getElementById('dav-quantidade-input').value = '1';
-}
-
-function removerItemDAV(codigo) {
-    itensDAV = itensDAV.filter(item => item.codigo !== codigo);
-    atualizarTabelaDAV();
-}
-
-function atualizarTabelaDAV() {
-    const tbody = document.getElementById('lista-itens-dav');
-    
-    if (itensDAV.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="padding: 20px; text-align: center; color: #9ca3af;">Nenhum item adicionado</td></tr>';
-        document.getElementById('dav-total-geral').textContent = 'R$ 0,00';
-        return;
-    }
-    
-    tbody.innerHTML = itensDAV.map(item => `
-        <tr style="border-bottom: 1px solid #e5e7eb;">
-            <td style="padding: 12px;">${item.nome}</td>
-            <td style="padding: 12px; text-align: center; font-weight: 600;">${item.quantidade}</td>
-            <td style="padding: 12px; text-align: right;">R$ ${item.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-            <td style="padding: 12px; text-align: right; font-weight: 700; color: #059669;">R$ ${item.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-            <td style="padding: 12px; text-align: center;">
-                <button type="button" onclick="removerItemDAV('${item.codigo}')" class="btn-remove">❌</button>
-            </td>
-        </tr>
-    `).join('');
-    
-    const totalGeral = itensDAV.reduce((sum, item) => sum + item.total, 0);
-    document.getElementById('dav-total-geral').textContent = 'R$ ' + totalGeral.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-}
-
-function finalizarDAV(event) {
-    event.preventDefault();
-    
-    if (itensDAV.length === 0) {
-        alert('⚠️ Adicione pelo menos um produto!');
-        return;
-    }
-    
-    const cliente = document.getElementById('dav-cliente').value;
-    const representante = document.getElementById('dav-representante').value;
-    const pagamento = document.getElementById('dav-pagamento').value;
-    const obs = document.getElementById('dav-obs').value;
-    const totalGeral = itensDAV.reduce((sum, item) => sum + item.total, 0);
-    
-    const numeroDAV = 'DAV-' + new Date().getTime();
-    const dataEmissao = new Date().toLocaleString('pt-BR');
-    
-    davAtual = {
-        numero: numeroDAV,
-        data: new Date().toISOString().split('T')[0],
-        dataEmissao: dataEmissao,
-        cliente: cliente,
-        representante: representante,
-        itens: [...itensDAV],
-        total: totalGeral,
-        pagamento: pagamento,
-        observacoes: obs,
-        status: 'Emitido'
-    };
-    
-    historicoDAVs.unshift(davAtual);
-    salvarDados();
-    
-    let detalhesItens = itensDAV.map(item => 
-        `${item.nome}\nQtd: ${item.quantidade} x R$ ${item.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})} = R$ ${item.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`
-    ).join('\n\n');
-    
-    const textoDAV = 
-        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-        `   PROHOSPITALAR - DAV\n` +
-        `   Documento Auxiliar de Venda\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-        `📄 Número: ${numeroDAV}\n` +
-        `📅 Data: ${dataEmissao}\n\n` +
-        `🏥 Cliente: ${cliente}\n` +
-        `👨‍💼 Representante: ${representante}\n\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-        `ITENS DO PEDIDO:\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-        `${detalhesItens}\n\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-        `💰 TOTAL: R$ ${totalGeral.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n` +
-        `💳 Pagamento: ${pagamento}\n` +
-        `${obs ? '\n📝 Observações:\n' + obs + '\n' : ''}` +
-        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-    
-    document.getElementById('dav-gerado-conteudo').textContent = textoDAV;
-    closeModal('modalDAV');
-    document.getElementById('modalDAVGerado').style.display = 'block';
-    document.getElementById('formDAV').reset();
-    itensDAV = [];
-}
-
-function imprimirDAV() {
-    if (!davAtual) return;
-    const conteudo = document.getElementById('dav-gerado-conteudo').textContent;
-    const janela = window.open('', '', 'width=800,height=600');
-    janela.document.write('<html><head><title>DAV - ' + davAtual.numero + '</title>');
-    janela.document.write('<style>body{font-family:monospace;padding:20px;white-space:pre-wrap;}</style></head><body>');
-    janela.document.write(conteudo);
-    janela.document.write('</body></html>');
-    janela.document.close();
-    janela.print();
-}
-
-function baixarDAVPDF() {
-    alert('📄 Funcionalidade de PDF em desenvolvimento!\n\nUse "Imprimir" e salve como PDF.');
-}
-
-function enviarDAVEmail() {
-    const email = prompt('📧 Digite o email:');
-    if (email) alert('✅ Email enviado para: ' + email + '\n\n(Funcionalidade simulada)');
-}
-
-function enviarDAVWhatsApp() {
-    if (!davAtual) return;
-    const texto = encodeURIComponent(document.getElementById('dav-gerado-conteudo').textContent);
-    window.open(`https://wa.me/?text=${texto}`, '_blank');
-}
-
-function visualizarDAV(numeroDAV) {
-    davAtual = historicoDAVs.find(d => d.numero === numeroDAV);
-    if (!davAtual) return;
-    
-    let detalhes = davAtual.itens.map(item => 
-        `${item.nome}\nQtd: ${item.quantidade} x R$ ${item.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})} = R$ ${item.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`
-    ).join('\n\n');
-    
-    const texto = 
-        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-        `   PROHOSPITALAR - DAV\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-        `📄 ${davAtual.numero}\n📅 ${davAtual.dataEmissao}\n\n` +
-        `🏥 ${davAtual.cliente}\n👨‍💼 ${davAtual.representante}\n\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nITENS:\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n${detalhes}\n\n` +
-        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n💰 TOTAL: R$ ${davAtual.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n` +
-        `💳 ${davAtual.pagamento}\n${davAtual.observacoes ? '\n📝 ' + davAtual.observacoes : ''}`;
-    
-    document.getElementById('dav-gerado-conteudo').textContent = texto;
-    document.getElementById('modalDAVGerado').style.display = 'block';
-}
-
-function reimprimirDAV(numeroDAV) {
-    visualizarDAV(numeroDAV);
-    setTimeout(() => imprimirDAV(), 500);
-}
-
-function deletarDAV(numeroDAV) {
-    if (confirm('⚠️ Deletar DAV ' + numeroDAV + '?')) {
-        historicoDAVs = historicoDAVs.filter(d => d.numero !== numeroDAV);
-        salvarDados();
-        alert('✅ DAV deletado!');
-        renderHistoricoDAVs();
-    }
-}
-    // ========================================
-// PARTE B - CRUD REPRESENTANTES E FORNECEDORES
-// Cole DENTRO do <script>, depois das funções de DAV
-// ========================================
-
-// ========================================
-// REPRESENTANTES - CRUD COMPLETO
-// ========================================
-
-function salvarRepresentante(event) {
-    event.preventDefault();
-    
-    const idEdit = document.getElementById('representante-id-edit').value;
-    
-    const dados = {
-        nome: document.getElementById('representante-nome').value,
-        cpf: document.getElementById('representante-cpf').value,
-        telefone: document.getElementById('representante-telefone').value,
-        email: document.getElementById('representante-email').value,
-        regiao: document.getElementById('representante-regiao').value,
-        meta: parseFloat(document.getElementById('representante-meta').value),
-        comissao: parseFloat(document.getElementById('representante-comissao').value),
-        observacoes: document.getElementById('representante-obs').value
-    };
-    
-    if (idEdit) {
-        // EDITAR
-        const index = representantes.findIndex(r => r.id == idEdit);
-        if (index !== -1) {
-            representantes[index] = {
-                ...representantes[index],
-                ...dados
-            };
-            alert('✅ Representante atualizado com sucesso!');
-        }
-    } else {
-        // NOVO
-        const novoRepresentante = {
-            id: representantes.length > 0 ? Math.max(...representantes.map(r => r.id)) + 1 : 1,
-            ...dados,
-            vendasMes: 0,
-            performance: '0%',
-            status: 'Ativo'
-        };
-        representantes.push(novoRepresentante);
-        alert('✅ Representante cadastrado com sucesso!');
-    }
-    
-    salvarDados();
-    closeModal('modalRepresentante');
-    document.getElementById('formRepresentante').reset();
-    showTab('vendedores');
-}
-
-function editarRepresentante(id) {
-    const rep = representantes.find(r => r.id === id);
-    if (!rep) return;
-    
-    document.getElementById('modalRepresentante').style.display = 'block';
-    document.getElementById('titulo-modal-representante').textContent = '✏️ Editar Representante';
-    document.getElementById('representante-id-edit').value = rep.id;
-    document.getElementById('representante-nome').value = rep.nome;
-    document.getElementById('representante-cpf').value = rep.cpf || '';
-    document.getElementById('representante-telefone').value = rep.telefone || '';
-    document.getElementById('representante-email').value = rep.email || '';
-    document.getElementById('representante-regiao').value = rep.regiao;
-    document.getElementById('representante-meta').value = rep.meta || 0;
-    document.getElementById('representante-comissao').value = rep.comissao || 5;
-    document.getElementById('representante-obs').value = rep.observacoes || '';
-}
-
-function deletarRepresentante(id) {
-    const rep = representantes.find(r => r.id === id);
-    if (!rep) return;
-    
-    // Verificar se tem vendas associadas
-    const vendasAssociadas = vendas.filter(v => v.representante === rep.nome).length;
-    
-    if (vendasAssociadas > 0) {
-        if (!confirm(`⚠️ ATENÇÃO!\n\nEste representante tem ${vendasAssociadas} venda(s) associada(s).\n\nDeseja realmente deletar?\n\nAs vendas não serão deletadas, apenas o representante será removido.`)) {
-            return;
-        }
-    } else {
-        if (!confirm(`⚠️ Deletar o representante "${rep.nome}"?`)) {
-            return;
-        }
-    }
-    
-    representantes = representantes.filter(r => r.id !== id);
-    salvarDados();
-    alert('✅ Representante deletado com sucesso!');
-    renderRepresentantes();
-    atualizarContadores();
-}
-
-function abrirModalRepresentante() {
-    document.getElementById('modalRepresentante').style.display = 'block';
-    document.getElementById('titulo-modal-representante').textContent = '👨‍💼 Novo Representante';
-    document.getElementById('representante-id-edit').value = '';
-    document.getElementById('formRepresentante').reset();
-}
-
-// ========================================
-// FORNECEDORES - CRUD COMPLETO
-// ========================================
-
-function salvarFornecedor(event) {
-    event.preventDefault();
-    
-    const idEdit = document.getElementById('fornecedor-id-edit').value;
-    
-    const dados = {
-        nome: document.getElementById('fornecedor-nome').value,
-        cnpj: document.getElementById('fornecedor-cnpj').value,
-        ie: document.getElementById('fornecedor-ie').value,
-        telefone: document.getElementById('fornecedor-telefone').value,
-        email: document.getElementById('fornecedor-email').value,
-        especialidade: document.getElementById('fornecedor-especialidade').value,
-        cidade: document.getElementById('fornecedor-cidade').value,
-        estado: document.getElementById('fornecedor-estado').value,
-        observacoes: document.getElementById('fornecedor-obs').value
-    };
-    
-    if (idEdit) {
-        // EDITAR
-        const index = fornecedores.findIndex(f => f.id == idEdit);
-        if (index !== -1) {
-            fornecedores[index] = {
-                ...fornecedores[index],
-                ...dados
-            };
-            alert('✅ Fornecedor atualizado com sucesso!');
-        }
-    } else {
-        // NOVO
-        const novoFornecedor = {
-            id: fornecedores.length > 0 ? Math.max(...fornecedores.map(f => f.id)) + 1 : 1,
-            ...dados,
-            status: 'Ativo'
-        };
-        fornecedores.push(novoFornecedor);
-        alert('✅ Fornecedor cadastrado com sucesso!');
-    }
-    
-    salvarDados();
-    closeModal('modalFornecedor');
-    document.getElementById('formFornecedor').reset();
-    showTab('fornecedores');
-}
-
-function editarFornecedor(id) {
-    const forn = fornecedores.find(f => f.id === id);
-    if (!forn) return;
-    
-    document.getElementById('modalFornecedor').style.display = 'block';
-    document.getElementById('titulo-modal-fornecedor').textContent = '✏️ Editar Fornecedor';
-    document.getElementById('fornecedor-id-edit').value = forn.id;
-    document.getElementById('fornecedor-nome').value = forn.nome;
-    document.getElementById('fornecedor-cnpj').value = forn.cnpj;
-    document.getElementById('fornecedor-ie').value = forn.ie || '';
-    document.getElementById('fornecedor-telefone').value = forn.telefone || '';
-    document.getElementById('fornecedor-email').value = forn.email || '';
-    document.getElementById('fornecedor-especialidade').value = forn.especialidade;
-    document.getElementById('fornecedor-cidade').value = forn.cidade || '';
-    document.getElementById('fornecedor-estado').value = forn.estado || '';
-    document.getElementById('fornecedor-obs').value = forn.observacoes || '';
-}
-
-function deletarFornecedor(id) {
-    const forn = fornecedores.find(f => f.id === id);
-    if (!forn) return;
-    
-    if (!confirm(`⚠️ Deletar o fornecedor "${forn.nome}"?`)) {
-        return;
-    }
-    
-    fornecedores = fornecedores.filter(f => f.id !== id);
-    salvarDados();
-    alert('✅ Fornecedor deletado com sucesso!');
-    renderFornecedores();
-    atualizarContadores();
-}
-
-function abrirModalFornecedor() {
-    document.getElementById('modalFornecedor').style.display = 'block';
-    document.getElementById('titulo-modal-fornecedor').textContent = '🏭 Novo Fornecedor';
-    document.getElementById('fornecedor-id-edit').value = '';
-    document.getElementById('formFornecedor').reset();
-}
-
-// ========================================
-// ATUALIZAR RENDERIZAÇÕES (SUBSTITUIR)
-// ========================================
-
-// SUBSTITUIR a função renderRepresentantes() existente por esta:
-function renderRepresentantes() {
-    const tbody = document.getElementById('lista-representantes');
-    if (!tbody) return;
-    
-    if (representantes.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">Nenhum representante cadastrado. <button onclick="abrirModalRepresentante()" class="text-green-600 font-semibold ml-2">Cadastrar primeiro representante</button></td></tr>';
-        return;
-    }
-    
-    tbody.innerHTML = representantes.map(rep => {
-        const vendasRep = vendas.filter(v => v.representante === rep.nome).reduce((sum, v) => sum + v.valor, 0);
-        const metaAtingida = rep.meta > 0 ? ((vendasRep / rep.meta) * 100).toFixed(0) : 0;
-        const corPerformance = metaAtingida >= 100 ? 'text-green-600' : metaAtingida >= 80 ? 'text-blue-600' : 'text-orange-600';
-        
-        return `
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4">
-                    <div class="font-medium">${rep.nome}</div>
-                    <div class="text-xs text-gray-500">${rep.email || 'Sem email'}</div>
-                </td>
-                <td class="px-6 py-4 text-sm">${rep.regiao}</td>
-                <td class="px-6 py-4">
-                    <div class="font-semibold ${corPerformance}">R$ ${vendasRep.toLocaleString('pt-BR')}</div>
-                    <div class="text-xs text-gray-500">Meta: R$ ${(rep.meta || 0).toLocaleString('pt-BR')} (${metaAtingida}%)</div>
-                </td>
-                <td class="px-6 py-4">
-                    <button onclick="editarRepresentante(${rep.id})" class="btn-edit">✏️ Editar</button>
-                    <button onclick="deletarRepresentante(${rep.id})" class="btn-delete">🗑️ Deletar</button>
-                </td>
-            </tr>
-        `;
-    }).join('');
-}
-
-// SUBSTITUIR a função renderFornecedores() existente por esta:
-function renderFornecedores() {
-    const tbody = document.getElementById('lista-fornecedores');
-    if (!tbody) return;
-    
-    if (fornecedores.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">Nenhum fornecedor cadastrado. <button onclick="abrirModalFornecedor()" class="text-indigo-600 font-semibold ml-2">Cadastrar primeiro fornecedor</button></td></tr>';
-        return;
-    }
-    
-    tbody.innerHTML = fornecedores.map(forn => `
-        <tr class="hover:bg-gray-50">
-            <td class="px-6 py-4">
-                <div class="font-medium">${forn.nome}</div>
-                <div class="text-xs text-gray-500">${forn.email || 'Sem email'}</div>
-            </td>
-            <td class="px-6 py-4 text-sm">${forn.cnpj}</td>
-            <td class="px-6 py-4 text-sm">
-                <div>${forn.especialidade}</div>
-                <div class="text-xs text-gray-500">${forn.cidade || ''} - ${forn.estado || ''}</div>
-            </td>
-            <td class="px-6 py-4">
-                <button onclick="editarFornecedor(${forn.id})" class="btn-edit">✏️ Editar</button>
-                <button onclick="deletarFornecedor(${forn.id})" class="btn-delete">🗑️ Deletar</button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-// ========================================
-// ATUALIZAR openModal() - ADICIONAR CASOS
-// ========================================
-
-// SUBSTITUIR a função openModal() adicionando estes casos:
-// Procure a função openModal() existente e adicione estes casos no final:
-
-// Na função openModal(), adicionar:
-/*
-} else if (tipo === 'representante') {
-    abrirModalRepresentante();
-} else if (tipo === 'fornecedor') {
-    abrirModalFornecedor();
-}
-*/
-
-// ========================================
-// FIM DA PARTE B
-// ========================================
-
-console.log('✅ CRUD Representantes e Fornecedores carregado!');
-    // ========================================
-// PARTE C - ATUALIZAÇÕES E INTEGRAÇÕES
-// ========================================
-
-// ========================================
-// 1️⃣ ADICIONAR NOS BOTÕES RÁPIDOS DA SIDEBAR
-// ========================================
-
-// PROCURE no HTML a seção "Ações Rápidas" e ADICIONE estes botões:
-
-/*
-<button onclick="openModal('representante')" class="w-full bg-yellow-50 text-yellow-700 px-3 py-2 rounded-lg text-sm hover:bg-yellow-100 font-medium">👨‍💼 Novo Representante</button>
-<button onclick="openModal('fornecedor')" class="w-full bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg text-sm hover:bg-indigo-100 font-medium">🏭 Novo Fornecedor</button>
-*/
-
-// ========================================
-// 2️⃣ ATUALIZAR A FUNÇÃO openModal()
-// ========================================
-
-// SUBSTITUIR a função openModal() COMPLETA por esta:
-
-function openModal(tipo) {
-    if (tipo === 'venda') {
-        document.getElementById('modalVenda').style.display = 'block';
-        document.getElementById('titulo-modal-venda').textContent = '💰 Nova Venda';
-        document.getElementById('venda-id-edit').value = '';
-        popularSelectsVenda();
-        document.getElementById('formVenda').reset();
-    } else if (tipo === 'cliente') {
-        document.getElementById('modalCliente').style.display = 'block';
-        document.getElementById('titulo-modal-cliente').textContent = '🏥 Novo Cliente';
-        document.getElementById('cliente-id-edit').value = '';
-        document.getElementById('formCliente').reset();
-    } else if (tipo === 'produto') {
-        document.getElementById('modalProduto').style.display = 'block';
-        document.getElementById('titulo-modal-produto').textContent = '🩺 Novo Produto';
-        document.getElementById('produto-codigo-edit').value = '';
-        document.getElementById('formProduto').reset();
-    } else if (tipo === 'dav') {
-        document.getElementById('modalDAV').style.display = 'block';
-        popularSelectsDAV();
-        itensDAV = [];
-        atualizarTabelaDAV();
-    } else if (tipo === 'representante') {
-        abrirModalRepresentante();
-    } else if (tipo === 'fornecedor') {
-        abrirModalFornecedor();
-    }
-}
-
-// ========================================
-// 3️⃣ ATUALIZAR showTab() PARA INCLUIR VENDEDORES/FORNECEDORES
-// ========================================
-
-// SUBSTITUIR a função showTab() COMPLETA por esta:
-
-function showTab(tabName) {
-    const tabs = ['dashboard', 'vendas', 'contas-receber', 'clientes', 'estoque', 'vendedores', 'fornecedores', 'financeiro', 'historico-davs'];
-    
-    tabs.forEach(tab => {
-        const element = document.getElementById(tab);
-        if (element) element.classList.add('hidden');
-        
-        const tabButton = document.getElementById(`tab-${tab}`);
-        if (tabButton) {
-            tabButton.classList.remove('active-tab');
-            tabButton.classList.add('text-gray-700', 'hover:bg-gray-100');
-        }
-    });
-
-    const selectedTab = document.getElementById(tabName);
-    if (selectedTab) {
-        selectedTab.classList.remove('hidden');
-        selectedTab.classList.add('fade-in');
-    }
-    
-    const selectedButton = document.getElementById(`tab-${tabName}`);
-    if (selectedButton) {
-        selectedButton.classList.add('active-tab');
-        selectedButton.classList.remove('text-gray-700', 'hover:bg-gray-100');
-    }
-
-    // Renderizar conforme a aba
-    if (tabName === 'dashboard') initDashboard();
-    else if (tabName === 'vendas') renderVendas();
-    else if (tabName === 'contas-receber') renderContasReceber();
-    else if (tabName === 'clientes') renderClientes();
-    else if (tabName === 'estoque') renderProdutos();
-    else if (tabName === 'vendedores') renderRepresentantes();
-    else if (tabName === 'fornecedores') renderFornecedores();
-    else if (tabName === 'financeiro') renderFinanceiro();
-    else if (tabName === 'historico-davs') renderHistoricoDAVs();
-}
-
-// ========================================
-// 4️⃣ ATUALIZAR carregarDadosIniciais()
-// ========================================
-
-// SUBSTITUIR a função carregarDadosIniciais() COMPLETA por esta:
-
-function carregarDadosIniciais() {
-    clientes = [
-        { id: 1, nome: 'Hospital São Lucas', cnpj: '12.345.678/0001-90', cidade: 'São Paulo', status: 'Ativo' },
-        { id: 2, nome: 'Clínica Santa Maria', cnpj: '23.456.789/0001-01', cidade: 'Rio de Janeiro', status: 'Ativo' }
-    ];
-    
-    produtos = [
-        { codigo: 'MC-500', nome: 'Monitor Cardíaco', categoria: 'Monitoramento', quantidade: 12, custo: 30000, precoVenda: 45000, estoqueMinimo: 5 },
-        { codigo: 'US-300', nome: 'Ultrassom Portátil', categoria: 'Diagnóstico', quantidade: 3, custo: 50000, precoVenda: 78000, estoqueMinimo: 5 },
-        { codigo: 'RX-700', nome: 'Raio-X Digital', categoria: 'Radiologia', quantidade: 2, custo: 80000, precoVenda: 125000, estoqueMinimo: 2 }
-    ];
-    
-    representantes = [
-        { 
-            id: 1, 
-            nome: 'Ana Silva', 
-            cpf: '123.456.789-00',
-            telefone: '(11) 99999-1111',
-            email: 'ana.silva@prohospitalar.com',
-            regiao: 'Sudeste', 
-            meta: 200000,
-            comissao: 5,
-            vendasMes: 0, 
-            performance: '0%',
-            status: 'Ativo'
-        },
-        { 
-            id: 2, 
-            nome: 'Carlos Mendes', 
-            cpf: '987.654.321-00',
-            telefone: '(41) 99999-2222',
-            email: 'carlos.mendes@prohospitalar.com',
-            regiao: 'Sul', 
-            meta: 180000,
-            comissao: 5,
-            vendasMes: 0, 
-            performance: '0%',
-            status: 'Ativo'
-        }
-    ];
-    
-    fornecedores = [
-        { 
-            id: 1, 
-            nome: 'MedTech Equipamentos Ltda', 
-            cnpj: '56.789.012/0001-34',
-            ie: '123.456.789.012',
-            telefone: '(11) 3333-3333',
-            email: 'contato@medtech.com.br',
-            especialidade: 'Equipamentos de Diagnóstico',
-            cidade: 'São Paulo',
-            estado: 'SP',
-            status: 'Ativo' 
-        },
-        { 
-            id: 2, 
-            nome: 'HospitalPro Indústria', 
-            cnpj: '78.901.234/0001-56',
-            ie: '987.654.321.098',
-            telefone: '(21) 2222-2222',
-            email: 'vendas@hospitalpro.com.br',
-            especialidade: 'Equipamentos de Monitoramento',
-            cidade: 'Rio de Janeiro',
-            estado: 'RJ',
-            status: 'Ativo' 
-        }
-    ];
-    
-    vendas = [];
-    contasReceber = [];
-    transacoes = [];
-    historicoDAVs = [];
-}
-
-// ========================================
-// 5️⃣ ATUALIZAR salvarDados() E carregarDados()
-// ========================================
-
-// SUBSTITUIR a função salvarDados() por esta:
-
-function salvarDados() {
-    try {
-        const dados = {
-            vendas,
-            produtos,
-            clientes,
-            representantes,
-            fornecedores,
-            transacoes,
-            contasReceber,
-            historicoDAVs,
-            ultimoBackup: new Date().toLocaleString('pt-BR')
-        };
-        localStorage.setItem('prohospitalar_dados', JSON.stringify(dados));
-        document.getElementById('ultimo-backup').textContent = 'Agora mesmo';
-        return true;
-    } catch (e) {
-        console.error('Erro ao salvar dados:', e);
-        return false;
-    }
-}
-
-// SUBSTITUIR a função carregarDados() por esta:
-
-function carregarDados() {
-    try {
-        const dadosSalvos = localStorage.getItem('prohospitalar_dados');
-        if (dadosSalvos) {
-            const dados = JSON.parse(dadosSalvos);
-            vendas = dados.vendas || [];
-            produtos = dados.produtos || [];
-            clientes = dados.clientes || [];
-            representantes = dados.representantes || [];
-            fornecedores = dados.fornecedores || [];
-            transacoes = dados.transacoes || [];
-            contasReceber = dados.contasReceber || [];
-            historicoDAVs = dados.historicoDAVs || [];
-            
-            if (dados.ultimoBackup) {
-                document.getElementById('ultimo-backup').textContent = dados.ultimoBackup;
-            }
-            
-            console.log('✅ Dados carregados do backup!');
-            return true;
-        } else {
-            carregarDadosIniciais();
-            console.log('✅ Dados iniciais carregados!');
-            return false;
-        }
-    } catch (e) {
-        console.error('Erro ao carregar dados:', e);
-        carregarDadosIniciais();
-        return false;
-    }
-}
-
-// ========================================
-// 6️⃣ ADICIONAR TABS NA SIDEBAR (HTML)
-// ========================================
-
-// PROCURE na sidebar os botões de navegação e ADICIONE (se não tiver):
-
-/*
-<button onclick="showTab('vendedores')" id="tab-vendedores" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
-    <span class="text-xl">👨‍💼</span>
-    <div class="flex-1 text-left"><span class="font-medium">Representantes</span></div>
-</button>
-
-<button onclick="showTab('fornecedores')" id="tab-fornecedores" class="w-full flex items-center space-x-4 px-4 py-3 rounded-lg transition-all text-gray-700 hover:bg-gray-100">
-    <span class="text-xl">🏭</span>
-    <div class="flex-1 text-left"><span class="font-medium">Fornecedores</span></div>
-</button>
-*/
-
-// ========================================
-// 7️⃣ ADICIONAR DIVS VENDEDORES E FORNECEDORES (HTML)
-// ========================================
-
-// PROCURE no HTML as divs de conteúdo e ADICIONE (se não tiver):
-
-/*
-<div id="vendedores" class="hidden">
-    <h2 class="text-3xl font-bold mb-6">👨‍💼 Gestão de Representantes</h2>
-    <div class="bg-white rounded-xl shadow-premium overflow-hidden">
-        <table class="w-full">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Região</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vendas</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
-                </tr>
-            </thead>
-            <tbody id="lista-representantes"></tbody>
-        </table>
-    </div>
-</div>
-
-<div id="fornecedores" class="hidden">
-    <h2 class="text-3xl font-bold mb-6">🏭 Gestão de Fornecedores</h2>
-    <div class="bg-white rounded-xl shadow-premium overflow-hidden">
-        <table class="w-full">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">CNPJ</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Especialidade</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
-                </tr>
-            </thead>
-            <tbody id="lista-fornecedores"></tbody>
-        </table>
-    </div>
-</div>
-*/
-
-// ========================================
-// FIM DA PARTE C
-// ========================================
-
-console.log('✅ Integrações de Representantes e Fornecedores completas!');
-    // ========================================
-// PARTE 5 DE 5 - EXPORTAÇÕES E INICIALIZAÇÃO
-// ========================================
-
-// ========================================
-// FUNÇÕES DE EXPORTAÇÃO
-// ========================================
-
-function exportarDashboard() {
-    const totalVendas = vendas.reduce((sum, v) => sum + v.valor, 0);
-    const { totalReceber } = calcularTotaisReceber();
-    
-    let csv = 'DASHBOARD PROHOSPITALAR\n\n';
-    csv += 'RESUMO EXECUTIVO\n';
-    csv += `Total de Vendas,R$ ${totalVendas.toLocaleString('pt-BR')}\n`;
-    csv += `Total a Receber,R$ ${totalReceber.toLocaleString('pt-BR')}\n`;
-    csv += `Clientes Cadastrados,${clientes.length}\n`;
-    csv += `Produtos Ativos,${produtos.length}\n`;
-    csv += `Produtos com Estoque Baixo,${produtos.filter(p => p.quantidade <= (p.estoqueMinimo || 5)).length}\n`;
-    
-    baixarCSV(csv, 'dashboard_prohospitalar.csv');
-}
-
-function exportarVendas() {
-    let csv = 'Data,Cliente,Produto,Quantidade,Valor,Status,Pagamento\n';
+    // Agrupar vendas por data
+    const vendasPorData = {};
     vendas.forEach(v => {
-        csv += `${v.data},${v.cliente},${v.produto},${v.quantidade || 1},R$ ${v.valor.toLocaleString('pt-BR')},${v.status},${v.pagamento}\n`;
+        const data = formatarData(v.data);
+        vendasPorData[data] = (vendasPorData[data] || 0) + v.valor;
     });
-    baixarCSV(csv, 'vendas_prohospitalar.csv');
-}
-
-function exportarContasReceber() {
-    let csv = 'Venda,Cliente,Vencimento,Valor,Status\n';
-    contasReceber.forEach(c => {
-        csv += `#${c.vendaId},${c.cliente},${new Date(c.dataVencimento).toLocaleDateString('pt-BR')},R$ ${c.valor.toLocaleString('pt-BR')},${c.status}\n`;
-    });
-    baixarCSV(csv, 'contas_receber_prohospitalar.csv');
-}
-
-function exportarClientes() {
-    let csv = 'Nome,CNPJ,Cidade,Status\n';
-    clientes.forEach(c => {
-        csv += `${c.nome},${c.cnpj},${c.cidade},${c.status}\n`;
-    });
-    baixarCSV(csv, 'clientes_prohospitalar.csv');
-}
-
-function exportarProdutos() {
-    let csv = 'Código,Nome,Categoria,Quantidade,Custo,Preço Venda,Estoque Mínimo\n';
-    produtos.forEach(p => {
-        csv += `${p.codigo},${p.nome},${p.categoria},${p.quantidade},R$ ${p.custo.toLocaleString('pt-BR')},R$ ${p.precoVenda.toLocaleString('pt-BR')},${p.estoqueMinimo}\n`;
-    });
-    baixarCSV(csv, 'produtos_prohospitalar.csv');
-}
-
-function exportarRepresentantes() {
-    alert('📄 Função em desenvolvimento!');
-}
-
-function exportarFornecedores() {
-    alert('📄 Função em desenvolvimento!');
-}
-
-function exportarFinanceiro() {
-    alert('📄 Função em desenvolvimento!');
-}
-
-function exportarHistoricoDAVs() {
-    alert('📄 Função em desenvolvimento!');
-}
-
-function baixarCSV(conteudo, nomeArquivo) {
-    const blob = new Blob([conteudo], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', nomeArquivo);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    alert('✅ Arquivo exportado com sucesso!\n\n📄 ' + nomeArquivo);
-}
-
-// ========================================
-// NOTIFICAÇÕES
-// ========================================
-
-function mostrarNotificacoes() {
-    const contasPendentes = contasReceber.filter(c => c.status === 'Pendente').length;
-    const produtosBaixos = produtos.filter(p => p.quantidade <= (p.estoqueMinimo || 5)).length;
     
-    let msg = '🔔 NOTIFICAÇÕES DO SISTEMA\n\n';
+    const labels = Object.keys(vendasPorData).slice(-7);
+    const dados = Object.values(vendasPorData).slice(-7);
     
-    if (contasPendentes > 0) {
-        msg += `💵 ${contasPendentes} conta(s) a receber pendente(s)\n`;
+    if (chartVendas) {
+        chartVendas.destroy();
     }
     
-    if (produtosBaixos > 0) {
-        msg += `⚠️ ${produtosBaixos} produto(s) com estoque baixo\n`;
-        const lista = produtos.filter(p => p.quantidade <= (p.estoqueMinimo || 5));
-        lista.forEach(p => {
-            msg += `   • ${p.nome}: ${p.quantidade} unidades\n`;
-        });
-    }
-    
-    if (contasPendentes === 0 && produtosBaixos === 0) {
-        msg += '✅ Nenhuma notificação pendente!\n\nTudo está em ordem! 🎉';
-    }
-    
-    alert(msg);
+    chartVendas = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Vendas (R$)',
+                data: dados,
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'R$ ' + value.toLocaleString('pt-BR');
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
-// ========================================
-// INICIALIZAÇÃO DO SISTEMA
-// ========================================
-
-window.onload = function() {
-    console.log('🚀 Iniciando ProHospitalar v5.0...');
+// ========== INICIALIZAÇÃO ==========
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Sistema Pro Hospitalar iniciando...');
     
-    // Carregar dados do backup
     carregarDados();
     
-    // Inicializar dashboard
-    showTab('dashboard');
+    renderVendas();
+    renderClientes();
+    renderProdutos();
+    renderRepresentantes();
+    renderFornecedores();
+    renderContasReceber();
+    renderHistoricoDAVs();
     
-    // Verificar estoque baixo
-    verificarEstoqueBaixo();
-    
-    // Atualizar contadores
     atualizarContadores();
+    atualizarGrafico();
     
-    console.log('✅ Sistema iniciado com sucesso!');
-    console.log('📊 Vendas:', vendas.length);
-    console.log('🏥 Clientes:', clientes.length);
-    console.log('🩺 Produtos:', produtos.length);
-    console.log('💵 Contas a Receber:', contasReceber.length);
-};
+    // Auto-save a cada 5 minutos
+    setInterval(salvarDados, 5 * 60 * 1000);
+    
+    console.log('✅ Sistema carregado com sucesso!');
+});
 
-// ========================================
-// FECHAR MODAL AO CLICAR FORA
-// ========================================
-
-window.onclick = function(event) {
-    if (event.target.classList.contains('modal')) {
-        event.target.style.display = 'none';
-    }
-}
-
-// ========================================
-// SALVAR AUTOMATICAMENTE A CADA 30 SEGUNDOS
-// ========================================
-
-setInterval(() => {
-    salvarDados();
-    console.log('💾 Backup automático realizado:', new Date().toLocaleString('pt-BR'));
-}, 30000); // 30 segundos
-
-console.log('✅ ProHospitalar v5.0 - FASE 1 COMPLETA carregado!');
-console.log('📦 Funcionalidades implementadas:');
-console.log('   ✅ Baixa automática de estoque');
-console.log('   ✅ Contas a Receber');
-console.log('   ✅ Backup localStorage automático');
-console.log('   ✅ Exportação de dados (CSV)');
-console.log('   ✅ Alertas de estoque baixo');
-console.log('   ✅ Dashboard executivo');
-</script>
-</body>
-</html>
+// Salvar antes de fechar
+window.addEventListener('beforeunload', salvarDados);
